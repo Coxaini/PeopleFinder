@@ -1,0 +1,137 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using PeopleFinder.Application.Models.Profile;
+using PeopleFinder.Application.Services.ProfileServices;
+using Microsoft.AspNetCore.Http.HttpResults;
+using PeopleFinder.Api.Common.Extensions;
+using System.Linq;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using MapsterMapper;
+using PeopleFinder.Contracts.Profile;
+using Microsoft.AspNetCore.Authorization;
+using PeopleFinder.Api.Controllers.Common;
+using System.Security.Claims;
+using Newtonsoft.Json;
+using PeopleFinder.Application.Models.File;
+using PeopleFinder.Application.Services.FriendsService;
+using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Domain.Common.Pagination.Cursor;
+
+namespace PeopleFinder.Api.Controllers
+{
+    [Route("/profile")]
+    
+    public class ProfileController : ApiController
+    {
+        private readonly IProfileService _profileService;
+        private readonly IRelationshipService _relationshipService;
+        private readonly IMapper _mapper;
+        public ProfileController(IProfileService profileService,  IMapper mapper, IRelationshipService relationshipService)
+        {
+            _profileService = profileService;
+            _mapper = mapper;
+            _relationshipService = relationshipService;
+        }
+
+
+        [HttpPost]      
+        public async Task<IActionResult>CreateProfile(ProfileFillRequest request)
+        {
+
+            var createResult = await _profileService.CreateProfile(UserIdInClaims, request);
+
+            return createResult.Match(
+                (profile) => {
+                    return Created(Request.GetUri() + $"/{profile.Id}", _mapper.Map<ShortProfileResponse>(profile));
+                    },
+                Problem);
+        }
+        [HttpPut]
+        public async Task<IActionResult> EditProfile(ProfileFillRequest request)
+        {
+            var editResult = await _profileService.UpdateProfile(ProfileIdInClaims, request);
+
+            return editResult.Match(
+                (profile) => Ok(_mapper.Map<ShortProfileResponse>(profile)),
+                Problem);
+        }
+        
+        [HttpPut("picture")]
+        public async Task<IActionResult> EditProfilePicture(IFormFile imageFile)
+        {
+            
+            ImageDto image = new(imageFile.FileName, imageFile.ContentType, imageFile.GetBytes());
+            
+            var result = await _profileService.UploadProfilePicture(ProfileIdInClaims, image);
+            
+
+            return result.Match(
+                (profile) => Ok(),
+                Problem);
+        }
+        
+        [HttpGet("{profileId:int}")]
+        public async Task<IActionResult> GetProfileById(int profileId)
+        {
+            var profile = await _profileService.GetProfileWithRelationshipById(profileId, ProfileIdInClaims);
+
+            return profile.Match(
+                     (source) =>
+                     {
+                         var metadata = new
+                         {
+                             source.MutualFriends.TotalCount,
+                             NextCursor =  source.MutualFriends.Next?.Relationship?.AcknowledgeAt,
+                         };
+                         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                         
+                         return Ok(_mapper.Map<ProfileResponse>(source));
+                     },
+                     Problem);
+
+        }
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetProfileByUsername(string username)
+        {
+            var profile = await _profileService.GetProfileWithRelationshipByUsername(username, ProfileIdInClaims);
+            return profile.Match(
+                (source) =>
+                {
+                    var metadata = new
+                    {
+                        source.MutualFriends.TotalCount,
+                        NextCursor =  source.MutualFriends.Next?.Relationship?.AcknowledgeAt,
+                    };
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                         
+                    var res = _mapper.Map<ProfileResponse>(source);
+                    return Ok(res);
+                },
+                Problem);
+
+        }
+
+        [HttpGet("{profileId:int}/mutualFriends")]
+        public async Task<IActionResult> GetMutualFriendsWithProfile(int profileId, [FromQuery]CursorPaginationRequest<DateTime> cursorPaginationParams)
+        {
+            CursorPaginationParams<DateTime> pag = new()
+                { PageSize = cursorPaginationParams.PageSize, After = cursorPaginationParams.After, Before = cursorPaginationParams.Before };
+            
+            var mutualFriends = await _relationshipService.GetMutualFriends(ProfileIdInClaims, profileId, pag);
+            return mutualFriends.Match(
+                (source) =>
+                {
+                    var metadata = new
+                    {
+                        source.TotalCount,
+                        NextCursor =  source.Next?.Relationship?.AcknowledgeAt,
+                    };
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                         
+                    return Ok(_mapper.Map<IEnumerable<ShortProfileResponse>>(source.Items));
+                },
+                Problem);
+            
+        }
+        
+    }
+}

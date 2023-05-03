@@ -1,0 +1,45 @@
+button.approve,
+button.decline {
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+button.approve {
+    background-color: #007bff;
+    color: #fff;
+}
+
+button.approve:hover {
+    background-color: #0056b3;
+}
+
+button.decline {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+
+button.decline:hover {
+    background-color: #9e2a34;
+}
+
+button.upload-btn{
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: #006aff;
+    color: #fff;
+}

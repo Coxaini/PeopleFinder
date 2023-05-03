@@ -1,0 +1,60 @@
+.panel{
+    width: 100%;
+    height: 100%;
+
+    padding: 10px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flexlist{
+    display: flex;
+    flex-direction: column;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.centerpanel{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.leftoffset {
+    margin-left: 10px;
+}
+
+.rightoffset {
+    margin-right: 10px;
+}
+
+.marginbottom10{
+    margin-bottom: 10px;
+}
+
+.nonvisible {
+    display: none !important;
+}
+
+.username{
+    color : #6a0078;
+    font-size: 21px;
+}
+
+a.profilelinkpanel{
+    color: initial;
+    text-decoration: none;
+}
+
+span.errormessage{
+    color: rgb(217, 0, 0);
+    font-weight: 800;
+    
+}

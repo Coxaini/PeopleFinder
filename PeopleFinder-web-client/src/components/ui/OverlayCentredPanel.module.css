@@ -1,0 +1,75 @@
+.centeredoverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    z-index: 15;
+    align-items: center;
+}
+
+.whitepanel {
+    min-height: 300px;
+    max-height: 600px;
+    min-width: 700px;
+    background-color: var(--main-bg-panel-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.panelheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 50px;
+    position: relative;
+
+    border-bottom: 1px solid rgb(54, 54, 54);
+}
+
+.panelbody{
+    overflow-y:auto;
+    overflow-x: hidden;
+}
+
+.panelheader h1 {
+    font-size: 28px;
+    width: 50%;
+    font-weight: 700;
+    color: #333;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.leftspacer {
+    float: left;
+}
+.spacer{
+    position: relative;
+    height: 100%;
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.rightspacer {
+    float: right;
+}
+
+.cancelbutton {
+}
+
+.cancelbutton:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 160);
+}

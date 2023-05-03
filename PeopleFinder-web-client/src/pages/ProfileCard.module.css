@@ -1,0 +1,145 @@
+
+
+.profile{
+    width: 900px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+a.textlink{
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+span.leftoffset {
+    margin-left: 1ch;
+}
+
+span.rightoffset {
+    margin-right: 1ch;
+}
+
+span.highlight {
+    color: #282323;
+    font-weight: 900;
+}
+
+.profilegrid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 400px 300px;
+    column-gap: 20px;
+}
+
+.profilepanel {
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+.location {
+    display: flex;
+    align-items: baseline;
+    column-gap: 10px;
+}
+
+.profilepanel .info {
+    width: 100%;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profilegrid img {
+
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.profilepanel h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.profilepanel h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.info h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+.bio {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.interests {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    row-gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.interests li {
+    font-size: 14px;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.interests li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.actions {
+    display: flex;
+    column-gap: 10px;
+}
+
+.horizontallayout {
+    max-width: fit-content;
+    margin-top: 10px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.actionslayout{
+    margin-top: 10px;
+    column-gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.actionslayout button{
+    width: 100%;
+}
