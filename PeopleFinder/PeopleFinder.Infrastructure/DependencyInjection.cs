@@ -70,6 +70,7 @@ namespace PeopleFinder.Infrastructure
              configuration.Bind("JwtSettings", jwtSettings);
 
             services.AddSingleton(Options.Create(jwtSettings));
+            services.Configure<FileStorageSettings>(configuration.GetSection("FileStorageSettings"));
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
            

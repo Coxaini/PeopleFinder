@@ -13,9 +13,9 @@ public class FileStorageManager : IFileStorageManager
     private readonly string _fileStoragePath;
     private readonly ILogger<FileStorageManager> _logger;
 
-    public FileStorageManager(IConfiguration fileConfiguration, ILogger<FileStorageManager> logger)
+    public FileStorageManager(IOptions<FileStorageSettings> fileSettings, ILogger<FileStorageManager> logger)
     {
-        _fileStoragePath = fileConfiguration["FilePath"] ?? throw new IOException("File path not found in a configuration");
+        _fileStoragePath = fileSettings.Value.FilePath ?? throw new IOException("File path not found in a configuration");
         
         _logger = logger;
     }
