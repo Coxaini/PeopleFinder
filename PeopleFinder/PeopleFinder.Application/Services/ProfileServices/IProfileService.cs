@@ -7,6 +7,7 @@ using FluentResults;
 using PeopleFinder.Application.Models.File;
 using PeopleFinder.Application.Models.Profile;
 using PeopleFinder.Domain.Entities;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 
 namespace PeopleFinder.Application.Services.ProfileServices
 {
@@ -18,6 +19,6 @@ namespace PeopleFinder.Application.Services.ProfileServices
         Task<Result<Profile>> GetProfileById(int profileId);
         Task<Result<ProfileResult>> GetProfileWithRelationshipById(int profileId, int requesterId);
         Task<Result<ProfileResult>> GetProfileWithRelationshipByUsername(string profileUsername, int requesterId);
-         Task<Result<Profile>> UploadProfilePicture(int profileId, ImageDto image);
+         Task<Result<MediaFile>> UploadProfilePicture(int profileId, FileDto fileDto);
     }
 }

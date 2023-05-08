@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function ProfileActions(props) {
 
 
-    const { userData } = useUserData();
+    const [userData] = useUserData();
     const navigate = useNavigate()
 
     function gotoEdit() {
@@ -16,7 +16,7 @@ function ProfileActions(props) {
     }
 
     let actions = null;
-    if (props.id !== Number(userData.userid)) {
+    if (props.id !== Number(userData.id)) {
         switch (props.status) {
             case "friend":
                 actions = <>

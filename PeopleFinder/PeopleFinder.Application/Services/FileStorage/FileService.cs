@@ -24,9 +24,9 @@ public class FileService : IFileService
         if (media is null)
             return Result.Fail(FileServiceErrors.FileNotFound);
         
-        var file = await _fileStorageManager.GetImageAsync(media.Token.ToString() + media.Extension, media.UploadTime);
+        FileStream fileStream = _fileStorageManager.GetFileAsync(media.Id.ToString()+'.' + media.Extension, media.UploadTime);
         
-        return Result.Ok(new FileResult(media.OriginalName, file));
+        return Result.Ok(new FileResult(media.OriginalName,media.Type, media.Extension, fileStream));
         
     }
 }

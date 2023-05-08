@@ -14,7 +14,6 @@ namespace PeopleFinder.Mappers.Mapping
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<AuthenticationResult, AuthenticationResponse>()
-                .Map(dest => dest.Token, source => source.Token)
                 .Map(dest => dest, source => source.User)
                 .Map(dest => dest.Username, source => source.User.Profile!.Username);
         }

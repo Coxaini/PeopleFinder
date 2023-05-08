@@ -10,14 +10,14 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
 {
     public enum MediaFileType
     {
-        Photo,
+        Image,
         Video,
         Audio
     }
     public class MediaFile
     {
-        public long Id { get; set; }
-        public Guid Token { get; set; }
+       
+        public Guid Id { get; set; }
         [MaxLength(10)]
         public string Extension { get; set; } = null!;
         public string OriginalName { get; set; } = null!;
@@ -26,7 +26,8 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         public DateTime? ExpirationDate { get; set; }*/
         public MediaFileType Type { get; set; }
         public DateTime UploadTime { get; set; }
-
+        
+        public bool IsPublic { get; set; }
 
     }
 }

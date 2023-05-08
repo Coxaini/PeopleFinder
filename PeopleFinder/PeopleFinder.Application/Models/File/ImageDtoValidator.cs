@@ -3,16 +3,12 @@ using Microsoft.Extensions.Options;
 
 namespace PeopleFinder.Application.Models.File;
 
-public class ImageDtoValidator : AbstractValidator<ImageDto>
+public class ImageDtoValidator : AbstractValidator<FileDto>
 {
-    private readonly ImageSettings settings;
-
-
     public ImageDtoValidator(IOptions<ImageSettings> options)
     {
-        settings = options.Value;
-        RuleFor(x => x.Content).Must(x => x.Length < settings.MaxSize);
-        RuleFor(x => x.ContentType).NotEmpty();
+        var settings = options.Value;
+        RuleFor(x => x.ContentStream).Must(x => x.Length < settings.MaxSize);
         RuleFor(x => x.FileName)
             .NotEmpty()
             .Must(x=>options.Value.AllowedExtensions.Contains(Path.GetExtension(x)))

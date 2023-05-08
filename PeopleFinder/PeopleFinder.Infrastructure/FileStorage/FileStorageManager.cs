@@ -1,3 +1,5 @@
+using System.Drawing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
@@ -8,39 +10,47 @@ namespace PeopleFinder.Infrastructure.FileStorage;
 
 public class FileStorageManager : IFileStorageManager
 {
-    private readonly IOptions<ImageSettings> _imageSettings;
+    private readonly string _fileStoragePath;
     private readonly ILogger<FileStorageManager> _logger;
 
-    public FileStorageManager(IOptions<ImageSettings> imageSettings, ILogger<FileStorageManager> logger)
+    public FileStorageManager(IConfiguration fileConfiguration, ILogger<FileStorageManager> logger)
     {
-        _imageSettings = imageSettings;
+        _fileStoragePath = fileConfiguration["FilePath"] ?? throw new IOException("File path not found in a configuration");
+        
         _logger = logger;
     }
     
     
-    public async Task<(Guid Token, string Extension)> SaveImageAsync(ImageDto image, DateTime uploadTime)
+    public async Task<(Guid Token, string Extension)> SaveFileAsync(FileDto fileDto, DateTime uploadTime)
     {
-        string ext = Path.GetExtension(image.FileName);
+        
+        string ext = Path.GetExtension(fileDto.FileName);
         var token = Guid.NewGuid();
-        string folderPath = FileFolderHelper.GetFileFolderPath(_imageSettings.Value.Path, uploadTime);
+        string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, uploadTime);
         Directory.CreateDirectory(folderPath);
         
         string filePath = Path.Combine(folderPath, $"{token}{ext}");
         await using var stream = new FileStream(filePath, FileMode.CreateNew);
-        
-        await stream.WriteAsync(image.Content);
-        _logger.LogInformation($"Image saved to {filePath}");
-        return (token, ext);
+        await fileDto.ContentStream.CopyToAsync(stream);
+
+        _logger.LogInformation("{fileName} saved to {filePath}", fileDto.FileName, filePath);
+        return (token, ext[1..]);
         
     }
 
-    public async  Task<byte[]> GetImageAsync(string fileName, DateTime uploadTime)
+    
+    /// <exception cref="FileNotFoundException"></exception>
+    public FileStream GetFileAsync(string fileName, DateTime uploadTime)
     {
-        string folderPath = FileFolderHelper.GetFileFolderPath(_imageSettings.Value.Path, uploadTime);
+        string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, uploadTime);
         
         string filePath = Path.Combine(folderPath, fileName);
+        if (!File.Exists(filePath))
+        {
+            throw new FileNotFoundException($"File {fileName} not found");
+        }
         
-        return await File.ReadAllBytesAsync(filePath);
+        return File.OpenRead(filePath);
 
     }
 }

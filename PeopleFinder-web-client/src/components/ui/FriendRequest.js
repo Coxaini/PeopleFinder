@@ -12,7 +12,7 @@ const FriendRequest = forwardRef((props, ref) => {
 
     return (
         <div className={classes.profile} ref={ref}>
-            <img className={classes.largeimage} src="https://placehold.it/360x360" alt="profile" />
+            <img className={classes.largeimage} src={profile.mainPictureUrl} alt="profile" />
             <div className={classes.info}>
                 <div className={classes.horizontallayout}><h2>{profile.name}</h2> <span>sent {timeAgo}</span></div>
                 <span className={classes.bio}>{profile.bio}</span>

@@ -30,7 +30,7 @@ const FriendProfile = forwardRef((props, ref) => {
     return (
         <Link className='profilelinkpanel' to={`/profile/${props.username}`}>
         <div className={classes.profile} ref={ref} >
-            <img className={classes.smallimage} src="https://placehold.it/100x100" alt="profile" />
+            <img className={classes.smallimage} src={props.mainPictureUrl} alt="profile" />
             <div className={classes.smallinfo}>
                 <div className={classes.columncontainer}>
                 <h2>{props.name}</h2>

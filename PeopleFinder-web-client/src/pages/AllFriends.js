@@ -14,7 +14,7 @@ function AllFriends() {
   //const {friends, setFriends, pageNum, setPageNum} = useContext(FriendsContext);
   
   const {isLoading, isError, error, metadata} = 
-  useCursorPagedData("/friends", setFriends, afterCursor, 5);
+  useCursorPagedData("/friends", setFriends, afterCursor, 10);
 
    const { lastFriendRef } = useInfiniteLoadObserver( metadata, isLoading, setAfterCursor);
 

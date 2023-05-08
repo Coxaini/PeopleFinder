@@ -19,12 +19,15 @@ namespace PeopleFinder.Mappers.Mapping
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<FriendProfile, ShortProfileResponse>()
+                .Map(dest=>dest.MainPictureUrl, 
+                    src=>"https://localhost:7273/"+ (src.Profile.MainPictureId.HasValue ? src.Profile.MainPictureId.Value.ToString() : "images/default.jpg"))
                 .Map(dest => dest, src => src.Profile);
 
 
             config.NewConfig<Profile, ShortProfileResponse>()
                 .Map(dest => dest.Tags, src => src.Tags)
-                .Map(dest => dest.Age, src => src.Age);
+                .Map(dest => dest.Age, src => src.Age)
+                .Map(dest=>dest.MainPictureUrl, src=>"https://localhost:7273/"+ (src.MainPictureId.HasValue ? src.MainPictureId.Value.ToString() : "images/default.jpg"));
 
 
             config
@@ -46,6 +49,7 @@ namespace PeopleFinder.Mappers.Mapping
                 .Map(dest=>dest.MutualFriends, 
                     src=>src.MutualFriends != null ? src.MutualFriends.Items.Select(p=>p.Profile.Username) : new List<string>())
                 .Map(src=>src.Tags, dest=>dest.Tags)
+                .Map(dest=>dest.MainPictureUrl, src=>"https://localhost:7273/"+ (src.MainPictureId.HasValue ? src.MainPictureId.Value.ToString() : "images/default.jpg"))
                 .Map(dest=>dest.Status, src=>(src.Relationship != null ? src.Relationship!.Status.
                     ToRelationshipStatusResponse( src.Id, src.Relationship) : RelationshipStatusResponse.None).ToString().ToLower());
                     
@@ -56,7 +60,7 @@ namespace PeopleFinder.Mappers.Mapping
             config.NewConfig<Tag, TagResponse>()
                 .Map(dest => dest.Title, src => src.Name);
 
-            config.NewConfig<ProfilePicture, string>();
+            //config.NewConfig<ProfilePicture, string>();
             // .Map(dest => dest, src => src.);
 
         }

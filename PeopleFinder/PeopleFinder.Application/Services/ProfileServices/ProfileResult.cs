@@ -9,4 +9,4 @@ using PeopleFinder.Domain.Entities;
 namespace PeopleFinder.Application.Services.ProfileServices;
 
 public record ProfileResult(int Id, string Username, RelationshipResult? Relationship, CursorList<FriendProfile>? MutualFriends
-    , string Name, int? Age, string Bio, string City, Gender? Gender, string MainPicture , List<TagResponse>  Tags);
+    , string Name, int? Age, string Bio, string City, Gender? Gender, Guid? MainPictureId , List<TagResponse>  Tags);

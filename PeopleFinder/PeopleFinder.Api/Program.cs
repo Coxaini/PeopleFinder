@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PeopleFinder.Api;
+using PeopleFinder.Api.Middlewares;
 using PeopleFinder.Application;
 using PeopleFinder.Infrastructure;
 using PeopleFinder.Infrastructure.Persistence;
@@ -9,22 +10,8 @@ using PeopleFinder.Mappers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-    
- /*  .ConfigureApiBehaviorOptions(options =>
-{
-    options.InvalidModelStateResponseFactory = context =>
-    {
-        var validationDetails = new ValidationProblemDetails(context.ModelState);
 
-        return new BadRequestObjectResult(new
-        {
-            //put other context info here
-            Errors = validationDetails.Errors
-        });
-    };
-});*/
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -47,25 +34,34 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
         
     }));
 
+//add configuration for files 
+builder.Configuration.AddJsonFile("filesettings.json");
+
 var app = builder.Build();
 
+app.UseStaticFiles();
 
-var dbcontext = app.Services.CreateScope().ServiceProvider.GetRequiredService<PeopleFinderDbContext>();
+if (app.Environment.IsDevelopment())
+{
+    var dbcontext = app.Services.CreateScope().ServiceProvider.GetRequiredService<PeopleFinderDbContext>();
 //dbcontext.Database.EnsureDeleted();
-dbcontext.Database.EnsureCreated();
+    dbcontext.Database.EnsureCreated();
+}
+
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-    {
+{
         app.UseSwagger();
         app.UseSwaggerUI();
-    }
+}
 app.UseCors("NgOrigins");
 
 app.UseExceptionHandler("/error");
 
 app.UseHttpsRedirection();
+app.UseMiddleware<AuthTokenSetterMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

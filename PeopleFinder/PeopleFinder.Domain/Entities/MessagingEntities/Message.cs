@@ -14,9 +14,9 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
     }
     public class Message
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
-        public long ChatId { get; set; }
+        public Guid ChatId { get; set; }
         public int SenderId { get; set; }
         public string Text { get; set; } = null!;
         public DateTime SentAt { get; set; }

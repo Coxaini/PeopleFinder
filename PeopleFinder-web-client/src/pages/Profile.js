@@ -17,7 +17,7 @@ import ProfileActions from '../components/ui/Profile/ProfileActions';
 function ProfilePage() {
 
     const params = useParams();
-    const { userData } = useUserData();
+    const [userData] = useUserData();
 
     const apiPrivate = useApiPrivate();
     const [profile, setProfile] = useState({});
@@ -32,7 +32,7 @@ function ProfilePage() {
 
         setMutualFriendsOverlay(false);
         
-        apiPrivate.get(`/profile/${params.username ?? params.id ?? userData.userid}`)
+        apiPrivate.get(`/profile/${params.username ?? params.id ?? userData.id}`)
             .then(response => {
                 setProfile(response?.data);
                 const metadata = JSON.parse(response?.headers?.['x-pagination']);
@@ -45,7 +45,7 @@ function ProfilePage() {
             });
        
 
-    }, [params.username, params.id, userData.userid, apiPrivate]);
+    }, [params.username, params.id, userData.id, apiPrivate]);
 
 
     if (isLoading) {
@@ -78,7 +78,7 @@ function ProfilePage() {
     }
 
     let actions = null;
-    if (profile.id !== Number(userData.userid)) {
+    if (profile.id !== Number(userData.id)) {
         switch (profile.status) {
             case "friend":
                 actions = <>
@@ -130,7 +130,7 @@ function ProfilePage() {
                 <div className={classes.profile}>
                     <div className={classes.profilegrid}>
                         <div className='flexlist'>
-                            <img src='https://placehold.it/360x360' />
+                            <img src={profile.mainPictureUrl} alt='profile' />
                             <div className={classes.actionslayout}>
                             <ProfileActions id={profile.id} status={profile.status}/>
                         </div>

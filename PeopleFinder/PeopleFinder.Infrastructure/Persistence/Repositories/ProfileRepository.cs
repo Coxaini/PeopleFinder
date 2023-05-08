@@ -70,54 +70,10 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         {
             return await Context.Profiles.FindAsync(id);
         }
-
-
-
-        /*public async Task<ProfileWithMutualFriends> GetRecommendedByMutualFriends(Profile profile)
-        {
-            var profileEntry = Context.Profiles
-                .Entry(profile);
-
-            var friends = profileEntry.Collection(p => p.InitiatedFriendships).Query()
-                    .Select(f=>f.SecondProfile)
-                .Union(profileEntry.Collection(p => p.ApprovedFriendships).Query()
-                    .Select(f=>f.FirstProfile));
-
-            
-
-        }*/
+        
         public async Task<IEnumerable<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId) //cache this
         {
 
-            /*var f1 = Context.Friendships
-                .Where(f => f.FirstProfileId == profileId)
-                .Select(f =>  f.SecondProfile);
-            var f2 = Context.Friendships
-                .Where(f => f.SecondProfileId == profileId)
-                .Select(f =>  f.FirstProfile);
-            
-            
-            
-            var friends = f1.Union(f2).Include(f=>f.User);
-
-            var friendsWithFriends = friends
-                .Select(f => new {Friend = f , FriendsOfFriends = f.InitiatedFriendships.Select(fs => fs.SecondProfile)
-                    .Union(f.ApprovedFriendships.Select(fs => fs.FirstProfile))
-                    .Where(ff=>ff.Id != profileId)}
-                );
-
-            var mutualFriends = await friendsWithFriends
-                .SelectMany(ff => ff.FriendsOfFriends
-                .Select(mf => new { MutualFriend = mf, ProfileFriend = ff.Friend }))
-                
-                .GroupBy(m => m.MutualFriend.Id)
-                .Select(mfs=>new 
-                    ProfileWithMutualFriends(mfs.Select(x=>x.MutualFriend).First(),
-                        mfs.Select(x=>x.ProfileFriend.User.Login)))
-                .ToListAsync();
-            
-
-            return mutualFriends;*/
 
             var mutualRecs = await Context.MutualFriendsRecommendations
                 .FromSql(
@@ -153,84 +109,6 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                     x.Usernames.Split(", ")));
             return recs;
 
-            /*var rightRecs = mutualRecs.GroupBy(x => x.Id)
-                .Select(g => 
-                    new { Id = g.Key, Logins = g.Select(x => x.Login) });
-            
-            var recs  = rightRecs
-                .Select(x => new ProfileWithMutualFriends
-                    (Context.Profiles.Find(x.Id)!, x.Logins));
-            return recs;*/
-
-            /*
-            var qprofile = Context.Profiles.Where(up => profile.Id == up.Id);
-
-            
-
-            var profileChats = Context.Chats
-                .Where(c => c.ChatType == ChatType.Private)
-                .Where(c => c.Members.Contains(profile));
-
-
-            var friends = profileChats
-                .SelectMany(c => c.Members
-                    .Where(p => p.Id != profile.Id));
-
-            var friendsChats = friends
-                .SelectMany(f => f.Chats
-                    .Where(c => c.ChatType == ChatType.Private)
-                    .Except(profileChats)
-                );
-
-
-            var friendsOfFriends = await friendsChats
-                .SelectMany(c => c.Members
-                    .Except(friends)
-                    .Select(p => new
-                        {
-                            Profile = p, MutualCount = c.Members
-                                .Intersect(friends)
-                                .Count()
-                        }
-                    )
-                ).OrderByDescending(x => x.MutualCount)
-                .AsNoTracking()
-                .ToListAsync();
-
-
-
-            var recs = friendsOfFriends
-                .Select(f => new ProfileWithMutualFriends(f.Profile,
-                        friendsChats
-                            .Where(c=>c.Members.Contains(f.Profile))
-                            .SelectMany(x => x.Members
-                                .Where(m=>m.Id!= f.Profile.Id)
-                                .Select(mu => mu.User!.Login)).ToList()
-                    )
-                );
-
-            return recs;
-            */
-
-
-            /*var friendsOfFriends = await friends
-                .SelectMany(f => f.Chats
-                    .Where(c => c.ChatType == ChatType.Private)
-                    .Except(profileChats)
-                ).SelectMany(c => c.Members
-                    .Except(friends)
-                    .Select(p => new ProfileWithMutualFriends(p, c.Members
-                            .Intersect(friends)
-                            .Select(mu => mu.User!.Login)
-                        )
-                    ))
-                .OrderByDescending(x => x.MutualFriends.Count())
-                .Include(x=>x.Profile.Tags)
-                .AsNoTracking()
-                .ToListAsync();
-
-
-            return friendsOfFriends;*/
         }
 
         public async Task<CursorList<FriendProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId, int limit, DateTime? after = null) //cache this
@@ -301,17 +179,22 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 
             var totalCount = await query.CountAsync();
             
+            
             if(after != null)
                 query = query.Where(f => f.AcknowledgeAt <= after);
 
             var friends = await query.OrderByDescending(f => f.AcknowledgeAt)
                 .Include(f => f.InitiatorProfile.Tags)
                 .Include(f => f.ReceiverProfile.Tags)
+                .AsSplitQuery()
                 .Select(f => f.InitiatorProfileId == profileId
                     ? new FriendProfile(f.ReceiverProfile, f)
                     : new FriendProfile(f.InitiatorProfile, f))
                 .Take(limit+1)
                 .ToListAsync();
+            
+            
+            
 
             var cursorList = new CursorList<FriendProfile>(friends,limit, totalCount);
             
@@ -327,6 +210,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                         .Include(f=>f.InitiatorProfile.Tags)
                         .Include(f=>f.ReceiverProfile.Tags)
                         .Select(f=>f.InitiatorProfileId == profileId ? f.ReceiverProfile : f.InitiatorProfile)
+                        
                     , pagedPaginationParams.PageNumber, pagedPaginationParams.PageSize);
             
             return friends;

@@ -51,7 +51,8 @@ namespace PeopleFinder.Infrastructure
             services.AddDbContext<PeopleFinderDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-                //o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+               // o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+                
             });
 
             /*services.AddScoped<IUserRepository, UserRepository>();

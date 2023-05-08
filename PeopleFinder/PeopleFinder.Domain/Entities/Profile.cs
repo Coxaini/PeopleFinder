@@ -38,8 +38,8 @@ namespace PeopleFinder.Domain.Entities
         public List<Tag> Tags { get; set; } = null!;
 
 
-        public long? PictureId { get; set; }
-        public MediaFile? Picture { get; set; } = null!;
+        public Guid? MainPictureId { get; set; }
+        public MediaFile? MainPicture { get; set; } = null!;
 
         public List<Recommendation> ReceivedRecommendations = null!;
         public List<Recommendation> PromotedRecommendations = null!;

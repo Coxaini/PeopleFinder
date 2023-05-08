@@ -35,6 +35,7 @@ namespace PeopleFinder.Api.Controllers
                  user =>
                  {
                      SetRefreshToken(user.RefreshToken, user.RefreshTokenExpiryTime);
+                     SetAccessToken(user.Token);
                      return Ok(_mapper.Map<AuthenticationResponse>(user));
                  },
                  Problem);
@@ -51,6 +52,7 @@ namespace PeopleFinder.Api.Controllers
                 user =>
                 {
                     SetRefreshToken(user.RefreshToken, user.RefreshTokenExpiryTime);
+                    SetAccessToken(user.Token);
                     return Ok(_mapper.Map<AuthenticationResponse>(user));
                 },
                 (err)=>
@@ -70,14 +72,24 @@ namespace PeopleFinder.Api.Controllers
             {
                 return Unauthorized("Refresh token is missing");
             }
-            
-            RefreshTokenRequest request = new RefreshTokenRequest(
-                Request.Headers["Authorization"].ToString().Replace("Bearer ", "")
-                ,refreshToken);
-            var tokenResult = await _authenticationService.RefreshToken(request);
 
+            string? accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            
+            if(string.IsNullOrEmpty(accessToken))
+            {
+                return Unauthorized("Access token is missing");
+            }
+            
+            var request = new RefreshTokenRequest(accessToken,refreshToken);
+            var tokenResult = await _authenticationService.RefreshToken(request);
+           
             return tokenResult.Match(
-                 tokens => new ObjectResult(new {Token = tokens.Token}),
+                
+                 tokens =>
+                 {
+                     SetAccessToken(tokens.Token);
+                     return Ok("Token refreshed successfully");
+                 },
                  Problem);
         }
 
@@ -98,7 +110,17 @@ namespace PeopleFinder.Api.Controllers
                 Ok,
                 Problem);
         }
-
+        
+        private void SetAccessToken(string accessToken)
+        {
+            Response.Cookies.Append("accessToken", accessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                MaxAge = TimeSpan.FromDays(300),
+                Secure = true
+            });
+        }
 
         private void SetRefreshToken(string refreshToken, DateTime expiryTime)
         {

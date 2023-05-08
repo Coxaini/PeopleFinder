@@ -15,6 +15,7 @@ using PeopleFinder.Application.Models.File;
 using PeopleFinder.Application.Services.FriendsService;
 using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 
 namespace PeopleFinder.Api.Controllers
 {
@@ -55,17 +56,18 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
-        [HttpPut("picture")]
-        public async Task<IActionResult> EditProfilePicture(IFormFile imageFile)
+        [HttpPost("picture")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile imageFile)
         {
             
-            ImageDto image = new(imageFile.FileName, imageFile.ContentType, imageFile.GetBytes());
+            FileDto fileDto = new(imageFile.FileName, imageFile.OpenReadStream(), MediaFileType.Image);
             
-            var result = await _profileService.UploadProfilePicture(ProfileIdInClaims, image);
-            
+            var result = await _profileService.UploadProfilePicture(ProfileIdInClaims, fileDto);
 
+            
             return result.Match(
-                (profile) => Ok(),
+                (image) => CreatedAtAction(nameof(FileController.GetFile), "File", 
+                    new{ Token = image.Id} , image),
                 Problem);
         }
         

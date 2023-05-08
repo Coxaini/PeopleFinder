@@ -7,9 +7,8 @@ import Tooltip from "../../components/ui/Tooltip";
 import logo from "../../images/PeopleFinder.png"
 import { Link } from "react-router-dom";
 import api from "../../api/axios";
-import useAccessToken from "../../hooks/useAccessToken";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import useUserData from "../../hooks/useUserData";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -42,7 +41,7 @@ const Register = () => {
   const pwdRef = useRef();
   const matchRef = useRef();
 
-  const [, setToken] = useAccessToken();
+  const [userData, setUserData] = useUserData();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -127,9 +126,7 @@ const Register = () => {
           withCredentials: true
         });
 
-      const accessToken = response?.data?.token;
-
-      setToken(accessToken);
+      setUserData(response?.data);
       navigate(from, { replace: true });
 
     } catch (err) {

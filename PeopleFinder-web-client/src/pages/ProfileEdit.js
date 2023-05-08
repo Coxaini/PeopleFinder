@@ -8,7 +8,7 @@ import LoaderSpinner from '../components/ui/LoaderSpinner';
 
 function ProfileEdit() {
 
-    const { userData } = useUserData();
+    const [userData] = useUserData();
     const apiPrivate = useApiPrivate();
     const [profile, setProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -26,9 +26,10 @@ function ProfileEdit() {
     const [imageLoading, setImageLoading] = useState(false);
 
     useEffect(() => {
-        apiPrivate.get(`/profile/${userData.userid}`)
+        apiPrivate.get(`/profile/${userData.id}`)
             .then(response => {
                 setProfile(response?.data);
+                setImagePreviewUrl(response?.data?.mainPictureUrl);
             })
             .catch(error => {
                 console.log(error);
@@ -37,7 +38,7 @@ function ProfileEdit() {
             });
 
 
-    }, [userData.userid, apiPrivate]);
+    }, [userData.id, apiPrivate]);
 
     useEffect(() => {
         if (profile) {
@@ -78,7 +79,8 @@ function ProfileEdit() {
         let formData = new FormData();
         formData.append('imageFile', imagefile);
 
-        apiPrivate.put('/profile/picture', formData)
+
+        apiPrivate.post('/profile/picture', formData)
             .then(response => {
                 setImageLoading(false);
                
@@ -88,8 +90,10 @@ function ProfileEdit() {
 
                 setImageErrorMsg("An error occurred while uploading the image");
                 setImageLoading(false);
-                setImagePreviewUrl('https://via.placeholder.com/150');
+                setImagePreviewUrl(profile?.data?.mainPictureUrl);
             });
+
+        
     }
 
     return (

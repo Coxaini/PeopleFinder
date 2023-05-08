@@ -20,11 +20,11 @@ namespace PeopleFinder.Application.Services.ProfileServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileStorageManager _storageManager;
         private readonly IValidator<ProfileFillRequest> _profileFillValidator;
-        private readonly IValidator<ImageDto> _profileImageValidator;
+        private readonly IValidator<FileDto> _profileImageValidator;
         private readonly IMapper _mapper;
 
         public ProfileService(IUnitOfWork unitOfWork, IFileStorageManager storageManager, IValidator<ProfileFillRequest> profileFillValidator
-            ,IValidator<ImageDto> profileImageValidator , IMapper mapper)
+            ,IValidator<FileDto> profileImageValidator , IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _storageManager = storageManager;
@@ -141,37 +141,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
         }
 
-        public async Task<Result<Profile>> UploadProfilePicture(int profileId, ImageDto image)
-        {
-            var valResult = await _profileImageValidator.ValidateAsync(image);
-            if (!valResult.IsValid)
-            {
-                return Result.Fail(valResult.ToErrorList());
-            }
-            
-            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
-            
-            var now = DateTime.Now;
-            (Guid Token, string Extension) file = await _storageManager.SaveImageAsync(image, now);
-            
-            var profilePicture = new MediaFile()
-            {
-                Token = file.Token,
-                Extension = file.Extension,
-                UploadTime = now,
-                Type = MediaFileType.Photo,
-                OriginalName = image.FileName
-            };
-            
-            
-            await _unitOfWork.MediaFileRepository.AddAsync(profilePicture);
-            profile!.Picture = profilePicture;
-            
-            await _unitOfWork.SaveAsync();
-
-            return Result.Ok();
-        }
-
+     
         private async Task<ProfileResult> GetProfileResult(Profile profile, int requesterId)
         {
             if (profile.Id == requesterId)
@@ -189,6 +159,37 @@ namespace PeopleFinder.Application.Services.ProfileServices
             return _mapper.Map<ProfileResult>((profile, mutualFriends));
             
         }
+        public async Task<Result<MediaFile>> UploadProfilePicture(int profileId, FileDto fileDto)
+        {
+            var valResult = await _profileImageValidator.ValidateAsync(fileDto);
+            if (!valResult.IsValid)
+            {
+                return Result.Fail(valResult.ToErrorList());
+            }
+            
+            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            
+            var now = DateTime.Now;
+            (Guid Token, string Extension) file = await _storageManager.SaveFileAsync(fileDto, now);
+            
+            var profilePicture = new MediaFile()
+            {
+                Id = file.Token,
+                Extension = file.Extension,
+                UploadTime = now,
+                Type = MediaFileType.Image,
+                OriginalName = fileDto.FileName
+            };
+            
+            
+            await _unitOfWork.MediaFileRepository.AddAsync(profilePicture);
+            profile!.MainPicture = profilePicture;
+            
+            await _unitOfWork.SaveAsync();
+
+            return profilePicture;
+        }
+
         
         
     }

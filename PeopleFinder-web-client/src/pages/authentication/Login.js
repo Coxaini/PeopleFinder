@@ -8,7 +8,7 @@ import logo from "../../images/PeopleFinder.png"
 import api from "../../api/axios";
 import useAccessToken from "../../hooks/useAccessToken";
 import { Link, useNavigate , useLocation} from "react-router-dom";
-
+import useUserData from "../../hooks/useUserData";
 
 const Login = () => {
 
@@ -27,6 +27,7 @@ const Login = () => {
   //const [, setToken] = useAccessToken();
 
   const [,setToken] = useAccessToken();
+  const [userData, setUserData] = useUserData();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,12 +49,9 @@ const Login = () => {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true
       });
-      
+         
+      setUserData(response?.data);     
 
-      const accessToken = response?.data?.token;
-      
-      
-      setToken(accessToken);
       navigate(from, { replace: true });
 
     } catch (err) {

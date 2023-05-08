@@ -9,7 +9,6 @@ namespace PeopleFinder.Contracts.Authentication
     public record AuthenticationResponse(
     int Id,
     string Username,
-    string Email,
-    string Token);
+    string Email);
     
 }

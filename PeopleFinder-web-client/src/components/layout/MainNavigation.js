@@ -8,7 +8,7 @@ import {  faUsersViewfinder, faUserGroup } from '@fortawesome/free-solid-svg-ico
 
 function MainNavigation() {
 
-  const { userData } = useUserData();
+  const [userData,] = useUserData();
 
   return (
     <div className={classes.topcontainer}>
@@ -28,7 +28,7 @@ function MainNavigation() {
         
           <ul>
             <li id = {classes["profileitem"]}>
-              <Link to={`/profile/${userData.unique_name}`}>
+              <Link to={`/profile/${userData.username}`}>
                 <div className={classes.icon} id={classes["profile"]}>
                   <FontAwesomeIcon icon={faUser} className={classes.linkicon} />
                  <span>Profile</span> 

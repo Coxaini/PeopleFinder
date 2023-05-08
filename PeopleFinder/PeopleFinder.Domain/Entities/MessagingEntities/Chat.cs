@@ -15,7 +15,7 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
 
     public class Chat
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         
         public List<Message> Messages { get; set; } = null!;
         

@@ -14,7 +14,7 @@ public class MediaFileRepository :  BaseRepo<MediaFile>,IMediaFileRepository
     
     public async Task<MediaFile?> GetByToken(Guid token)
     {
-        return await Context.MediaFiles.FirstOrDefaultAsync(x => x.Token == token);
+        return await Context.MediaFiles.FirstOrDefaultAsync(x => x.Id == token);
     }
     
 }

@@ -1,0 +1,26 @@
+{
+  "ImageSettings": {
+    "MaxSize": 5000000,
+    "AllowedExtensions": [
+      ".jpg",
+      ".png",
+      ".jpeg"
+    ]
+  },
+    "VideoSettings": {
+        "MaxSize": 100000000,
+        "AllowedExtensions": [
+        ".mp4",
+        ".avi",
+        ".mov"
+        ]
+    },
+    "AudioSettings": {
+        "MaxSize": 50000000,
+        "AllowedExtensions": [
+        ".mp3",
+        ".wav",
+        ".ogg"
+        ]
+    }
+}

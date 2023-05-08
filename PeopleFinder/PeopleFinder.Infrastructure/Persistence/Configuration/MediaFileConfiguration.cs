@@ -8,7 +8,7 @@ public class MediaFileConfiguration: IEntityTypeConfiguration<MediaFile>
 {
     public void Configure(EntityTypeBuilder<MediaFile> builder)
     {
-        builder.HasIndex(x => x.Token).IsUnique();
+        builder.HasIndex(x => x.Id).IsUnique();
         
         
     }

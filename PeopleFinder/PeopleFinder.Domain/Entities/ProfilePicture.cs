@@ -10,7 +10,7 @@ namespace PeopleFinder.Domain.Entities
     public class ProfilePicture
     {
         public long Id { get; set; }
-        public long PictureId { get; set; }
+        public Guid PictureId { get; set; }
         public MediaFile? Picture { get; set; }
         public Profile? Profile { get; set; }
     }
