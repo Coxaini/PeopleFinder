@@ -4,6 +4,7 @@ using PeopleFinder.Application.Models.Chat;
 using PeopleFinder.Application.Models.File;
 using PeopleFinder.Contracts.Chats;
 using PeopleFinder.Domain.Common.Models;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 
 namespace PeopleFinder.Mappers.Mapping;
 
@@ -28,7 +29,10 @@ public class ChatMappingConfig : IRegister
         
         
         config.NewConfig<UserChat, ChatResponse>()
-            .Map(dest => dest.DisplayLogoUrl, source => _fileUrlService.GetFileUrl(source.DisplayLogoId))
+            .Map(dest => dest.DisplayLogoUrl, 
+                source => _fileUrlService.GetFileUrl(source.DisplayLogoId) 
+                          ??( source.ChatType == ChatType.Direct ? _fileUrlService.GetFileUrl("images/default.jpg") 
+                              :_fileUrlService.GetFileUrl("images/default-group.jpg") ))
             .Map(dest => dest.ChatType, source => source.ChatType.ToString());
     }
 }

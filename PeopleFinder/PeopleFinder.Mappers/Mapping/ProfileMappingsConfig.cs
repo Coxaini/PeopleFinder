@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Services.ProfileServices;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
@@ -18,24 +19,28 @@ namespace PeopleFinder.Mappers.Mapping
 {
     public class ProfileMappingsConfig : IRegister
     {
-        private readonly FileStorageSettings _fileStorageSettings;
+        private readonly IFileUrlService _fileUrlService;
+      
 
-        public ProfileMappingsConfig(IOptions<FileStorageSettings> fileStorageSettings)
+        public ProfileMappingsConfig( IFileUrlService fileUrlService)
         {
-            _fileStorageSettings = fileStorageSettings.Value;
+            _fileUrlService = fileUrlService;
+           
         }
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<FriendProfile, ShortProfileResponse>()
                 .Map(dest=>dest.MainPictureUrl, 
-                    src=>_fileStorageSettings.BaseUrl+ (src.Profile.MainPictureId.HasValue ? src.Profile.MainPictureId.Value.ToString() : "images/default.jpg"))
+                    src=>_fileUrlService.GetFileUrl(src.Profile.MainPictureId) 
+                         ?? _fileUrlService.GetFileUrl("images/default.jpg"))
                 .Map(dest => dest, src => src.Profile);
 
 
             config.NewConfig<Profile, ShortProfileResponse>()
                 .Map(dest => dest.Tags, src => src.Tags)
                 .Map(dest => dest.Age, src => src.Age)
-                .Map(dest=>dest.MainPictureUrl, src=>_fileStorageSettings.BaseUrl+ (src.MainPictureId.HasValue ? src.MainPictureId.Value.ToString() : "images/default.jpg"));
+                .Map(dest=>dest.MainPictureUrl, src=>_fileUrlService.GetFileUrl(src.MainPictureId) 
+                                                     ?? _fileUrlService.GetFileUrl("images/default.jpg"));
 
 
             config
@@ -57,7 +62,8 @@ namespace PeopleFinder.Mappers.Mapping
                 .Map(dest=>dest.MutualFriends, 
                     src=>src.MutualFriends != null ? src.MutualFriends.Items.Select(p=>p.Profile.Username) : new List<string>())
                 .Map(src=>src.Tags, dest=>dest.Tags)
-                .Map(dest=>dest.MainPictureUrl, src=>_fileStorageSettings.BaseUrl+ (src.MainPictureId.HasValue ? src.MainPictureId.Value.ToString() : "images/default.jpg"))
+                .Map(dest=>dest.MainPictureUrl, src=>_fileUrlService.GetFileUrl(src.MainPictureId) 
+                                                     ?? _fileUrlService.GetFileUrl("images/default.jpg"))
                 .Map(dest=>dest.Status, src=>(src.Relationship != null ? src.Relationship!.Status.
                     ToRelationshipStatusResponse( src.Id, src.Relationship) : RelationshipStatusResponse.None).ToString().ToLower());
                     

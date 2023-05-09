@@ -16,4 +16,9 @@ public class FileUrlService : IFileUrlService
     {
         return fileId is null ? null : $"{_fileSettings.BaseUrl}/{fileId}";
     }
+
+    public string GetFileUrl(string fileName)
+    {
+        return $"{_fileSettings.BaseUrl}/{fileName}";
+    }
 }
