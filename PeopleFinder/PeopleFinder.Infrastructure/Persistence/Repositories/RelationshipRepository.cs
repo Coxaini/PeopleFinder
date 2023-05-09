@@ -9,6 +9,8 @@ using PeopleFinder.Infrastructure.Persistence.Common;
 
 namespace PeopleFinder.Infrastructure.Persistence.Repositories;
 
+
+
 public class RelationshipRepository : BaseRepo<Relationship>, IRelationshipRepository
 {
     public RelationshipRepository(PeopleFinderDbContext context) : base(context)
@@ -27,18 +29,26 @@ public class RelationshipRepository : BaseRepo<Relationship>, IRelationshipRepos
     }
 
     
-    public Task<Relationship?> GetRelationshipByProfileIdsAsync(int firstProfileId, int secondProfileId)
+    public async Task<Relationship?> GetRelationshipByProfileIdsAsync(int firstProfileId, int secondProfileId)
     {
-        return Context.Relationships
+        return await Context.Relationships
             .Where(f=>f.Status == RelationshipStatus.Pending || f.Status == RelationshipStatus.Approved)
             .FirstOrDefaultAsync(f => (f.InitiatorProfileId == firstProfileId && f.ReceiverProfileId == secondProfileId) ||
                                       (f.InitiatorProfileId == secondProfileId && f.ReceiverProfileId == firstProfileId));
     }
-
-    public void DeleteFriendshipByProfileIds(int firstProfileId, int secondProfileId)
+    
+    public async Task<bool> IsProfilesFriends(int firstProfileId, int secondProfileId)
     {
-        var friendship = Context.Relationships
-            .FirstOrDefault(f => (f.InitiatorProfileId == firstProfileId && f.ReceiverProfileId == secondProfileId) ||
+        return await Context.Relationships
+            .AnyAsync(f => f.Status == RelationshipStatus.Approved &&
+                           ((f.InitiatorProfileId == firstProfileId && f.ReceiverProfileId == secondProfileId) ||
+                            (f.InitiatorProfileId == secondProfileId && f.ReceiverProfileId == firstProfileId)));
+    }
+
+    public async Task DeleteFriendshipByProfileIds(int firstProfileId, int secondProfileId)
+    {
+        var friendship = await Context.Relationships
+            .FirstOrDefaultAsync(f => (f.InitiatorProfileId == firstProfileId && f.ReceiverProfileId == secondProfileId) ||
                                  (f.InitiatorProfileId == secondProfileId && f.ReceiverProfileId == firstProfileId));
         if (friendship != null)
         {
@@ -104,9 +114,17 @@ public class RelationshipRepository : BaseRepo<Relationship>, IRelationshipRepos
         return newRequests;
     }
 
-    public async void DeclineFriendRequest(int profileId, int senderId)
+    public async Task DeclineFriendRequest(int profileId, int senderId)
     {
-        throw new NotImplementedException();
+        var friendship = await Context.Relationships
+            .FirstOrDefaultAsync(f => f.Status == RelationshipStatus.Pending &&
+                                      f.InitiatorProfileId == senderId &&
+                                      f.ReceiverProfileId == profileId);
+        if (friendship != null)
+        {
+            friendship.Status = RelationshipStatus.Rejected;
+            friendship.AcknowledgeAt = DateTime.UtcNow;
+        }
     }
 
     public async Task<Relationship?> GetRequest(int senderId, int receiverId)

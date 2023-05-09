@@ -17,6 +17,8 @@ namespace PeopleFinder.Domain.Repositories.Common
         IRecommendationRepository RecommendationRepository { get; }
         IChatRepository ChatRepository { get; }
         IMediaFileRepository MediaFileRepository { get; }
+        
+        IMessageRepository MessageRepository { get; }
 
         IRelationshipRepository RelationshipRepository { get; }
         IDbContextTransaction BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);

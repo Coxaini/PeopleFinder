@@ -14,13 +14,14 @@ public interface IRelationshipRepository : IRepo<Relationship>
     /// </summary>
     Task<Relationship?> GetRelationshipByProfileIdsAsync(int firstProfileId, int secondProfileId);
     
-    void DeleteFriendshipByProfileIds(int firstProfileId, int secondProfileId);
+    Task DeleteFriendshipByProfileIds(int firstProfileId, int secondProfileId);
+    Task<bool> IsProfilesFriends(int firstProfileId, int secondProfileId);
     
     Task<IEnumerable<Relationship>> GetRequestsWithoutAnswer(int profileId);
     Task<CursorList<Relationship>> GetRequestsWithoutAnswer(int profileId, int limit, DateTime? after);
     Task <int> GetRequestsWithoutAnswerCount(int profileId);
     Task<PagedList<Relationship>> GetRequestsWithoutAnswer(int profileId, PagedPaginationParams pagedPaginationParams);
-    void DeclineFriendRequest(int profileId, int senderId);
+    Task DeclineFriendRequest(int profileId, int senderId);
     Task<Relationship?> GetRequest(int senderId, int receiverId);
     
 }

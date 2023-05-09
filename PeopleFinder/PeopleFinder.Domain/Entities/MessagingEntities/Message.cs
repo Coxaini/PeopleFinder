@@ -9,7 +9,6 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
     public enum MessageType
     {
         Text,
-        Attachment,
         Event
     }
     public class Message
@@ -21,6 +20,9 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         public string Text { get; set; } = null!;
         public DateTime SentAt { get; set; }
         public DateTime? EditedAt { get; set; }
+        
+        public Guid? AttachmentFileId { get; set; }
+        public MediaFile? AttachmentFile { get; set; }
 
         public Profile Sender { get; set; } = null!;
 

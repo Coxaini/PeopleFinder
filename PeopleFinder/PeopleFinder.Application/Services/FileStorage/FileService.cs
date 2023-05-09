@@ -1,6 +1,8 @@
 using FluentResults;
 using PeopleFinder.Application.Common.Errors;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Models.File;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 using PeopleFinder.Domain.Repositories.Common;
 
 namespace PeopleFinder.Application.Services.FileStorage;
@@ -28,5 +30,25 @@ public class FileService : IFileService
         
         return Result.Ok(new FileResult(media.OriginalName,media.Type, media.Extension, fileStream));
         
+    }
+
+    public async Task<Result<MediaFile>> UploadFileAsync(FileDto fileDto)
+    {
+        
+        var now = DateTime.Now;
+        var file = await _fileStorageManager.UploadFileAsync(fileDto, now);
+        
+        var MediaFile = new MediaFile()
+        {
+            Id = file.Token,
+            OriginalName = fileDto.FileName,
+            Type = fileDto.Type,
+            Extension = file.Extension,
+            UploadTime = now
+        };
+        
+        await _unitOfWork.MediaFileRepository.AddAsync(MediaFile);
+        await _unitOfWork.SaveAsync();
+        return Result.Ok(MediaFile);
     }
 }

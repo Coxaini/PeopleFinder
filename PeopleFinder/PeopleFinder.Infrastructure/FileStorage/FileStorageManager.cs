@@ -21,7 +21,7 @@ public class FileStorageManager : IFileStorageManager
     }
     
     
-    public async Task<(Guid Token, string Extension)> SaveFileAsync(FileDto fileDto, DateTime uploadTime)
+    public async Task<(Guid Token, string Extension)> UploadFileAsync(FileDto fileDto, DateTime uploadTime)
     {
         
         string ext = Path.GetExtension(fileDto.FileName);

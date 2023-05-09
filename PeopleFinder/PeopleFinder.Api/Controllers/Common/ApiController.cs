@@ -16,7 +16,6 @@ namespace PeopleFinder.Api.Controllers.Common
 
     protected int ProfileIdInClaims => Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     protected int UserIdInClaims => Convert.ToInt32(HttpContext.User.FindFirst(ProjectJwtRegisteredClaimNames.UserId)?.Value);
-
     
 
     protected IActionResult Problem(List<IError> errors)

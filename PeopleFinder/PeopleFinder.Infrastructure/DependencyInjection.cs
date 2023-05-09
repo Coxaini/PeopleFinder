@@ -38,11 +38,12 @@ namespace PeopleFinder.Infrastructure
             services.AddPersistence(configuration);
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
-            services.AddSingleton<IFileStorageManager, FileStorageManager>();;
+            services.AddSingleton<IFileStorageManager, FileStorageManager>();
+            services.AddSingleton<IFileUrlService, FileUrlService>();
             return services;
         }
 
-        public static IServiceCollection AddPersistence(this IServiceCollection services,
+        private static IServiceCollection AddPersistence(this IServiceCollection services,
         IConfiguration configuration)
         {
             string connectionString = configuration.GetConnectionString("DefaultConnection") 
@@ -63,7 +64,7 @@ namespace PeopleFinder.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddAuth(this IServiceCollection services,
+        private static IServiceCollection AddAuth(this IServiceCollection services,
         IConfiguration configuration)
         {
              var jwtSettings = new JwtSettings();

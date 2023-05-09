@@ -9,7 +9,7 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
 {
     public enum ChatType
     {
-        Private,
+        Direct,
         Group
     }
 
@@ -19,10 +19,17 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         
         public List<Message> Messages { get; set; } = null!;
         
+        public string? Title { get; set; } = null!;
+        
+        public MediaFile? Logo { get; set; }
         public ChatType ChatType { get; set; }
         
+        public int MembersCount { get; set; }
         public List<Profile> Members { get; set; } = null!;
         public  List<ChatMember> ChatMembers { get; set; } = null!;
+        
+        public DateTime? LastMessageAt { get; set; }
+        public string? LastMessage { get; set; } = null!;
         
         [Precision(2)]
         public DateTime CreatedAt { get; set; }

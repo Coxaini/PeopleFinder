@@ -113,9 +113,9 @@ namespace PeopleFinder.Api.Controllers
         }
 
         [HttpGet("{profileId:int}/mutualFriends")]
-        public async Task<IActionResult> GetMutualFriendsWithProfile(int profileId, [FromQuery]CursorPaginationRequest<DateTime> cursorPaginationParams)
+        public async Task<IActionResult> GetMutualFriendsWithProfile(int profileId, [FromQuery]CursorPagination<DateTime> cursorPaginationParams)
         {
-            CursorPaginationParams<DateTime> pag = new()
+            CursorPaginationParams<DateTime> pag = new(20)
                 { PageSize = cursorPaginationParams.PageSize, After = cursorPaginationParams.After, Before = cursorPaginationParams.Before };
             
             var mutualFriends = await _relationshipService.GetMutualFriends(ProfileIdInClaims, profileId, pag);

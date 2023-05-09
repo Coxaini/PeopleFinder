@@ -19,11 +19,12 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         private IChatRepository? _chatRepository;
         private IRelationshipRepository? _relationshipRepository;
         private IMediaFileRepository? _mediaFileRepository;
+        private IMessageRepository? _messageRepository;
         public UnitOfWork(PeopleFinderDbContext dbContext) 
         {
             _dbContext = dbContext;
         }
-        
+        public IMessageRepository MessageRepository => _messageRepository ??= new MessageRepository(_dbContext);
         public IMediaFileRepository MediaFileRepository => _mediaFileRepository ??= new MediaFileRepository(_dbContext);
         public IProfileRepository ProfileRepository => _profileRepository ??= new ProfileRepository(_dbContext);
 

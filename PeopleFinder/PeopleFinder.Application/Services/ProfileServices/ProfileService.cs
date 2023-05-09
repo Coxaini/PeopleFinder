@@ -170,7 +170,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
             var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
             
             var now = DateTime.Now;
-            (Guid Token, string Extension) file = await _storageManager.SaveFileAsync(fileDto, now);
+            (Guid Token, string Extension) file = await _storageManager.UploadFileAsync(fileDto, now);
             
             var profilePicture = new MediaFile()
             {
