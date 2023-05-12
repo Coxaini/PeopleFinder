@@ -23,6 +23,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.Security;
 using PeopleFinder.Infrastructure.FileStorage;
 using PeopleFinder.Infrastructure.Persistence;
@@ -39,7 +40,7 @@ namespace PeopleFinder.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IFileStorageManager, FileStorageManager>();
-            services.AddSingleton<IFileUrlService, FileUrlService>();
+            
             return services;
         }
 
@@ -71,7 +72,9 @@ namespace PeopleFinder.Infrastructure
              configuration.Bind("JwtSettings", jwtSettings);
 
             services.AddSingleton(Options.Create(jwtSettings));
-            services.Configure<FileStorageSettings>(configuration.GetSection("FileStorageSettings"));
+           
+            
+            
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
            

@@ -1,4 +1,4 @@
-namespace PeopleFinder.Infrastructure.FileStorage;
+namespace PeopleFinder.Application.Services.FileStorage;
 
 public class FileStorageSettings
 {

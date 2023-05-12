@@ -1,12 +1,10 @@
 using FluentResults;
 using PeopleFinder.Application.Models.Friend;
 using PeopleFinder.Domain.Common.Models;
-using PeopleFinder.Domain.Common.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
-using PeopleFinder.Domain.Common.Pagination.Page;
 using PeopleFinder.Domain.Entities;
 
-namespace PeopleFinder.Application.Services.FriendsService;
+namespace PeopleFinder.Application.Services.RelationshipServices;
 
 public interface IRelationshipService
 {

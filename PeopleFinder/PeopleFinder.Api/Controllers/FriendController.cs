@@ -6,7 +6,7 @@ using PeopleFinder.Api.Common.Extensions;
 using PeopleFinder.Api.Controllers.Common;
 using PeopleFinder.Application.Models.Friend;
 using PeopleFinder.Application.Models.Rating;
-using PeopleFinder.Application.Services.FriendsService;
+using PeopleFinder.Application.Services.RelationshipServices;
 using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Contracts.Profile;
 using PeopleFinder.Contracts.Rating;
@@ -77,7 +77,7 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                     
-                    return Ok(_mapper.Map<IEnumerable<ShortProfileResponse>>(friends.Items));
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(friends.Items));
                 },
                 Problem);
            
@@ -101,7 +101,7 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                     
-                    return Ok(_mapper.Map<IEnumerable<FriendRequestResponse>>(updates.Items));
+                    return Ok(_mapper.Map<IList<FriendRequestResponse>>(updates.Items));
                 },
                 Problem);
             

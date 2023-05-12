@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PeopleFinder.Application.Models.Chat;
+using PeopleFinder.Application.Models.Message;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 
@@ -16,11 +17,16 @@ namespace PeopleFinder.Application.Services.ChatServices
         
         Task<Result<CursorList<UserChat>>> GetChats(int profileId, CursorPaginationParams<DateTime> paginationParams);
         /// <summary>
-        /// Creates a direct chat between two profiles and send a first message
+        /// Creates a direct chat between two profiles and sends a first message
         /// </summary>
-        Task<Result<Chat>> CreateDirectChat(CreateDirectChatRequest request);
-        Task<Result<Message>> SendMessage(SendMessageRequest request);
+        Task<Result<UserChat>> CreateDirectChat(CreateDirectChatRequest request);
+        /// <summary>
+        /// Gets a direct chat between two profiles
+        /// </summary>
+        Task<Result<UserChat>> GetDirectChat(int profileId, int friendId);
         
+        Task<Result<UserChat>> GetChat(int profileId,Guid chatId);
+
         /*Task<Result<Chat>> UpdateChat();
         Task<Result<Chat>> DeleteChat();#1#*/
     }

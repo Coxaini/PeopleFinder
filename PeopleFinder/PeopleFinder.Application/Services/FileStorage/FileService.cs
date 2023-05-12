@@ -26,7 +26,7 @@ public class FileService : IFileService
         if (media is null)
             return Result.Fail(FileServiceErrors.FileNotFound);
         
-        FileStream fileStream = _fileStorageManager.GetFileAsync(media.Id.ToString()+'.' + media.Extension, media.UploadTime);
+        FileStream fileStream = _fileStorageManager.GetFileAsync(media);
         
         return Result.Ok(new FileResult(media.OriginalName,media.Type, media.Extension, fileStream));
         
@@ -34,21 +34,12 @@ public class FileService : IFileService
 
     public async Task<Result<MediaFile>> UploadFileAsync(FileDto fileDto)
     {
+        var uploadTime = DateTime.Now;
         
-        var now = DateTime.Now;
-        var file = await _fileStorageManager.UploadFileAsync(fileDto, now);
-        
-        var MediaFile = new MediaFile()
-        {
-            Id = file.Token,
-            OriginalName = fileDto.FileName,
-            Type = fileDto.Type,
-            Extension = file.Extension,
-            UploadTime = now
-        };
-        
-        await _unitOfWork.MediaFileRepository.AddAsync(MediaFile);
+        var mediaFile = await _fileStorageManager.UploadFileAsync(fileDto);
+
+        await _unitOfWork.MediaFileRepository.AddAsync(mediaFile);
         await _unitOfWork.SaveAsync();
-        return Result.Ok(MediaFile);
+        return Result.Ok(mediaFile);
     }
 }

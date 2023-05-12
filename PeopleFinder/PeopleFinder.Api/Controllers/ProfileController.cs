@@ -12,7 +12,8 @@ using PeopleFinder.Api.Controllers.Common;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using PeopleFinder.Application.Models.File;
-using PeopleFinder.Application.Services.FriendsService;
+using PeopleFinder.Application.Services.FileStorage;
+using PeopleFinder.Application.Services.RelationshipServices;
 using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities.MessagingEntities;
@@ -25,12 +26,14 @@ namespace PeopleFinder.Api.Controllers
     {
         private readonly IProfileService _profileService;
         private readonly IRelationshipService _relationshipService;
+        private readonly IFileTypeResolver _fileTypeResolver;
         private readonly IMapper _mapper;
-        public ProfileController(IProfileService profileService,  IMapper mapper, IRelationshipService relationshipService)
+        public ProfileController(IProfileService profileService,  IMapper mapper, IRelationshipService relationshipService, IFileTypeResolver fileTypeResolver)
         {
             _profileService = profileService;
             _mapper = mapper;
             _relationshipService = relationshipService;
+            _fileTypeResolver = fileTypeResolver;
         }
 
 

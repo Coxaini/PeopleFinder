@@ -18,6 +18,15 @@ namespace PeopleFinder.Infrastructure.Persistence.Configuration
                 HasOne(u => u.SecondMember).
                 WithMany(c => c.GuestChats).
                 HasForeignKey(u => u.SecondMemberId).OnDelete(DeleteBehavior.NoAction);*/
+            builder
+                .HasOne(c => c.LastMessageAuthorProfile)
+                .WithMany(p => p.LastAuthorSenderChats)
+                .HasForeignKey(c => c.LastMessageAuthorProfileId);
+
+            builder
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Chat)
+                .HasForeignKey(m => m.ChatId);
 
             builder
                 .HasMany(c=>c.Members)

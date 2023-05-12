@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
-using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Services.FileStorage;
 
-namespace PeopleFinder.Infrastructure.FileStorage;
+namespace PeopleFinder.Application.Services.FileStorage;
 
 public class FileUrlService : IFileUrlService
 {
@@ -12,9 +12,14 @@ public class FileUrlService : IFileUrlService
         _fileSettings = fileSettings.Value;
     }
     
-    public string? GetFileUrl(Guid? fileId)
+    public string? GetFileUrl(Guid? fileId, string? defaultUrl = null)
     {
-        return fileId is null ? null : $"{_fileSettings.BaseUrl}/{fileId}";
+        if (fileId != null)
+        {
+            return $"{_fileSettings.BaseUrl}/{fileId}";
+        }
+
+        return defaultUrl != null ? $"{_fileSettings.BaseUrl}/{defaultUrl}" : null;
     }
 
     public string GetFileUrl(string fileName)

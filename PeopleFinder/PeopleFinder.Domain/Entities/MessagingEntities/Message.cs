@@ -23,9 +23,7 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         
         public Guid? AttachmentFileId { get; set; }
         public MediaFile? AttachmentFile { get; set; }
-
         public Profile Sender { get; set; } = null!;
-
         public Chat Chat { get; set; } = null!;
 
     }

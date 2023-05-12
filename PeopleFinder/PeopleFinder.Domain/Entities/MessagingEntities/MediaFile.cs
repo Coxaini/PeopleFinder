@@ -12,7 +12,8 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
     {
         Image,
         Video,
-        Audio
+        Audio,
+        File
     }
     public class MediaFile
     {

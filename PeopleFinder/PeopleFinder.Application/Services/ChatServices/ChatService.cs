@@ -1,8 +1,12 @@
 using FluentResults;
+using FluentValidation;
 using PeopleFinder.Application.Common.Errors;
+using PeopleFinder.Application.Common.Extensions;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Models.Chat;
 using PeopleFinder.Application.Models.File;
+using PeopleFinder.Application.Models.Message;
+using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities.MessagingEntities;
@@ -15,11 +19,14 @@ public class ChatService : IChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IFileStorageManager _fileStorageManager;
+    private readonly IValidator<FileDto> _fileValidator;
 
-    public ChatService(IUnitOfWork unitOfWork, IFileStorageManager fileStorageManager)
+
+    public ChatService(IUnitOfWork unitOfWork, IFileStorageManager fileStorageManager, IValidator<FileDto> fileValidator)
     {
         _unitOfWork = unitOfWork;
         _fileStorageManager = fileStorageManager;
+        _fileValidator = fileValidator;
     }
     
     public async Task<Result<CursorList<UserChat>>> GetChats(int profileId, CursorPaginationParams<DateTime> paginationParams)
@@ -35,16 +42,43 @@ public class ChatService : IChatService
     }
 
     
-    public async Task<Result<Chat>> CreateDirectChat(CreateDirectChatRequest request)
+    public async Task<Result<UserChat>> CreateDirectChat(CreateDirectChatRequest request)
     {
+
+        if (request.Attachment is not null)
+        {
+           var valResult = await  _fileValidator.ValidateAsync(request.Attachment);
+              if (!valResult.IsValid)
+              {
+                return Result.Fail(valResult.ToErrorList());
+              }
+        }
         
         if (request.CreatorId == request.FriendId)
         {
             return Result.Fail(ChatErrors.CannotCreateChatWithSelf);
         }
+        
+        var creator = await _unitOfWork.ProfileRepository.GetOne(request.CreatorId);
+        if (creator is null)
+        {
+            return Result.Fail(ProfileErrors.ProfileNotFound);
+        }
+        
+        var friend = await _unitOfWork.ProfileRepository.GetOne(request.FriendId);
+        if (friend is null)
+        {
+            return Result.Fail(ChatErrors.NotFriends);
+        }
+        
         if (!await _unitOfWork.RelationshipRepository.IsProfilesFriends(request.CreatorId, request.FriendId))
         {
             return Result.Fail(ChatErrors.NotFriends);
+        }
+
+        if (await _unitOfWork.ChatRepository.GetDirectChatAsync(request.CreatorId, friend) is not null)
+        {
+            return Result.Fail(ChatErrors.ChatAlreadyExists);
         }
         
         var now = DateTime.Now;
@@ -69,73 +103,88 @@ public class ChatService : IChatService
                     JoinedAt = DateTime.Now
                 }
             },
-            LastMessage = request.Text,
-            LastMessageAt = now,
         };
         
-        MediaFile? mediaFile = await UploadFileAsync(request.Attachment, DateTime.Now);
+        MediaFile? mediaFile = await UploadFileAsync(request.Attachment);
 
         var firstMessage = new Message(){
+            Id = Guid.NewGuid(),
+            Chat = chat,
             SenderId = request.CreatorId,
             Text = request.Text,
             SentAt = now,
+            AttachmentFile = mediaFile,
         };
+        
+        
+
+        chat.UpdateLastMessage(firstMessage.Id,firstMessage.SentAt, firstMessage.Text, creator);
             
         chat.Messages.Add(firstMessage);
 
         await _unitOfWork.ChatRepository.AddAsync(chat);
         await _unitOfWork.SaveAsync();
 
-        return chat;
-            
+
+        var userChat = new UserChat()
+        {
+            Id = chat.Id,
+            ChatType = chat.ChatType,
+            CreatedAt = chat.CreatedAt,
+            LastMessage = chat.LastMessage,
+            LastMessageAt = chat.LastMessageAt,
+            LastMessageAuthorName = chat.LastMessageAuthorProfile?.Name,
+            MembersCount = chat.MembersCount,
+            DisplayLogoId = friend.MainPictureId,
+            DisplayTitle = friend.Name,
+            UniqueTitle = friend.Username,
+        };
+
+        return userChat;
+
     }
-    public async Task<Result<Message>> SendMessage(SendMessageRequest request)
+
+
+    public async Task<Result<UserChat>> GetDirectChat(int profileId, int friendId)
     {
-        var chat = await _unitOfWork.ChatRepository.GetOne(request.ChatId);
+        if (profileId == friendId)
+            return Result.Fail(ChatErrors.CannotGetChatWithSelf);
+        
+        var friend = await _unitOfWork.ProfileRepository.GetOne(friendId);
+        if(friend is null)
+            return Result.Fail(RelationshipErrors.FriendNotFound);
+        
+        var chat = await _unitOfWork.ChatRepository.GetDirectChatAsync(profileId, friend);
+        
+        if(chat is null)
+            return Result.Fail(ChatErrors.ChatNotFound);
+
+        return chat;
+
+    }
+
+    public async Task<Result<UserChat>> GetChat(int profileId,Guid chatId)
+    {
+        var chat = await _unitOfWork.ChatRepository.GetChatAsync(profileId, chatId);
         if (chat is null)
             return Result.Fail(ChatErrors.ChatNotFound);
         
-        var profile = await _unitOfWork.ProfileRepository.GetOne(request.SenderId);
-        if (profile is null)
-            return Result.Fail(ProfileErrors.ProfileNotFound);
-
-        if (!await _unitOfWork.ChatRepository.IsProfileInChatAsync(request.SenderId, request.ChatId))
-        {
+        if(!await _unitOfWork.ChatRepository.IsProfileInChatAsync(profileId, chatId))
             return Result.Fail(ChatErrors.ProfileNotInChat);
-        }
 
-        var timeNow = DateTime.Now;
-        
-        MediaFile? mediaFile = await UploadFileAsync(request.Attachment, timeNow);
-
-        var message = new Message()
-        {
-            SenderId = request.SenderId,
-            Text = request.Text,
-            SentAt = timeNow,
-            AttachmentFile = mediaFile,
-        };
-        
-        await _unitOfWork.MessageRepository.AddAsync(message);
-        await _unitOfWork.SaveAsync();
-        return message;
+        return chat;
     }
-    
-    private async Task<MediaFile?> UploadFileAsync(FileDto? fileDto, DateTime now)
+
+    private async Task<MediaFile?> UploadFileAsync(FileDto? fileDto)
     {
         if (fileDto is null)
             return null;
         
-        var file =await _fileStorageManager.UploadFileAsync(fileDto, now);
-        var mediaFile = new MediaFile()
-        {
-            Id = file.Token,
-            OriginalName = fileDto.FileName,
-            Type = fileDto.Type,
-            Extension = file.Extension,
-            UploadTime = now,
-            IsInPrivateChat = true
-        };
+        var mediaFile = await _fileStorageManager.UploadFileAsync(fileDto);
+       
+        
+        mediaFile.IsInPrivateChat = true;
+        
         await _unitOfWork.MediaFileRepository.AddAsync(mediaFile);
         return mediaFile;
         

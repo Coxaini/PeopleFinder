@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.ProfileServices;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
@@ -19,28 +20,24 @@ namespace PeopleFinder.Mappers.Mapping
 {
     public class ProfileMappingsConfig : IRegister
     {
-        private readonly IFileUrlService _fileUrlService;
-      
 
-        public ProfileMappingsConfig( IFileUrlService fileUrlService)
-        {
-            _fileUrlService = fileUrlService;
-           
-        }
         public void Register(TypeAdapterConfig config)
         {
+
+            
             config.NewConfig<FriendProfile, ShortProfileResponse>()
                 .Map(dest=>dest.MainPictureUrl, 
-                    src=>_fileUrlService.GetFileUrl(src.Profile.MainPictureId) 
-                         ?? _fileUrlService.GetFileUrl("images/default.jpg"))
+                    src=>MapContext.Current
+                        .GetService<IFileUrlService>().GetFileUrl(src.Profile.MainPictureId,"images/default.jpg"))
                 .Map(dest => dest, src => src.Profile);
 
 
             config.NewConfig<Profile, ShortProfileResponse>()
                 .Map(dest => dest.Tags, src => src.Tags)
                 .Map(dest => dest.Age, src => src.Age)
-                .Map(dest=>dest.MainPictureUrl, src=>_fileUrlService.GetFileUrl(src.MainPictureId) 
-                                                     ?? _fileUrlService.GetFileUrl("images/default.jpg"));
+                .Map(dest=>dest.MainPictureUrl, 
+                    src=>MapContext.Current
+                        .GetService<IFileUrlService>().GetFileUrl(src.MainPictureId,"images/default.jpg"));
 
 
             config
@@ -62,8 +59,9 @@ namespace PeopleFinder.Mappers.Mapping
                 .Map(dest=>dest.MutualFriends, 
                     src=>src.MutualFriends != null ? src.MutualFriends.Items.Select(p=>p.Profile.Username) : new List<string>())
                 .Map(src=>src.Tags, dest=>dest.Tags)
-                .Map(dest=>dest.MainPictureUrl, src=>_fileUrlService.GetFileUrl(src.MainPictureId) 
-                                                     ?? _fileUrlService.GetFileUrl("images/default.jpg"))
+                .Map(dest=>dest.MainPictureUrl, 
+                    src=>MapContext.Current
+                        .GetService<IFileUrlService>().GetFileUrl(src.MainPictureId,"images/default.jpg"))
                 .Map(dest=>dest.Status, src=>(src.Relationship != null ? src.Relationship!.Status.
                     ToRelationshipStatusResponse( src.Id, src.Relationship) : RelationshipStatusResponse.None).ToString().ToLower());
                     

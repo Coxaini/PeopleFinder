@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.AspNetCore.Components.Web;
 using PeopleFinder.Application.Common.Constants;
-using PeopleFinder.Application.Services.FriendsService;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;

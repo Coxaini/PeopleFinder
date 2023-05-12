@@ -137,6 +137,23 @@ public class PeopleFinderDbContext : DbContext
             new Profile() { Id = 16, Name ="Olivia", UserId = 16, Username ="user8", Gender = Gender.Female, Bio="I love painting", BirthDate=new DateTime(1989,9,5), City ="Philadelphia" },
         };
 
+        List<Relationship> relationships = new List<Relationship>()
+        {
+            new Relationship()
+            {
+                Id = 1, InitiatorProfileId = 1, ReceiverProfileId = 2,
+                Status = RelationshipStatus.Approved,
+                SentAt = new DateTime(2021, 1, 1, 1, 1, 0),
+                AcknowledgeAt = new DateTime(2021, 1, 1, 1, 1, 0)
+            },
+            new Relationship()
+            {
+                Id = 2, InitiatorProfileId = 1, ReceiverProfileId = 3,
+                Status = RelationshipStatus.Approved,
+                SentAt = new DateTime(2021, 1, 2, 1, 1, 0),
+                AcknowledgeAt = new DateTime(2021, 1, 2, 1, 1, 0)
+            },
+        };
         
 
         object[] profileTag = {
@@ -156,6 +173,7 @@ public class PeopleFinderDbContext : DbContext
         modelBuilder.Entity<Tag>().HasData(tags);
         modelBuilder.Entity<User>().HasData(users);
         modelBuilder.Entity<Profile>().HasData(profiles);
+        modelBuilder.Entity<Relationship>().HasData(relationships);
 
 
         //modelBuilder.ApplyConfigurationsFromAssembly(typeof(PeopleFinderDbContext).Assembly);
