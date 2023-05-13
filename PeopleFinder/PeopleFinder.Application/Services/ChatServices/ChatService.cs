@@ -40,6 +40,15 @@ public class ChatService : IChatService
         return chats;
 
     }
+    
+    public async Task<Result<IList<Chat>>> GetAllChats(int profileId)
+    {
+
+        var chats = await _unitOfWork.ChatRepository.GetAllChatsAsync(profileId);
+
+        return chats.ToResult();
+
+    }
 
     
     public async Task<Result<UserChat>> CreateDirectChat(CreateDirectChatRequest request)

@@ -1,8 +1,8 @@
 using Mapster;
-using PeopleFinder.Api.Notifications;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Contracts.Messages;
+using PeopleFinder.Contracts.Notifications;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Entities.MessagingEntities;
 using PeopleFinder.Infrastructure.FileStorage;
@@ -32,12 +32,6 @@ public class MessageMappingConfig : IRegister
                 src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null));
 
         
-        config.NewConfig<UserMessage, SendMessageNotification>()
-            .Map(dest=>dest.ChatType, src=>src.ChatType.ToString())
-            .Map(dest => dest.AttachmentUrl, 
-                src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null))
-            .Map(dest => dest.DisplayImageAvatarUrl, 
-                src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AuthorAvatarId, "images/default.jpg"));
-        
+       
     }
 }

@@ -27,6 +27,8 @@ namespace PeopleFinder.Application.Services.ChatServices
         
         Task<Result<UserChat>> GetChat(int profileId,Guid chatId);
 
+        Task<Result<IList<Chat>>> GetAllChats(int profileId);
+
         /*Task<Result<Chat>> UpdateChat();
         Task<Result<Chat>> DeleteChat();#1#*/
     }

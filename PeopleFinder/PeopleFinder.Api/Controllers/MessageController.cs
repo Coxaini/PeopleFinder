@@ -1,9 +1,11 @@
 using System.Security.Cryptography;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using PeopleFinder.Api.Common.Extensions;
 using PeopleFinder.Api.Controllers.Common;
+using PeopleFinder.Api.Hubs;
 using PeopleFinder.Application.Models.File;
 using PeopleFinder.Application.Models.Message;
 using PeopleFinder.Application.Services.FileStorage;
@@ -11,6 +13,7 @@ using PeopleFinder.Application.Services.Messages;
 using PeopleFinder.Contracts.Chats;
 using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Contracts.Messages;
+using PeopleFinder.Contracts.Notifications;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 
 namespace PeopleFinder.Api.Controllers;
@@ -21,12 +24,15 @@ public class MessageController : ApiController
     private readonly IMessageService _messageService;
     private readonly IMapper _mapper;
     private readonly IFileTypeResolver _fileTypeResolver;
+    private readonly IHubContext<ChatHub, IChatHub> _hubContext;
 
-    public MessageController(IMessageService messageService, IMapper mapper, IFileTypeResolver fileTypeResolver)
+    public MessageController(IMessageService messageService, IMapper mapper,
+        IFileTypeResolver fileTypeResolver, IHubContext<ChatHub, IChatHub> hubContext)
     {
         _messageService = messageService;
         _mapper = mapper;
         _fileTypeResolver = fileTypeResolver;
+        _hubContext = hubContext;
     }
     
     [HttpGet("{chatId:guid}")]
@@ -63,6 +69,8 @@ public class MessageController : ApiController
         return messageResult.Match(
             (message) =>
             {
+                _hubContext.Clients.Group(message.ChatId.ToString())
+                    .MessageSent(_mapper.Map<SendMessageNotification>(message));
                 
                 return Ok(_mapper.Map<MessageResponse>(message));
             },
@@ -75,7 +83,12 @@ public class MessageController : ApiController
         var messageResult = await _messageService.DeleteMessage(ProfileIdInClaims, messageId);
         
         return messageResult.Match(
-            () => Ok("Message deleted"),
+            (deletedMessage) =>
+            {
+                _hubContext.Clients.Group(deletedMessage.ChatId.ToString())
+                    .MessageDeleted(new DeleteMessageNotification(messageId, deletedMessage.ChatId));
+                return Ok("Message deleted");
+            },
             Problem);
     }
     
@@ -88,7 +101,13 @@ public class MessageController : ApiController
         var messageResult = await _messageService.EditMessage(messageRequest);
         
         return messageResult.Match(
-            (message) => Ok(_mapper.Map<MessageResponse>(message)),
+            (message) =>
+            {
+                _hubContext.Clients.Group(message.ChatId.ToString())
+                    .MessageEdited(_mapper.Map<EditMessageNotification>(message));
+                
+                return Ok(_mapper.Map<MessageResponse>(message));
+            },
             Problem);
     }
     

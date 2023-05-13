@@ -1,6 +1,8 @@
 using System.Security.Claims;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using PeopleFinder.Api;
+using PeopleFinder.Api.Hubs;
 using PeopleFinder.Api.Middlewares;
 using PeopleFinder.Application;
 using PeopleFinder.Infrastructure;
@@ -37,6 +39,8 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 //add configuration for files 
 builder.Configuration.AddJsonFile("filesettings.json");
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.UseStaticFiles();
@@ -67,5 +71,6 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+app.MapHub<ChatHub>("chat");
 
 app.Run();

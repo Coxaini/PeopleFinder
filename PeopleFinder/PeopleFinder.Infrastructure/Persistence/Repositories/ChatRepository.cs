@@ -153,4 +153,13 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
         return chat;
 
     }
+
+    public async Task<IList<Chat>> GetAllChatsAsync(int profileId)
+    {
+        return await Context.ChatMembers
+            .AsNoTracking()
+            .Where(cm => cm.ProfileId == profileId)
+            .Select(cm => cm.Chat)
+            .ToListAsync();
+    }
 }

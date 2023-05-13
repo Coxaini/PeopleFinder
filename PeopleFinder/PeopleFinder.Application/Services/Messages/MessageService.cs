@@ -143,7 +143,7 @@ public class MessageService : IMessageService
         
     }
 
-    public async Task<Result> DeleteMessage(int profileId, Guid messageId)
+    public async Task<Result<Message>> DeleteMessage(int profileId, Guid messageId)
     {
         var message = await _unitOfWork.MessageRepository.GetWithDetailsById(messageId);
         if (message is null)
@@ -171,8 +171,8 @@ public class MessageService : IMessageService
         
         
         await _unitOfWork.SaveAsync();
-        return Result.Ok();
-        
+        return message;
+
     }
     
     private async Task<MediaFile?> UploadFileAsync(FileDto? fileDto, Chat chat, DateTime now)

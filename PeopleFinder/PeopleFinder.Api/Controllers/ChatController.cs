@@ -1,8 +1,10 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using PeopleFinder.Api.Common.Extensions;
 using PeopleFinder.Api.Controllers.Common;
+using PeopleFinder.Api.Hubs;
 using PeopleFinder.Application.Models.Chat;
 using PeopleFinder.Application.Models.File;
 using PeopleFinder.Application.Models.Message;
@@ -10,6 +12,7 @@ using PeopleFinder.Application.Services.ChatServices;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Contracts.Chats;
 using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Contracts.Notifications;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 
 namespace PeopleFinder.Api.Controllers;
@@ -20,12 +23,15 @@ public class ChatController : ApiController
     private readonly IChatService _chatService;
     private readonly IMapper _mapper;
     private readonly IFileTypeResolver _fileTypeResolver;
+    private readonly IHubContext<ChatHub, IChatHub> _hubContext;
 
-    public ChatController(IChatService chatService, IMapper mapper, IFileTypeResolver fileTypeResolver)
+    public ChatController(IChatService chatService, IMapper mapper, IFileTypeResolver fileTypeResolver,
+        IHubContext<ChatHub,IChatHub> hubContext)
     {
         _chatService = chatService;
         _mapper = mapper;
         _fileTypeResolver = fileTypeResolver;
+        _hubContext = hubContext;
     }
     
     [HttpGet]
@@ -59,9 +65,15 @@ FileDto.FromFormFile(request.Attachment,
     _fileTypeResolver.Resolve(request.Attachment?.FileName, request.Attachment?.Length)));
         var chatResult = await _chatService.CreateDirectChat(chatRequest);
         
+        
 
         return chatResult.Match(
-            (chat) => CreatedAtAction("GetChat", new {ChatId = chat.Id} ,_mapper.Map<ChatResponse>(chat)),
+            (chat) =>
+            {
+                _hubContext.Clients.User(request.FriendId.ToString())
+                    .DirectChatCreated(_mapper.Map<ChatCreatedNotification>(chat));
+                return CreatedAtAction("GetChat", new { ChatId = chat.Id }, _mapper.Map<ChatResponse>(chat));
+            },
             Problem
         );
     }

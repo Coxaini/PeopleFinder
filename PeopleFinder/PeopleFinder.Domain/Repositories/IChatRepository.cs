@@ -20,6 +20,8 @@ namespace PeopleFinder.Domain.Repositories
         Task<bool> IsProfileInChatAsync(int profileId, Guid chatId);
         
         Task<UserChat?> GetDirectChatAsync(int profileId, Profile friend);
+        
+        Task<IList<Chat>> GetAllChatsAsync(int profileId);
 
     }
 }

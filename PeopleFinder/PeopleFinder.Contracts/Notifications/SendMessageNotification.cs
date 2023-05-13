@@ -1,9 +1,9 @@
-namespace PeopleFinder.Api.Notifications;
+namespace PeopleFinder.Contracts.Notifications;
 
 public record SendMessageNotification(
     Guid ChatId, 
     string ChatType,
-    int ProfileId,
+    int SenderId,
     Guid MessageId ,
     string DisplayName,
     string DisplayImageAvatarUrl,
