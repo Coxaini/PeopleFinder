@@ -18,8 +18,7 @@ public static class ChatErrors
     public static readonly IError ProfileNotInChat = 
         new BaseError("User is not in chat", ErrorType.NotFound);
     
-    public static readonly IError ChatAlreadyExists = 
-        new BaseError("Chat already exists", ErrorType.Conflict);
+
 
 
 }

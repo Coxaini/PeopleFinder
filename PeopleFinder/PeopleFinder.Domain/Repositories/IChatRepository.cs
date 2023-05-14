@@ -18,6 +18,7 @@ namespace PeopleFinder.Domain.Repositories
         Task<UserChat?> GetChatAsync(int profileId,Guid chatId);
 
         Task<bool> IsProfileInChatAsync(int profileId, Guid chatId);
+        Task<Chat?> GetDirectChatAsync(int profileId, int friendId);
         
         Task<UserChat?> GetDirectChatAsync(int profileId, Profile friend);
         

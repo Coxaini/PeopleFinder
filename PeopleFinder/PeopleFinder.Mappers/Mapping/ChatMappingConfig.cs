@@ -18,7 +18,7 @@ public class ChatMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
 
-        config.NewConfig<UserChat, ChatResponse>()
+        config.NewConfig<UserChat, UserChatResponse>()
             .Map(dest => dest.DisplayLogoUrl, 
                 source => 
                      MapContext.Current.GetService<IFileUrlService>().GetFileUrl(source.DisplayLogoId, null) 

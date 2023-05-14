@@ -18,7 +18,8 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
     {
         var chatsMembersQuery = Context.ChatMembers
             .AsNoTracking()
-            .Where(cm => cm.ProfileId == profileId);
+            .Where(cm => cm.ProfileId == profileId)
+            .Where(cm=>cm.Chat.ChatType!= ChatType.Direct || cm.Chat.LastMessageAt != null); 
             
         
         if(after != null)
@@ -128,6 +129,15 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
             .AnyAsync(cm => cm.ProfileId == profileId && cm.ChatId == chatId);
     }
 
+    public async Task<Chat?> GetDirectChatAsync(int profileId, int friendId)
+    {
+        return await Context.Chats
+            .AsNoTracking()
+            .Where(c => c.ChatType == ChatType.Direct)
+            .Where(c=>c.ChatMembers.Any(cm=>cm.ProfileId== profileId))
+            .Where(c=>c.ChatMembers.Any(cm=>cm.ProfileId== friendId))
+            .FirstOrDefaultAsync();
+    }
     public async Task<UserChat?> GetDirectChatAsync(int profileId, Profile friend)
     {
         var chat = await Context.Chats

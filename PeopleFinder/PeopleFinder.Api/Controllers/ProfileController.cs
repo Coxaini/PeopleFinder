@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using PeopleFinder.Application.Models.File;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.RelationshipServices;
-using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities.MessagingEntities;
 

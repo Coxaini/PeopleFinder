@@ -11,8 +11,8 @@ using PeopleFinder.Application.Models.Message;
 using PeopleFinder.Application.Services.ChatServices;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Contracts.Chats;
-using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Contracts.Notifications;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 
 namespace PeopleFinder.Api.Controllers;
@@ -51,29 +51,21 @@ public class ChatController : ApiController
                 };
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(_mapper.Map<IList<ChatResponse>>(chats.Items));
+                return Ok(_mapper.Map<IList<UserChatResponse>>(chats.Items));
             },
             Problem
         );
     }
     
-    [HttpPost("direct")]
-    public async Task<IActionResult> StartDirectChat([FromForm] StartDirectChat request)
+    [HttpPost("{friendId:int}")]
+    public async Task<IActionResult> StartDirectChat([FromRoute]int friendId)
     {
-        var chatRequest = new CreateDirectChatRequest(ProfileIdInClaims, request.FriendId, request.Text,
-FileDto.FromFormFile(request.Attachment,
-    _fileTypeResolver.Resolve(request.Attachment?.FileName, request.Attachment?.Length)));
+        var chatRequest = new CreateDirectChatRequest(ProfileIdInClaims, friendId);
         var chatResult = await _chatService.CreateDirectChat(chatRequest);
-        
         
 
         return chatResult.Match(
-            (chat) =>
-            {
-                _hubContext.Clients.User(request.FriendId.ToString())
-                    .DirectChatCreated(_mapper.Map<ChatCreatedNotification>(chat));
-                return CreatedAtAction("GetChat", new { ChatId = chat.Id }, _mapper.Map<ChatResponse>(chat));
-            },
+            (chat) => CreatedAtAction("GetChat", new { ChatId = chat.Id }, new ChatResponse(chat.Id)),
             Problem
         );
     }
@@ -84,7 +76,7 @@ FileDto.FromFormFile(request.Attachment,
         var chatResult = await _chatService.GetChat(ProfileIdInClaims, chatId);
         
         return chatResult.Match(
-            (chat) => Ok(_mapper.Map<ChatResponse>(chat)),
+            (chat) => Ok(_mapper.Map<UserChatResponse>(chat)),
             Problem
         );
     }
@@ -95,7 +87,7 @@ FileDto.FromFormFile(request.Attachment,
         var chatResult = await _chatService.GetDirectChat(ProfileIdInClaims, profileId);
         
         return chatResult.Match(
-            (chat) => Ok(_mapper.Map<ChatResponse>(chat)),
+            (chat) => Ok(_mapper.Map<UserChatResponse>(chat)),
             Problem
         );
     }

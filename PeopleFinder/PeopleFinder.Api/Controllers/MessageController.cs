@@ -11,9 +11,9 @@ using PeopleFinder.Application.Models.Message;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.Messages;
 using PeopleFinder.Contracts.Chats;
-using PeopleFinder.Contracts.Friends;
 using PeopleFinder.Contracts.Messages;
 using PeopleFinder.Contracts.Notifications;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 
 namespace PeopleFinder.Api.Controllers;

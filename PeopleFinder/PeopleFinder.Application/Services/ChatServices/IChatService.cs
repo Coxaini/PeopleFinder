@@ -19,7 +19,7 @@ namespace PeopleFinder.Application.Services.ChatServices
         /// <summary>
         /// Creates a direct chat between two profiles and sends a first message
         /// </summary>
-        Task<Result<UserChat>> CreateDirectChat(CreateDirectChatRequest request);
+        Task<Result<Chat>> CreateDirectChat(CreateDirectChatRequest request);
         /// <summary>
         /// Gets a direct chat between two profiles
         /// </summary>

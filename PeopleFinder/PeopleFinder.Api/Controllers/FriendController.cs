@@ -7,7 +7,7 @@ using PeopleFinder.Api.Controllers.Common;
 using PeopleFinder.Application.Models.Friend;
 using PeopleFinder.Application.Models.Rating;
 using PeopleFinder.Application.Services.RelationshipServices;
-using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Contracts.Profile;
 using PeopleFinder.Contracts.Rating;
 using PeopleFinder.Contracts.Recommendation;
