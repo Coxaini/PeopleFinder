@@ -110,7 +110,7 @@ namespace PeopleFinder.Application.Services.Authentication
                 return AuthenticationErrors.UserLoginAlreadyExists;
             
 
-            Profile profile = new() {Name = String.Empty, Username = request.Username, Bio = String.Empty, City = String.Empty
+            Profile profile = new() {Name = request.Username, Username = request.Username, Bio = String.Empty, City = String.Empty
                 , CreatedAt = DateTime.Now, LastActivity = DateTime.Now};
             User user = new() { Email = request.Email, Password = request.Password, Profile = profile };
             

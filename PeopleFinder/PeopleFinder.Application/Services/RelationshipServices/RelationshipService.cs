@@ -1,6 +1,8 @@
 using FluentResults;
+using MapsterMapper;
 using PeopleFinder.Application.Common.Errors;
 using PeopleFinder.Application.Models.Friend;
+using PeopleFinder.Application.Services.ProfileServices;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Common.Pagination.Page;
@@ -12,10 +14,12 @@ namespace PeopleFinder.Application.Services.RelationshipServices;
 public class RelationshipService : IRelationshipService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public RelationshipService(IUnitOfWork unitOfWork)
+    public RelationshipService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<Result<Relationship>> SendFriendRequest(int profileId, FriendshipRequest friendshipRequest)
@@ -224,7 +228,7 @@ public class RelationshipService : IRelationshipService
         return requests;
     }
 
-    public async Task<Result<CursorList<FriendProfile>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams)
+    public async Task<Result<CursorList<FriendProfileResult>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams)
     {
         if (await _unitOfWork.ProfileRepository.GetOne(otherProfileId) is null)
             return Result.Fail(ProfileErrors.ProfileNotFound);
@@ -232,7 +236,7 @@ public class RelationshipService : IRelationshipService
         var mutualFriends = await _unitOfWork.ProfileRepository.GetMutualFriends(requesterProfileId,
             otherProfileId, cursorPaginationParams.PageSize, cursorPaginationParams.After);
         
-        return mutualFriends;
+        return  _mapper.Map<CursorList<FriendProfileResult>>(mutualFriends);
         
     }
 }

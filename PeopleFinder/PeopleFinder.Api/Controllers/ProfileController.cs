@@ -132,7 +132,7 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                          
-                    return Ok(_mapper.Map<IEnumerable<ShortProfileResponse>>(source.Items));
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(source.Items));
                 },
                 Problem);
             

@@ -31,6 +31,12 @@ namespace PeopleFinder.Mappers.Mapping
                         .GetService<IFileUrlService>().GetFileUrl(src.Profile.MainPictureId,"images/default.jpg"))
                 .Map(dest => dest, src => src.Profile);
 
+            config.NewConfig<FriendProfileResult, ShortProfileResponse>()
+                .Map(dest=>dest.MainPictureUrl, 
+                    src=>MapContext.Current
+                        .GetService<IFileUrlService>().GetFileUrl(src.MainPictureId,"images/default.jpg"))
+                .Map(dest=>dest.Tags, src=>src.Tags)
+                .Map(dest => dest, src => src);
 
             config.NewConfig<Profile, ShortProfileResponse>()
                 .Map(dest => dest.Tags, src => src.Tags)
@@ -43,12 +49,17 @@ namespace PeopleFinder.Mappers.Mapping
             config
                 .NewConfig<(Profile Profile, Relationship Relationship, CursorList<FriendProfile> MutualFriends),
                     ProfileResult>()
-                .Map(dest => dest, src => src.Profile)
                 .Map(dest => dest.Tags, src => src.Profile.Tags)
+                .Map(dest => dest, src => src.Profile)
                 .Map(dest => dest.MutualFriends, src => src.MutualFriends)
                 .Map(dest => dest.Age, src => src.Profile.Age)
                 .Map(dest => dest.Relationship, src => src.Relationship);
 
+            config
+                .NewConfig<FriendProfile, FriendProfileResult>()
+                .Map(dest => dest, src => src.Profile)
+                .Map(dest => dest.Relationship, src => src.Relationship);
+            
             config
                 .NewConfig<(Profile Profile, CursorList<FriendProfile> MutualFriends ), ProfileResult>()
                 .Map(dest => dest, src => src.Profile)
@@ -57,7 +68,7 @@ namespace PeopleFinder.Mappers.Mapping
 
             config.NewConfig<ProfileResult, ProfileResponse>()
                 .Map(dest=>dest.MutualFriends, 
-                    src=>src.MutualFriends != null ? src.MutualFriends.Items.Select(p=>p.Profile.Username) : new List<string>())
+                    src=>src.MutualFriends != null ? src.MutualFriends.Items.Select(p=>p.Username) : new List<string>())
                 .Map(src=>src.Tags, dest=>dest.Tags)
                 .Map(dest=>dest.MainPictureUrl, 
                     src=>MapContext.Current

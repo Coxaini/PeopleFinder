@@ -1,5 +1,6 @@
 using FluentResults;
 using PeopleFinder.Application.Models.Friend;
+using PeopleFinder.Application.Services.ProfileServices;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities;
@@ -22,5 +23,5 @@ public interface IRelationshipService
     
     Task<Result<CursorList<Relationship>>> GetFriendshipRequestUpdates(int profileId, CursorPaginationParams<DateTime> pagedPaginationParams);
     
-    Task<Result<CursorList<FriendProfile>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams);
+    Task<Result<CursorList<FriendProfileResult>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams);
 }

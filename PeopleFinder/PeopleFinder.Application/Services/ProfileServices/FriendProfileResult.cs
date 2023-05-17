@@ -1,22 +1,20 @@
-using System.Diagnostics.CodeAnalysis;
 using PeopleFinder.Application.Models.Relationship;
 using PeopleFinder.Contracts.Profile;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities;
-// ReSharper disable All
 
 namespace PeopleFinder.Application.Services.ProfileServices;
 
-public record ProfileResult(
+public record FriendProfileResult(
     int Id,
     string Username,
     RelationshipResult? Relationship,
-    CursorList<FriendProfileResult> MutualFriends,
     string Name,
     int? Age,
     string Bio,
     string City,
     Gender? Gender,
     Guid? MainPictureId,
-    List<TagResponse> Tags);
+    List<TagResponse> Tags
+);
