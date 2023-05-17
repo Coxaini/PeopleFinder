@@ -11,7 +11,7 @@ function AllFriends() {
 
   const [afterCursor, setAfterCursor] = useState(null);
   const [friends, setFriends] = useState([])
-  //const {friends, setFriends, pageNum, setPageNum} = useContext(FriendsContext);
+
   
   const {isLoading, isError, error, metadata} = 
   useCursorPagedData("/friends", setFriends, afterCursor, 10);

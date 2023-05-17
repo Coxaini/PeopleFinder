@@ -7,6 +7,12 @@
 
 }
 
+@media screen and (max-width: 1150px) {
+	.editform {
+		width: 100%;
+	}
+}
+
 .spinner-container{
 	display: inline-block;
 	text-align: center;
@@ -54,7 +60,7 @@
 	width: 120px;
 }
 
-.editform >form {
+.editform>form {
 	width: 100%;
 	height: 100%;
 }

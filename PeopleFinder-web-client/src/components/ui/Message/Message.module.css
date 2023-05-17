@@ -1,0 +1,87 @@
+.message{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.message .datestamp {
+    display: flex;
+    justify-content: center;
+    color: #999;
+    font-weight: 600;
+    font-size: 12px;
+    margin: 10px 0px;
+    text-transform: uppercase;
+}
+
+.message .messagedatacontainer {
+    font-size: 14px;
+    display: flex;
+    
+}
+
+.message.mine .messagedatacontainer {
+    justify-content: flex-end;
+}
+
+.message .messagedatacontainer .bubble .time {
+    color: #999;
+    font-size: 12px;
+   
+}
+
+.message .messagedatacontainer .bubble{
+    font-size: 18px;
+    margin: 0px 0 0px 10px;
+    max-width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message.mine .messagedatacontainer .bubble{
+    margin: 0px 10px 0px 0px;
+}
+
+
+.message .messagedatacontainer .bubble {
+    background: #f4f4f8;
+    padding: 10px;
+    min-width: 50px;
+    border-radius: 20px;
+    
+    
+    /* border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px; */
+}
+
+.message.mine .messagedatacontainer .bubble {
+    background: #087efc;
+    color: white;
+    /* border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px; */
+}
+.message.mine .messagedatacontainer .bubble .time {
+    color: rgb(206, 206, 206);
+}
+
+
+@media screen and (min-width: 1000px) {
+    .message.mine .messagedatacontainer {
+        justify-content:unset;
+    }
+
+    .message .messagedatacontainer .bubble{
+        max-width: 500px;
+       
+    }
+
+    .message.mine .messagedatacontainer .bubble{
+        margin: 0px 0 0px 10px;
+    }
+
+}

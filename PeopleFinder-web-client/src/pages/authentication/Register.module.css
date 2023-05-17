@@ -22,13 +22,12 @@
     
 
 
-.authform, form{
+.authform form{
     
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
-    
+
 }
 
 .section{
@@ -40,7 +39,8 @@
 }
 
 .authform{
-    
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
     width: 100%;
     max-width: 550px;
@@ -102,6 +102,10 @@
 
 .inputblock{
     position: relative;
+}
+
+.inputblock input{
+    width: 100%;
 }
 
 .offscreen{

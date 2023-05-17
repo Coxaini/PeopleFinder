@@ -3,6 +3,8 @@
 :root{
   --main-bg-panel-color: #fbfbfb;
   --header-height : 58px;
+  --active-chat-color: #3D68EA;
+  --mobile-mode-width: 900px;
 }
 
 * {

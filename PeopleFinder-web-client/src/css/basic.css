@@ -3,12 +3,25 @@
     height: 100%;
 
     padding: 10px;
+    
+}
+
+.shadow{
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.border-right{
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .flexlist{
     display: flex;
     flex-direction: column;
+}
+
+.flexrow{
+    display: flex;
+    flex-direction: row;
 }
 
 .center{
@@ -48,7 +61,7 @@
     font-size: 21px;
 }
 
-a.profilelinkpanel{
+a.nondecoration{
     color: initial;
     text-decoration: none;
 }

@@ -1,0 +1,150 @@
+.messagelist {
+    display: flex;
+    flex-direction: column;
+    /* height: calc(100vh - 58px - 77px - 66px); */
+    overflow-y: scroll;
+    /* height: calc(100vh - var(--header-height)); */
+  
+}
+
+.messagelist *{
+    overflow-anchor: none;
+}
+#anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}
+
+.backbutton{
+    width: 50px;
+    height: 50px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backbutton:hover{
+    background-color: #dddddd;
+    border-radius: 50%;
+}
+
+@media screen and (min-width: 1000px) {
+    .backbutton {
+        display: none;
+    }
+}
+    
+
+
+.chat {
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    display: grid;
+    grid-template-rows: 77px 1fr auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.chatheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    border-bottom: 1px solid #eeeef1;
+    position: relative;
+    top: 0px;
+    padding: 5px;
+}
+
+.chatheader .chaticon {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.chaticon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.chatheader .chatinfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.chatinfo .chattitle {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.chatinfo .chatstatus {
+    font-size: 14px;
+    color: gray;
+}
+
+.chatoptions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.messagesendform { 
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-top: 1px solid #eeeef1;
+    position: relative;
+    bottom: 0px;
+    background-color: #ffffff;
+    align-items: flex-end;
+    font-size: 21px;
+}
+
+.messagesendform textarea {
+    
+    border: none;
+    font-size: 21px;
+    flex : 1;
+    background: none;
+    margin-top: 0;
+    resize:none;
+    max-height: 300px;
+    min-height: 64px;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    height: 3em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.messagesendform textarea::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+
+.messagesendform textarea {
+    outline: none;
+}
+
+.chatbody{
+    
+    height: calc(100vh - var(--header-height));
+}
+
+
+.messagesendform button {
+    
+    height: 64px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    background-color:white;
+}

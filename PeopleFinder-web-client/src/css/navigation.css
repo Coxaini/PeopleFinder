@@ -20,6 +20,42 @@
     height: 100%;
 }
 
+@media screen and (max-width: 768px) {
+    .navigation-grid{
+        display: flex;
+        flex-direction: column;
+        font-size: larger;
+        min-height: inherit;
+    }
+    .navigation ul{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .navigation > h2{
+        display: none;
+    }
+
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width : 1150px) {
+    .navigation-grid-centered{
+        display: flex;
+        flex-direction: column;
+        font-size: larger;
+        min-height: inherit;
+    }
+
+}
+    
+
 .navigation ul {
     position: sticky;
     top: 0;

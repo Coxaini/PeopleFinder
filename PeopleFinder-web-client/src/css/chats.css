@@ -1,0 +1,40 @@
+.chat-list{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.chats-container{
+ 
+}
+
+.chat-nav-grid{
+    display: grid;
+    grid-template-columns: 500px 1fr;
+    font-size: larger;
+    min-height: inherit;
+}
+
+    
+
+@media screen and (max-width: 1000px) {
+    .chat.hidden
+    {
+        display: none;
+    }
+    
+    .chats-container.hidden{
+        display: none;
+    }
+    .chat-nav-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+

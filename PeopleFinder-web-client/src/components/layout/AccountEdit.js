@@ -6,7 +6,7 @@ import { faAddressCard, faUser } from "@fortawesome/free-regular-svg-icons";
 function AccountEdit() {
     return (
         <div className="navigation-grid-centered">
-            <div className="panel navigation">
+            <div className="border-right navigation">
                 <h2>Account Settings</h2>
                 <ul>
                     <li>

@@ -36,7 +36,7 @@ function MainNavigation() {
               </Link>
             </li>
             <li>
-              <Link to="/chat">
+              <Link to="/chats">
                 <div className={classes.icon} id={classes["chat"]}>
                 <FontAwesomeIcon icon={faMessage} className={classes.linkicon}/>
                   <span>Messages</span>

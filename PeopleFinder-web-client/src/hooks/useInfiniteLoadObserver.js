@@ -3,7 +3,7 @@ import { useRef, useCallback } from "react"
 function useInfiniteLoadObserver(metadata, isLoading, setAfterCursor) {
     const intObserver = useRef();
     
-    const lastFriendRef = useCallback(item => {
+    const lastRef = useCallback(item => {
         if (isLoading) return;
 
         if (intObserver.current) intObserver.current.disconnect();
@@ -18,7 +18,7 @@ function useInfiniteLoadObserver(metadata, isLoading, setAfterCursor) {
         if (item) intObserver.current.observe(item);
     }, [isLoading, metadata?.NextCursor, setAfterCursor])
 
-  return { lastFriendRef };
+  return {  lastRef };
 }
 
 export default useInfiniteLoadObserver

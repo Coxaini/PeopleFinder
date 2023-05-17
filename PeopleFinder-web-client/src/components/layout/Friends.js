@@ -5,18 +5,16 @@ import "../../css/navigation.css"
 import { Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
-import { FriendsProvider } from "../../context/FriendsProvider";
+
 
 function Friends() {
 
   return (
-    <FriendsProvider>
       <div className="navigation-grid">
-        <div className="panel navigation">
+        <div className="border-right navigation">
           <h2>Friends</h2>
           <ul>
             <li>
-
               <Link to="/friends/all">
                 <div>
                   <FontAwesomeIcon icon={faUser} />
@@ -50,7 +48,6 @@ function Friends() {
         </section>
 
       </div>
-    </FriendsProvider>
   );
 }
 

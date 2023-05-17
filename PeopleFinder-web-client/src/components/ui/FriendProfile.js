@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const FriendProfile = forwardRef((props, ref) => {
 
     const apiPrivate = useApiPrivate();
-    //const {friends, setFriends, pageNum,setPageNum} = useContext(FriendsContext);
+  
     //const loadmore = useLoadMore("/friends" ,setFriends, pageNum, 10);
 
     async function removeFriend() {
@@ -28,7 +28,7 @@ const FriendProfile = forwardRef((props, ref) => {
     }
 
     return (
-        <Link className='profilelinkpanel' to={`/profile/${props.username}`}>
+        <Link className='nondecoration' to={`/profile/${props.username}`}>
         <div className={classes.profile} ref={ref} >
             <img className={classes.smallimage} src={props.mainPictureUrl} alt="profile" />
             <div className={classes.smallinfo}>

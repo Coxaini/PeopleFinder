@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import FindPeoplePage from "./pages/FindPeople";
 import ProfilePage from "./pages/Profile";
-import ChatPage from "./pages/Chat";
+import ChatPage from "./pages/chat/ChatPage";
 import FriendNav from "./components/layout/Friends";
 import AllFriends from "./pages/AllFriends";
 import FriendRequests from "./pages/FriendRequests";
@@ -15,6 +15,10 @@ import RequireAuth from "./components/layout/RequireAuth";
 import UserEdit from "./pages/UserEdit";
 import AccountEdit from "./components/layout/AccountEdit";
 import ProfileEdit from "./pages/ProfileEdit";
+
+import ChatNav from "./components/layout/Chats";
+import EmptyChatPage from "./pages/chat/EmptyChatPage";
+
 function App() {
   return (
     <Routes>
@@ -23,7 +27,10 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route element={<Layout />}>
           <Route path="/" element={<FindPeoplePage />} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chats" element={<ChatNav />} >
+            <Route path=":chatid?" element={<ChatPage />} />
+            <Route index element={<EmptyChatPage />} />
+          </Route>
           <Route path="/edit" element={<AccountEdit />}>
             <Route path="profile" element={<ProfileEdit />} />
             <Route path="user" element={<UserEdit />} />
