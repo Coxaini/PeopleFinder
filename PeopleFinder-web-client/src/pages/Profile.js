@@ -9,7 +9,7 @@ import classes from './ProfileCard.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import OverlayCentredPanel from '../components/ui/OverlayCentredPanel';
+import OverlayCentredPanel from '../components/ui/Overlay/OverlayCentredPanel';
 import MutualFriendsList from '../components/ui/Profile/MutualFriendsList';
 import ProfileActions from '../components/ui/Profile/ProfileActions';
 

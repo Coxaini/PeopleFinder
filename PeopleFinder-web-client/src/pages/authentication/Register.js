@@ -69,15 +69,15 @@ const Register = () => {
   }, [user, email, pwd, matchPwd])
 
   useEffect(() => {
-    if(validName){
+    if (validName) {
       setNameAvailable(true);
-      const checkUser = setTimeout( async ()=>{
-        try{
-        const response = await api.get(`/auth/check_username/${user}`);
-        console.log("Username available");
-        setNameAvailable(true);
-        }catch(err){
-          if(err.response.status === 409){
+      const checkUser = setTimeout(async () => {
+        try {
+          const response = await api.get(`/auth/check_username/${user}`);
+          console.log("Username available");
+          setNameAvailable(true);
+        } catch (err) {
+          if (err.response.status === 409) {
             console.log("Username is not available");
             setNameAvailable(false);
           }
@@ -90,14 +90,14 @@ const Register = () => {
 
   useEffect(() => {
     setEmailAvailable(true);
-    if(validEmail){
-      const checkEmail = setTimeout( async ()=>{
-        try{
-        const response = await api.get(`/auth/check_email/${email}`);
-        console.log("Email available");
-        setEmailAvailable(true);
-        }catch(err){
-          if(err.response.status === 409){
+    if (validEmail) {
+      const checkEmail = setTimeout(async () => {
+        try {
+          const response = await api.get(`/auth/check_email/${email}`);
+          console.log("Email available");
+          setEmailAvailable(true);
+        } catch (err) {
+          if (err.response.status === 409) {
             console.log("Email is not available");
             setEmailAvailable(false);
           }
@@ -134,12 +134,12 @@ const Register = () => {
         setErrMsg('No Server Response');
       } else if (err.response?.status === 409) {
         let errMsg = err.response?.data?.title;
-        if(errMsg.includes('username') && errMsg.includes('email'))
+        if (errMsg.includes('username') && errMsg.includes('email'))
           setErrMsg('User with given username and email already exists');
-        else if(errMsg.includes('login'))
-        setErrMsg('User with given username already exists');
+        else if (errMsg.includes('login'))
+          setErrMsg('User with given username already exists');
         else
-        setErrMsg('User with given email already exists');
+          setErrMsg('User with given email already exists');
       } else {
         setErrMsg('Login Failed');
       }
@@ -168,7 +168,7 @@ const Register = () => {
                 tiptext="Username must be at least 4 symbols and start with a letter and can contain only letters, numbers, dashes and underscores"
                 className={user && !validName ? '' : classes.offscreen}
                 hiddentip={userFocus === true ? false : true} />
-                <Tooltip icontype={faCircleQuestion}
+              <Tooltip icontype={faCircleQuestion}
                 tiptext="Username is already taken. Try another one"
                 color="#1900f7"
                 className={user && validName && !nameAvailable ? '' : classes.offscreen}
@@ -186,7 +186,7 @@ const Register = () => {
                 tiptext="Email is not correct"
                 className={email && !validEmail ? '' : classes.offscreen}
                 hiddentip={emailFocus === true ? false : true} />
-            <Tooltip icontype={faCircleQuestion}
+              <Tooltip icontype={faCircleQuestion}
                 tiptext="Email is already taken. Try another one"
                 color="#1900f7"
                 className={email && validEmail && !emailAvailable ? '' : classes.offscreen}

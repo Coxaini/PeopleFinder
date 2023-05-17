@@ -3,7 +3,7 @@ import React from 'react'
 import '../../../css/buttons.css'
 import useUserData from '../../../hooks/useUserData';
 import { useState } from 'react';
-import OverlayCentredPanel from '../OverlayCentredPanel';
+import OverlayCentredPanel from '../Overlay/OverlayCentredPanel';
 import { useNavigate } from 'react-router-dom';
 function ProfileActions(props) {
 
