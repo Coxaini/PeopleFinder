@@ -77,8 +77,8 @@ public class MessageController : ApiController
             Problem);
     }
     
-    [HttpDelete]
-    public async Task<IActionResult> DeleteMessage([FromBody]Guid messageId)
+    [HttpDelete("{messageId:guid}")]
+    public async Task<IActionResult> DeleteMessage([FromRoute]Guid messageId)
     {
         var messageResult = await _messageService.DeleteMessage(ProfileIdInClaims, messageId);
         

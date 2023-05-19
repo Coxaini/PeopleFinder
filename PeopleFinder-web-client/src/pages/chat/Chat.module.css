@@ -4,15 +4,15 @@
     /* height: calc(100vh - 58px - 77px - 66px); */
     overflow-y: scroll;
     /* height: calc(100vh - var(--header-height)); */
-  
+
 }
 
-.messagelist *{
-    overflow-anchor: none;
-}
+/* .messagelist * {
+    overflow-anchor:none;
+} */
 #anchor {
     overflow-anchor: auto;
-    height: 1px;
+    min-height: 1px;
 }
 
 .backbutton{
@@ -42,9 +42,9 @@
     height: calc(100vh - var(--header-height));
     display: grid;
     grid-template-rows: 77px 1fr auto;
-    display: flex;
-    flex-direction: column;
-
+    /* display: flex;
+    flex-direction: column; */
+    scroll-snap-type: y mandatory;
 }
 
 .chatheader {
@@ -95,6 +95,13 @@
     margin-right: 20px;
 }
 
+.chatbottom{
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
 .messagesendform { 
     display: flex;
     flex-direction: row;
@@ -132,12 +139,6 @@
 .messagesendform textarea {
     outline: none;
 }
-
-.chatbody{
-    
-    height: calc(100vh - var(--header-height));
-}
-
 
 .messagesendform button {
     

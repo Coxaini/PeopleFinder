@@ -5,7 +5,7 @@ import useApiPrivate from './useApiPrivate';
 function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = false) {
 
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     const [error, setError] = useState({})
     const [metadata, setMetadata] = useState({})

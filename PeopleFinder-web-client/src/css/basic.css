@@ -24,6 +24,14 @@
     flex-direction: row;
 }
 
+.spacebetween{
+    justify-content: space-between;
+}
+
+.aligncenter{
+    align-items: center;
+}
+
 .center{
     display: flex;
     flex-direction: column;
@@ -52,6 +60,10 @@
     margin-bottom: 10px;
 }
 
+.marginright10{
+    margin-right: 10px;
+}
+
 .nonvisible {
     display: none !important;
 }
@@ -64,6 +76,12 @@
 a.nondecoration{
     color: initial;
     text-decoration: none;
+}
+
+button.emptybutton{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 span.errormessage{

@@ -17,7 +17,7 @@ function Chats() {
 
     const params = useParams();
     
-    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(params.chatid ?true : false);
 
     const [activeChatId, setActiveChatId] = useState(params?.chatid);
     const [activeChat, setActiveChat] = useState(null);

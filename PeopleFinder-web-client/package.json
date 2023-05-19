@@ -19,6 +19,7 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "^5.0.1",
     "react-virtualized": "^9.22.5",
+    "use-state-with-callback": "^3.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
