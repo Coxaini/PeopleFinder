@@ -12,3 +12,11 @@ audio.media{
     max-height: 50px;
     max-width: 100%;
 }
+
+span.media{
+    max-height: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    align-self: center;
+}

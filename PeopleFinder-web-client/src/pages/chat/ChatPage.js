@@ -229,7 +229,7 @@ function ChatPage(props) {
 
         reader.onloadend = () => {
             const progress = getScrollProportion(messageList);
-            setAttachment({ url: reader.result, type: file.type }, () => {
+            setAttachment({name: file.name,  url: reader.result, type: file.type }, () => {
                 if (progress === 1)
                     scrollToBottom(messageList);
             });
@@ -383,7 +383,7 @@ function ChatPage(props) {
                                 clearFileSelection();
                             }}
                         >
-                            <MessageFileBarInfo fileUrl={attachment.url} type={attachment.type} />
+                            <MessageFileBarInfo fileName={attachment.name} fileUrl={attachment.url} type={attachment.type} />
                         </MessageInputBar>
                 }
 

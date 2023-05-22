@@ -53,7 +53,7 @@ public class FileStorageManager : IFileStorageManager
     }
 
     
-    /// <exception cref="FileNotFoundException"></exception>
+    
     public FileStream GetFileAsync(MediaFile mediaFile)
     {
         string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);
@@ -66,8 +66,9 @@ public class FileStorageManager : IFileStorageManager
             _logger.LogError("File {fileName} not found", fileName);
             throw new FileNotFoundException($"File {fileName} not found");
         }
+        var stream = new FileStream(filePath, FileMode.Open);
         
-        return File.OpenRead(filePath);
+        return stream;
 
     }
 

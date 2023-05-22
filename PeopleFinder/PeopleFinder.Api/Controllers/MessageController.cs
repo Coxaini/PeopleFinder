@@ -72,7 +72,7 @@ public class MessageController : ApiController
                 _hubContext.Clients.Group(message.ChatId.ToString())
                     .MessageSent(_mapper.Map<SendMessageNotification>(message));
                 
-                return Ok(_mapper.Map<MessageResponse>(message));
+                return Ok(_mapper.Map<UserMessageResponse>(message));
             },
             Problem);
     }
@@ -106,7 +106,7 @@ public class MessageController : ApiController
                 _hubContext.Clients.Group(message.ChatId.ToString())
                     .MessageEdited(_mapper.Map<EditMessageNotification>(message));
                 
-                return Ok(_mapper.Map<MessageResponse>(message));
+                return Ok(_mapper.Map<UserMessageResponse>(message));
             },
             Problem);
     }

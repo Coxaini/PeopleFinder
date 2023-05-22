@@ -24,7 +24,7 @@ public class FileService : IFileService
         var media = await _unitOfWork.MediaFileRepository.GetByToken(token);
 
         if (media is null)
-            return Result.Fail(FileServiceErrors.FileNotFound);
+            return Result.Fail(FileErrors.FileNotFound);
         
         FileStream fileStream = _fileStorageManager.GetFileAsync(media);
         

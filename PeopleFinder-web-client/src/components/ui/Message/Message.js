@@ -4,6 +4,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OverlayActions from '../Overlay/OverlayActions';
 import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
+import { BsFillFileEarmarkBinaryFill } from 'react-icons/bs'
 import { apiPrivate } from '../../../api/axios';
 
 const Message = forwardRef((props, ref) => {
@@ -18,6 +19,7 @@ const Message = forwardRef((props, ref) => {
   } = props;
 
   const [attachment, setAttachment] = useState(null);
+  const fileLink = useRef(null);
 
   useEffect(() => {
 
@@ -39,7 +41,7 @@ const Message = forwardRef((props, ref) => {
           setAttachment(data.attachmentUrl);
         }
       }
-      
+
       //get image height from attachment
       // media.current.height = 500;
     }
@@ -66,7 +68,18 @@ const Message = forwardRef((props, ref) => {
         mediaElement = <audio ref={media} src={attachment} alt="attachment" controls />
         break;
       default:
-        mediaElement = <a href={attachment} target="_blank" rel="noreferrer">download file</a>;
+
+        mediaElement = (
+          <div className={classes.filecontent} onClick={() => fileLink.current.click()}>
+            <button className='emptybutton'>
+              <BsFillFileEarmarkBinaryFill size={30} />
+            </button>
+            <a href={attachment} ref={fileLink}  rel="noreferrer" hidden></a>
+            <div className={classes.fileinfo}>
+              <span className={classes.filename}>{data.attachmentName}</span>
+            </div>
+          </div>
+        );
         break;
     }
     return mediaElement

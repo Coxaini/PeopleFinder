@@ -106,6 +106,7 @@ public class MessageService : IMessageService
             AuthorAvatarId = profile.MainPictureId,
             AttachmentFileId = message.AttachmentFileId,
             AttachmentFileType = message.AttachmentFile?.Type,
+            AttachmentName = message.AttachmentFile?.OriginalName,
             IsMine = true
         };
         
@@ -139,7 +140,14 @@ public class MessageService : IMessageService
 
         if (message.AttachmentFile is not null && request.Attachment is not null)
         {
-            _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+            try
+            {
+                _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+            }
+            catch (IOException)
+            {
+                return Result.Fail(FileErrors.FileNotDeleted);
+            }
         }
         if(request.Attachment is not null)
             message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.Now);
@@ -159,6 +167,7 @@ public class MessageService : IMessageService
             AuthorAvatarId = message.Sender.MainPictureId,
             AttachmentFileId = message.AttachmentFileId,
             AttachmentFileType = message.AttachmentFile?.Type,
+            AttachmentName = message.AttachmentFile?.OriginalName,
             IsMine = true
         };
 
@@ -178,7 +187,16 @@ public class MessageService : IMessageService
 
 
         if (message.AttachmentFile is not null)
-            _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+        {
+            try
+            {
+                _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+            }
+            catch (IOException)
+            {
+                return Result.Fail(FileErrors.FileNotDeleted);
+            }
+        }
 
         _unitOfWork.MessageRepository.Delete(message);
 

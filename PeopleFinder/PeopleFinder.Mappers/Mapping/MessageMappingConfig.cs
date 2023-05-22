@@ -29,7 +29,9 @@ public class MessageMappingConfig : IRegister
             .Map(dest => dest.AttachmentUrl,
                 src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null))
             .Map(dest => dest.AttachmentType, 
-                src => src.AttachmentFileType.ToString()!.ToLower());
+                src => src.AttachmentFileType.ToString()!.ToLower())
+            .Map(dest => dest.AttachmentName, 
+                src => src.AttachmentName ?? "");
 
         config.NewConfig<UserMessage, MessageResponse>()
             .Map(dest => dest.AttachmentUrl, 

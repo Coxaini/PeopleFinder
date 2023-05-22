@@ -16,5 +16,6 @@ public class UserMessage
     public int? InReplyTo { get; set; }
     public Guid? AttachmentFileId { get; set; }
     public MediaFileType? AttachmentFileType { get; set; }
+    public string? AttachmentName { get; set; }
     public bool IsMine { get; set; }
 }

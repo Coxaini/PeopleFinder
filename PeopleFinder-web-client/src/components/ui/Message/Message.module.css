@@ -126,6 +126,31 @@ button.action{
     align-self: center;
 }
 
+.filecontent{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height : 3em;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    background: #576a98;
+}
+
+.filecontent:hover{
+    background: #4e608c;
+    cursor:pointer;
+}
+
+.filecontent .fileinfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+ 
 
 
 

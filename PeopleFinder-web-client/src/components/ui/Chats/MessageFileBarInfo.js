@@ -13,7 +13,7 @@ function MessageFileBarInfo(props) {
       case 'audio':
         return <audio className={classes.media} src={props.fileUrl} controls />
       default:
-        return null
+        return <span>{props.fileName}</span>
     }
   }
 

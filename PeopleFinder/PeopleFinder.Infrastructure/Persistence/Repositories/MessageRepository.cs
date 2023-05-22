@@ -52,6 +52,7 @@ public class MessageRepository : BaseRepo<Message>, IMessageRepository
                     DisplayName = m.Sender.Name,
                     AuthorAvatarId = m.Sender.MainPictureId,
                     AttachmentFileType = m.AttachmentFile!= null ? m.AttachmentFile.Type: null,
+                    AttachmentName = m.AttachmentFile!= null ? m.AttachmentFile.OriginalName: null,
 
                 })
             .ToListAsync();
