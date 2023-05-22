@@ -75,7 +75,7 @@
 	margin-bottom: 20px;
 }
 
-.file-upload input[type=file] {
+input[type=file]#file-upload {
 	position: absolute;
 	top: 0;
 	right: 0;

@@ -13,10 +13,6 @@ const apiPrivate = axios.create({
     withCredentials: true
 });
 
-export const getFriends = async (page = 1, options= {}) => {
-    const response = await apiPrivate.get(`/friends?page=${page}`, options);
-    return response;
-}
 
 export default api;
 export { apiPrivate };

@@ -1,0 +1,14 @@
+img.media{
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+video.media{
+    max-height: 200px;
+}
+
+audio.media{
+    max-height: 50px;
+    max-width: 100%;
+}

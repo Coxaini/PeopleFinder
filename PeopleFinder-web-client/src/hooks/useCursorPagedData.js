@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import useApiPrivate from './useApiPrivate';
 
 
-function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = false) {
+function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = false, dataPipeLineProcessor = null) {
 
 
     const [isLoading, setIsLoading] = useState(true)
@@ -21,13 +21,20 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
 
 
         apiPrivate.get(url + `?pageSize=${pageSize}` + (after ? `&after=${after}` : ``), { signal })
-            .then(data => {
+            .then( async (data) =>  {
                 //setResults(prev => [...prev, ...data?.data.map((item, key) => { return {...item, keyId: prev.length + key}})]);
+                let proccesedData = data?.data;
+                if (dataPipeLineProcessor) {
+                    proccesedData= await dataPipeLineProcessor(proccesedData);
+                    
+                }
+                
+
                 if (!isReverse)
-                    setResults(prev => [...prev, ...data?.data]);
+                    setResults(prev => [...prev, ...proccesedData]);
                 else {
-                    data?.data.reverse();
-                    setResults(prev => [...data?.data, ...prev]);
+                    proccesedData.reverse();
+                    setResults(prev => [...proccesedData, ...prev]);
                 }
 
                 const metadata = JSON.parse(data?.headers?.['x-pagination']);
@@ -42,7 +49,7 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
             });
 
         return () => controller.abort();
-    }, [apiPrivate, url, after, pageSize, setResults, isReverse]);
+    }, [apiPrivate, url, after, pageSize, isReverse]);
 
     return { isLoading, isError, error, metadata }
 }

@@ -105,13 +105,14 @@ public class MessageService : IMessageService
             DisplayName = profile.Name,
             AuthorAvatarId = profile.MainPictureId,
             AttachmentFileId = message.AttachmentFileId,
+            AttachmentFileType = message.AttachmentFile?.Type,
             IsMine = true
         };
         
         return userMessage;
     }
 
-    public async Task<Result<Message>> EditMessage(EditMessageRequest request)
+    public async Task<Result<UserMessage>> EditMessage(EditMessageRequest request)
     {
         if (request.Attachment is not null)
         {
@@ -122,6 +123,10 @@ public class MessageService : IMessageService
             }
         }
         
+        var profile = await _unitOfWork.ProfileRepository.GetOne(request.SenderId);
+        if (profile is null)
+            return Result.Fail(ProfileErrors.ProfileNotFound);
+        
         var message = await _unitOfWork.MessageRepository.GetWithDetailsById(request.MessageId);
         if (message is null)
             return Result.Fail(MessageErrors.MessageNotFound);
@@ -131,14 +136,33 @@ public class MessageService : IMessageService
         
         message.EditedAt = DateTime.Now;
         message.Text = request.Text;
-        
-        if (message.AttachmentFile is not null)
+
+        if (message.AttachmentFile is not null && request.Attachment is not null)
+        {
             _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
-        
-        message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.Now);
-        
+        }
+        if(request.Attachment is not null)
+            message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.Now);
+
         await _unitOfWork.SaveAsync();
-        return message;
+        
+        var userMessage = new UserMessage()
+        {
+            Id = message.Id,
+            ChatId = message.ChatId,
+            ChatType = message.Chat.ChatType,
+            SenderId = message.SenderId,
+            Text = message.Text,
+            SentAt = message.SentAt,
+            EditedAt = message.EditedAt,
+            DisplayName = message.Sender.Name,
+            AuthorAvatarId = message.Sender.MainPictureId,
+            AttachmentFileId = message.AttachmentFileId,
+            AttachmentFileType = message.AttachmentFile?.Type,
+            IsMine = true
+        };
+
+        return userMessage;
         
         
     }

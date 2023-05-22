@@ -7,6 +7,7 @@ public record UserMessageResponse(
     DateTime SentAt,
     DateTime? EditedAt,
     string? AttachmentUrl,
+    string? AttachmentType,
     string DisplayName,
     string AvatarUrl,
     bool IsMine

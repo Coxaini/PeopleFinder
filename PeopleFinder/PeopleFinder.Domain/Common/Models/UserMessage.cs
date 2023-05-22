@@ -12,10 +12,9 @@ public class UserMessage
     public DateTime SentAt { get; set; }
     public DateTime? EditedAt { get; set; }
     public string DisplayName { get; set; }
-    
-    
     public Guid? AuthorAvatarId { get; set; }
     public int? InReplyTo { get; set; }
     public Guid? AttachmentFileId { get; set; }
+    public MediaFileType? AttachmentFileType { get; set; }
     public bool IsMine { get; set; }
 }

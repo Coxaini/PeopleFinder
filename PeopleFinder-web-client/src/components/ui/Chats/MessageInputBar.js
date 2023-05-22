@@ -11,11 +11,10 @@ function MessageInputBar(props) {
         {props.icon}
         </div>
         <div className={classes.infoflexlist}>
-          <span className={classes.title}>{props.title}</span>
-          <span className={classes.info}>{props.info}</span>
+        {props.children} 
         </div>
       </div>
-      <button className='emptybutton marginright10' onClick={props.onCancel}>
+      <button className='emptybutton' onClick={props.onCancel}>
         <ImCancelCircle size={36} />
       </button>
     </div>
@@ -23,17 +22,3 @@ function MessageInputBar(props) {
 }
 
 export default MessageInputBar
-
-// return (
-//   <div className={classes.panel}>
-//     <div className={classes.infogroup}>
-//       {props.icon}
-//       <div className={classes.infoflexlist}>
-//           <span className={classes.title}>{props.title}</span>
-//           <span className={classes.info}>{props.info}</span>
-//       </div>
-//     </div>
-//       <button className='emptybutton' onClick={props.onCancel}>
-//           <ImCancelCircle size={24} />
-//       </button>
-//   </div>

@@ -20,12 +20,16 @@ public class MessageMappingConfig : IRegister
         config.NewConfig<Message, MessageResponse>()
             .Map(dest => dest.AttachmentUrl, 
                 src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null));
-        
+
         config.NewConfig<UserMessage, UserMessageResponse>()
-            .Map(dest=>dest.AvatarUrl, 
-                src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AuthorAvatarId, "images/default.jpg"))
-            .Map(dest => dest.AttachmentUrl, 
-                src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null));
+
+            .Map(dest => dest.AvatarUrl,
+                src => MapContext.Current.GetService<IFileUrlService>()
+                    .GetFileUrl(src.AuthorAvatarId, "images/default.jpg"))
+            .Map(dest => dest.AttachmentUrl,
+                src => MapContext.Current.GetService<IFileUrlService>().GetFileUrl(src.AttachmentFileId, null))
+            .Map(dest => dest.AttachmentType, 
+                src => src.AttachmentFileType.ToString()!.ToLower());
 
         config.NewConfig<UserMessage, MessageResponse>()
             .Map(dest => dest.AttachmentUrl, 

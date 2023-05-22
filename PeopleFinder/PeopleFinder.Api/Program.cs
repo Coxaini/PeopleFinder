@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using Mapster;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using PeopleFinder.Api;
 using PeopleFinder.Api.Hubs;
 using PeopleFinder.Api.Middlewares;
@@ -13,6 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 1024 * 1024 * 100; // 100MB
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

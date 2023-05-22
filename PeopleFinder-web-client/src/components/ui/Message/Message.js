@@ -1,18 +1,76 @@
-import React, { forwardRef, useMemo, useState } from 'react'
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import classes from './Message.module.css'
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OverlayActions from '../Overlay/OverlayActions';
-import {AiTwotoneEdit, AiFillDelete} from 'react-icons/ai'
+import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
+import { apiPrivate } from '../../../api/axios';
 
 const Message = forwardRef((props, ref) => {
 
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
+  const messageRef = useRef(null);
 
+  const media = useRef(null);
   const {
     data,
     showDateStamp
   } = props;
+
+  const [attachment, setAttachment] = useState(null);
+
+  useEffect(() => {
+
+
+    let url;
+    async function loadFile() {
+
+      if (data.attachmentUrl) {
+        //media.current.height = 500; 
+
+        if (data.attachmentType === 'image') {
+          const response = await apiPrivate.get(`${data.attachmentUrl}`, { responseType: 'blob' });
+          const blob = response?.data;
+          url = URL.createObjectURL(blob);
+          setAttachment(url);
+
+        }
+        else {
+          setAttachment(data.attachmentUrl);
+        }
+      }
+      
+      //get image height from attachment
+      // media.current.height = 500;
+    }
+    loadFile();
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    }
+
+  }, [data, data.attachmentUrl]);
+
+  function renderMedia() {
+
+    if (!data.attachmentUrl)
+      return null;
+    let mediaElement;
+    switch (data.attachmentType) {
+      case 'image':
+        mediaElement = <img ref={media} src={attachment} alt="attachment" className={classes.mediacontent} />
+        break;
+      case 'video':
+        mediaElement = <video ref={media} src={attachment} alt="attachment" className={classes.mediacontent} controls autoPlay />
+        break;
+      case 'audio':
+        mediaElement = <audio ref={media} src={attachment} alt="attachment" controls />
+        break;
+      default:
+        mediaElement = <a href={attachment} target="_blank" rel="noreferrer">download file</a>;
+        break;
+    }
+    return mediaElement
+  }
 
   const datetime = useMemo(() => {
     const mesdatetime = new Date(data.sentAt);
@@ -30,18 +88,18 @@ const Message = forwardRef((props, ref) => {
   }, [data.sentAt]);
 
   const editedtime = useMemo(() => {
-    if(!data.editedAt) return null;
+    if (!data.editedAt) return null;
     const mesSentDateTime = new Date(data.sentAt);
     const mesEditDateTime = new Date(data.editedAt);
 
     let timeOptions;
 
-    if(mesEditDateTime.toDateString() === mesSentDateTime.toDateString()) {
+    if (mesEditDateTime.toDateString() === mesSentDateTime.toDateString()) {
       timeOptions = { hour: '2-digit', minute: '2-digit' };
-    } else if(mesEditDateTime.getFullYear() === mesSentDateTime.getFullYear()) {
-      timeOptions = {hour: '2-digit', minute: '2-digit' , month: 'numeric', day: 'numeric' };
-    }else{
-      timeOptions = {hour: '2-digit', minute: '2-digit' ,year: 'numeric', month: 'numeric', day: 'numeric' };
+    } else if (mesEditDateTime.getFullYear() === mesSentDateTime.getFullYear()) {
+      timeOptions = { hour: '2-digit', minute: '2-digit', month: 'numeric', day: 'numeric' };
+    } else {
+      timeOptions = { hour: '2-digit', minute: '2-digit', year: 'numeric', month: 'numeric', day: 'numeric' };
     }
 
     return mesEditDateTime.toLocaleTimeString([], timeOptions)
@@ -49,7 +107,8 @@ const Message = forwardRef((props, ref) => {
 
 
   return (
-    <div className={`${classes.message} ${data.isMine ? classes.mine : ''}`} ref={ref}>
+    <div className={`${classes.message} ${props.className} ${data.isMine ? classes.mine : ''}`}
+      ref={ref}>
       {
         showDateStamp &&
         <div className={classes.datestamp}>
@@ -59,34 +118,38 @@ const Message = forwardRef((props, ref) => {
       <div className={classes.messagedatacontainer}>
 
         <div className={classes.bubble}>
+          {
+            renderMedia()
+          }
           <span className={classes.textcontent}>{data.text}</span>
           <div className={classes.bottombar}>
             <span className={classes.time}>{!editedtime ? datetime.senttime : `edited at ${editedtime}`}</span>
             <div className={classes.actionbuttoncontainer}>
-            <button className={classes.action} onClick={() => { setIsActionMenuOpen(true) }}>
-              <FontAwesomeIcon className='' icon={faEllipsisVertical} 
-              style={{ color: "#0a0a0a", transform:"rotate(90deg) scale(1.5)" }} />
-            </button>
-            <OverlayActions
-              onClick={() => { setIsActionMenuOpen(false) }}
-              isOpen={isActionMenuOpen}>
-                <button onClick={() => { 
+              <button className={classes.action} onClick={() => { setIsActionMenuOpen(true) }}>
+                <FontAwesomeIcon className='' icon={faEllipsisVertical}
+                  style={{ color: "#0a0a0a", transform: "rotate(90deg) scale(1.5)" }} />
+              </button>
+              <OverlayActions
+                onClick={() => { setIsActionMenuOpen(false) }}
+                isOpen={isActionMenuOpen}>
+                <button onClick={() => {
                   setIsActionMenuOpen(false);
-                  props.deleteMessage()}
-                  }>
-                   <AiFillDelete size={15}/>
-                   <span>Delete</span>
+                  props.deleteMessage()
+                }
+                }>
+                  <AiFillDelete size={15} />
+                  <span>Delete</span>
                 </button>
-                <button onClick={() => { 
+                <button onClick={() => {
                   setIsActionMenuOpen(false);
                   props.startEditing(data);
                 }}>
-                  <AiTwotoneEdit size={15}/>
+                  <AiTwotoneEdit size={15} />
                   <span> Edit </span>
                 </button>
-            </OverlayActions>
+              </OverlayActions>
             </div>
-           
+
           </div>
 
 

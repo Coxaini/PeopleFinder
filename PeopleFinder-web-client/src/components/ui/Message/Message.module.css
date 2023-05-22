@@ -54,10 +54,10 @@
 .message .messagedatacontainer .bubble {
     background: var(--message-color);
     color: var(--message-text-color);
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     min-width: 120px;
     border-radius: 20px;
-    
     
     /* border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
@@ -85,6 +85,8 @@
 
 .message .messagedatacontainer .bubble .textcontent{
     white-space: pre-wrap;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 
@@ -108,8 +110,23 @@ button.action{
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
-    width: 100%;
+    
+    margin-left: 10px;
+    margin-right: 10px;
+
+    width: calc(100% - 20px);
 }
+
+.mediacontent{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    max-height: 500px;
+    max-width: 100%;
+    object-fit: cover;
+    align-self: center;
+}
+
+
 
 
 @media screen and (min-width: 1000px) {

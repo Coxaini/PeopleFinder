@@ -1,0 +1,15 @@
+.title{
+    font-weight: 600;
+    font-size: 1.1em;
+    color: darkblue;
+}
+
+.info{
+    font-size: 0.9em;
+    color: #333333;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    display: inline-block;
+}
