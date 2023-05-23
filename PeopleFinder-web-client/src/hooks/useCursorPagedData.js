@@ -41,13 +41,15 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
                 }
 
                 if (!isReverse)
-                    setResults(prev => [...prev, ...proccesedData]);
-                else {
-                    proccesedData.reverse();
                     if (after)
-                        setResults(prev => [...proccesedData, ...prev]);
+                        setResults(prev => [...prev, ...proccesedData]);
                     else
                         setResults(proccesedData);
+                else {
+                    proccesedData.reverse();
+
+                    setResults(prev => [...proccesedData, ...prev]);
+
                 }
 
                 const metadata = JSON.parse(data?.headers?.['x-pagination']);

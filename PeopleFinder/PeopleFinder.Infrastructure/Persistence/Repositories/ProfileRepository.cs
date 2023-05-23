@@ -175,11 +175,6 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
             var query = Context.Relationships
                 .Where(f => f.Status == RelationshipStatus.Approved)
                 .Where(f => f.InitiatorProfileId == profileId || f.ReceiverProfileId == profileId);
-
-            
-            
-            
-            
             
             if (!string.IsNullOrEmpty(searchQuery))
             {
