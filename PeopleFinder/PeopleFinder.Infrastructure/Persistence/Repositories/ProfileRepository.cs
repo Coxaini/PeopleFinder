@@ -170,18 +170,30 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                 .Where(f => f.InitiatorProfileId == profileId || f.ReceiverProfileId == profileId);
             return await query.CountAsync();
         }
-        public async Task<CursorList<FriendProfile>> GetFriends(int profileId, int limit, DateTime? after)
+        public async Task<CursorList<FriendProfile>> GetFriends(int profileId, int limit, DateTime? after, string? searchQuery = null)
         {
             var query = Context.Relationships
-                .Where(f=>f.Status == RelationshipStatus.Approved)
+                .Where(f => f.Status == RelationshipStatus.Approved)
                 .Where(f => f.InitiatorProfileId == profileId || f.ReceiverProfileId == profileId);
 
-            var totalCount = await query.CountAsync();
             
+            
+            
+            
+            
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                query = query.Where(f =>
+                    (f.InitiatorProfileId == profileId && (f.ReceiverProfile.Name.Contains(searchQuery) || f.ReceiverProfile.Username.Contains(searchQuery))) ||
+                    (f.ReceiverProfileId == profileId && (f.InitiatorProfile.Name.Contains(searchQuery) || f.InitiatorProfile.Username.Contains(searchQuery)))
+                );
+            }
+            
+            var totalCount = await query.CountAsync();
             
             if(after != null)
                 query = query.Where(f => f.AcknowledgeAt <= after);
-
+            
             var friends = await query.OrderByDescending(f => f.AcknowledgeAt)
                 .Include(f => f.InitiatorProfile.Tags)
                 .Include(f => f.ReceiverProfile.Tags)
@@ -192,9 +204,6 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                 .Take(limit+1)
                 .ToListAsync();
             
-            
-            
-
             var cursorList = new CursorList<FriendProfile>(friends,limit, totalCount);
             
             return cursorList;

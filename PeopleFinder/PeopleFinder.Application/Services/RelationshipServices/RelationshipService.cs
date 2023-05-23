@@ -103,114 +103,23 @@ public class RelationshipService : IRelationshipService
          return Result.Ok();
             
     }
+    
 
-    public async Task<Result<PagedList<Profile>>> GetFriends(int profileId, PagedPaginationParams pagedPaginationParams)
-    {
-        var profile = await _unitOfWork.ProfileRepository.GetOne(profileId);
-        if (profile is null)
-            return Result.Fail(ProfileErrors.ProfileNotFound);
-        
-        var friends = await _unitOfWork.ProfileRepository.GetFriends(profile.Id, pagedPaginationParams);
-        
-        return friends;
-    }
-
-    public async Task<Result<CursorList<FriendProfile>>> GetFriends(int profileId, CursorPaginationParams<DateTime> cursorPaginationParams)
+    public async Task<Result<CursorList<FriendProfile>>> GetFriends(int profileId, 
+        CursorPaginationParams<DateTime> cursorPaginationParams, string? searchQuery = null)
     {
         var profile = await _unitOfWork.ProfileRepository.GetOne(profileId);
         if (profile is null)
             return Result.Fail(ProfileErrors.ProfileNotFound);
 
         var friends = await _unitOfWork.ProfileRepository
-            .GetFriends(profile.Id, cursorPaginationParams.PageSize, cursorPaginationParams.After);
+            .GetFriends(profile.Id, cursorPaginationParams.PageSize, cursorPaginationParams.After, searchQuery);
         
         
         
         return friends;
     }
-    
   
-
-    /*public async Task<Result> RateProfile(int userId, RateProfileRequest rateProfileRequest)
-    {
-        var raterProfile = await _unitOfWork.ProfileRepository.GetProfileByUserIdAsync(userId);
-            
-        if (raterProfile is null)
-            return Result.Fail(ProfileErrors.ProfileNotFound);
-            
-        var ratedProfile = await _unitOfWork.ProfileRepository.GetProfileByUserIdAsync(rateProfileRequest.RatedUserId);
-
-        if (ratedProfile is null)
-            return Result.Fail(ProfileErrors.RatedProfileNotFound);
-
-        //begin transaction to remove inconsistency between threads
-        await using (var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable))
-        {
-            var ret = await _unitOfWork.FriendRequestRepository.GetFirstOrDefaultRequestByUserIds(raterProfile.Id, ratedProfile.Id);
-            
-            if (ret != null)
-            {
-                //if rating already exists, approve it
-                if (ret.ProfileId == raterProfile.Id || ret.Approved != null)
-                {
-                    return  Result.Fail(ProfileErrors.ProfileAlreadyRated);
-                }
-
-                ret.Approved = rateProfileRequest.IsLiked;
-                _unitOfWork.FriendRequestRepository.Update(ret);
-                
-            }
-            else
-            {
-                //if rating doesn't exist, create it and delete recommendation
-                
-                //check if the user has rights to rate this person
-                var rec = await _unitOfWork.RecommendationRepository.
-                    GetRecommendationByRaterAndRatedProfileId(raterProfile.Id, ratedProfile.Id);
-                if (rec == null)
-                    return Result.Fail(ProfileErrors.AccessToRateDenied);
-                
-                var rating = new FriendRequest
-                {
-                    Profile = raterProfile,
-                    ReceiverProfile = ratedProfile,
-                    SentAt = DateTime.Today,
-                };
-                await _unitOfWork.FriendRequestRepository.AddAsync(rating);
-                _unitOfWork.RecommendationRepository.Delete(rec);
-                
-                raterProfile.LastActivity = DateTime.Now;
-                
-                Chat chat = new()
-                {
-                    Members = new List<Profile>() {raterProfile, ratedProfile},
-                    CreatedAt = DateTime.Now
-                };
-                
-               await _unitOfWork.ChatRepository.AddAsync(chat);
-                
-            }
-            await _unitOfWork.SaveAsync();
-            await transaction.CommitAsync();
-
-        }
-        
-            
-        return Result.Ok();
-
-    }*/
-
-    /*public async Task<Result<PagedList<Relationship>>> GetFriendshipRequestUpdates(int profileId, PagedPaginationParams pagedPaginationParams)
-    {
-        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
-        if (profile is null)
-            return Result.Fail(ProfileErrors.ProfileNotFound);
-
-        var friendshipRequests = await _unitOfWork.RelationshipRepository.GetRequestsWithoutAnswer(profile.Id, pagedPaginationParams);
-
-        return friendshipRequests.ToResult();
-    }*/
-
     public async Task<Result<CursorList<Relationship>>> GetFriendshipRequestUpdates(int profileId, CursorPaginationParams<DateTime> pagedPaginationParams)
     {
         var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);

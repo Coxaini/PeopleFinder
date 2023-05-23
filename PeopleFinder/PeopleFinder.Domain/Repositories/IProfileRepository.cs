@@ -24,7 +24,7 @@ namespace PeopleFinder.Domain.Repositories
         public Task<IEnumerable<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId);
         
         public Task<CursorList<FriendProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId,int limit, DateTime? after= null);
-        public Task<CursorList<FriendProfile>> GetFriends(int profileId,int limit, DateTime? after);
+        public Task<CursorList<FriendProfile>> GetFriends(int profileId,int limit, DateTime? after, string? searchQuery = null);
         public Task<int> GetFriendsCount(int profileId);
         public Task<PagedList<Profile>> GetFriends(int profileId, PagedPaginationParams pagedPaginationParams);
         

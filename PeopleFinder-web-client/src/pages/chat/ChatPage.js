@@ -16,6 +16,7 @@ import MessageEditingBarInfo from "../../components/ui/Chats/MessageEditingBarIn
 import { imageExtensions } from "../../constants/fileExtensions";
 import MessageFileBarInfo from "../../components/ui/Chats/MessageFileBarInfo";
 
+const MessagesPageSize = 20;
 
 function ChatPage(props) {
 
@@ -38,12 +39,12 @@ function ChatPage(props) {
 
     const [editableMessage, setEditableMessage] = useStateWithCallbackLazy(null);
 
-    const [isAnchoring, setIsAnchoring] = useState(true);
+    const [isAnchoring, setIsAnchoring] = useState(false);
 
     useEffect(() => {
         setMessages([]);
         setMessagesInit(false);
-        setIsAnchoring(true);
+        setIsAnchoring(false);
         setAfterCursor(null);
 
         if (!activeChat) {
@@ -64,38 +65,11 @@ function ChatPage(props) {
         auto_grow();
     }, [message]);
 
-    // const setMessagesCallback = (messagesSetter) => {
-
-    //     setIsAnchoring(false);
-    //     console.log(isAnchoring, isMessagesInit);
-    //     setMessages(messagesSetter, () => {
-    //         console.log(isAnchoring, isMessagesInit);
-    //         if (!isMessagesInit) {
-    //             setIsAnchoring(true);
-
-    //         }
-    //     });
-
-    // };
-
-   
-
 
     const { isLoading, isError, error, metadata }
-        = useCursorPagedData(`/messages/${params.chatid}`, setMessages, afterCursor, 20, true);
+        = useCursorPagedData(`/messages/${params.chatid}`, setMessages, afterCursor, MessagesPageSize, true);
 
-    // useEffect(() => {
 
-    //     if (messages.length !== 0 && !isMessagesInit) {
-    //         console.log("messeges", isAnchoring, isMessagesInit);
-    //         setIsAnchoring(true);
-    //     }
-    //     if (isMessagesInit && isLoading) {
-    //         console.log(isAnchoring, isMessagesInit);
-    //         setIsAnchoring(false);
-    //     }
-
-    // }, [messages, isLoading]);
 
     useEffect(() => {
         if (messageList.current && !isMessagesInit && messages.length > 0 && !isLoading) {
@@ -107,12 +81,30 @@ function ChatPage(props) {
 
     }, [messages, isLoading, isMessagesInit]);
 
-    useEffect(() => {
-        if (messageList.current && isMessagesInit) {
-        
-        console.log(messageList.current?.scrollHeight);
+    // useEffect(() => {
+    //     if (messageList.current && isMessagesInit) {
+    //         const c = getScrollProportion(messageList);
+    //         if (c === 1) {
+    //             setIsAnchoring(true);
+    //         } else {
+    //             if (isAnchoring)
+    //                 setIsAnchoring(false);
+    //         }
+    //     }
+
+    // }, [messageList.current?.scrollHeight]);
+
+    const { lastRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
+
+    function handleMediaLoad() {
+        console.log('media loaded');
+        if (messages.length <= MessagesPageSize) {
+            scrollToBottom(messageList);
+        }
+    }
+
+    function handleMessageListScroll(e) {
         const c = getScrollProportion(messageList);
-        console.log(c);
         if (c === 1) {
             setIsAnchoring(true);
         } else {
@@ -120,11 +112,6 @@ function ChatPage(props) {
                 setIsAnchoring(false);
         }
     }
-
-    }, [messageList.current?.scrollHeight, isMessagesInit]);
-
-    const { lastRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
-
 
 
     function handleKeyDown(e) {
@@ -201,9 +188,11 @@ function ChatPage(props) {
             const newMessage = { ...response.data, isMine: true };
             //scrollBarProgress.current = getScrollProportion(messageList);
             const progress = getScrollProportion(messageList);
+
             setMessages(prev => [...prev, newMessage], () => {
-                if (progress === 1)
+                if (progress === 1){
                     scrollToBottom(messageList);
+                }
             });
             setMessage('');
             clearFileSelection();
@@ -229,7 +218,7 @@ function ChatPage(props) {
 
         reader.onloadend = () => {
             const progress = getScrollProportion(messageList);
-            setAttachment({name: file.name,  url: reader.result, type: file.type }, () => {
+            setAttachment({ name: file.name, url: reader.result, type: file.type }, () => {
                 if (progress === 1)
                     scrollToBottom(messageList);
             });
@@ -322,6 +311,7 @@ function ChatPage(props) {
                     key={message.id}
                     data={message}
                     showDateStamp={showDateStamp}
+                    onMediaLoad={handleMediaLoad}
                     deleteMessage={() => { deleteMessage(message.id) }}
                     startEditing={() => { startEditingMessage(message) }}
                 />
@@ -362,7 +352,7 @@ function ChatPage(props) {
                 </div>
             </div>
 
-            <div className={classes.messagelist} ref={messageList}>
+            <div className={classes.messagelist} ref={messageList} onScroll={handleMessageListScroll}>
                 {isLoading && <p className='center'>Loading...</p>}
                 {renderMessages()}
                 <div id={classes.anchor}></div>

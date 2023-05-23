@@ -11,10 +11,10 @@
  .panel{
     position: absolute;
     z-index: 1;
-    bottom: 80%;
+    /* bottom: 80%;
     left: 80%;
     max-height: 300px;
-    min-width: 100px;
+    min-width: 100px; */
     background-color:whitesmoke;
     border-radius: 8px;
     display: flex;
@@ -24,11 +24,11 @@
     z-index: 25;
 }
 
-@media screen and (max-width: 1000px){
+/* @media screen and (max-width: 1000px){
     .panel{
         left: -80px;
     }
-}
+} */
     
 
  .panel button{
@@ -36,7 +36,7 @@
     height: 30px;
     background-color:whitesmoke;
     border: none;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     cursor: pointer;
     align-items: center;

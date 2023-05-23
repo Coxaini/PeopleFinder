@@ -9,6 +9,7 @@
 .navigation-grid-centered{
     display: grid;
     grid-template-columns: 350px 1fr 350px;
+    grid-gap: 10px;
     font-size: larger;
     min-height: inherit;
 

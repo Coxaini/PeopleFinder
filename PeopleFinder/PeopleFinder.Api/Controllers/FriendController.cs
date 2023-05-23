@@ -61,12 +61,13 @@ namespace PeopleFinder.Api.Controllers
         
         
         [HttpGet("")]
-        public async Task<IActionResult> GetFriends([FromQuery]CursorPagination<DateTime> paginationParams)
+        public async Task<IActionResult> GetFriends([FromQuery]CursorPagination<DateTime> paginationParams, 
+            [FromQuery]string? searchQuery)
         {
             CursorPaginationParams<DateTime> pag = new(20)
                 { PageSize = paginationParams.PageSize, After = paginationParams.After, Before = paginationParams.Before };
 
-            var friendsResult = await _relationshipService.GetFriends(ProfileIdInClaims, pag);
+            var friendsResult = await _relationshipService.GetFriends(ProfileIdInClaims, pag, searchQuery);
             return friendsResult.Match(
                 friends =>
                 {

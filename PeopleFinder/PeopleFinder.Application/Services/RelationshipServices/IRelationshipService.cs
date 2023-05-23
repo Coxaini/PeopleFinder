@@ -19,7 +19,8 @@ public interface IRelationshipService
     
     Task<Result> RemoveFriend(int profileId, int friendId);
     
-    Task<Result<CursorList<FriendProfile>>> GetFriends(int profileId, CursorPaginationParams<DateTime> cursorPaginationParams);
+    Task<Result<CursorList<FriendProfile>>> GetFriends(int profileId, CursorPaginationParams<DateTime> cursorPaginationParams,
+        string? searchQuery = null);
     
     Task<Result<CursorList<Relationship>>> GetFriendshipRequestUpdates(int profileId, CursorPaginationParams<DateTime> pagedPaginationParams);
     

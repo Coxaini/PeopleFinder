@@ -6,6 +6,7 @@ import OverlayActions from '../Overlay/OverlayActions';
 import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
 import { BsFillFileEarmarkBinaryFill } from 'react-icons/bs'
 import { apiPrivate } from '../../../api/axios';
+import '../../../css/overlaymenu.css'
 
 const Message = forwardRef((props, ref) => {
 
@@ -20,13 +21,11 @@ const Message = forwardRef((props, ref) => {
 
   const [attachment, setAttachment] = useState(null);
   const fileLink = useRef(null);
+  const [isMediaLoaded, setIsMediaLoaded] = useState(false);
 
   useEffect(() => {
-
-
     let url;
     async function loadFile() {
-
       if (data.attachmentUrl) {
         //media.current.height = 500; 
 
@@ -35,7 +34,6 @@ const Message = forwardRef((props, ref) => {
           const blob = response?.data;
           url = URL.createObjectURL(blob);
           setAttachment(url);
-
         }
         else {
           setAttachment(data.attachmentUrl);
@@ -50,7 +48,14 @@ const Message = forwardRef((props, ref) => {
       if (url) URL.revokeObjectURL(url);
     }
 
-  }, [data, data.attachmentUrl]);
+  }, [ data.attachmentUrl]);
+
+
+  function onMediaLoadHandler() {
+    setIsMediaLoaded(true);
+    if(!isMediaLoaded)
+    props.onMediaLoad()
+  }
 
   function renderMedia() {
 
@@ -59,10 +64,12 @@ const Message = forwardRef((props, ref) => {
     let mediaElement;
     switch (data.attachmentType) {
       case 'image':
-        mediaElement = <img ref={media} src={attachment} alt="attachment" className={classes.mediacontent} />
+        mediaElement = <img ref={media} src={attachment} alt="attachment" 
+        className={classes.mediacontent} onLoad={onMediaLoadHandler}/>
         break;
       case 'video':
-        mediaElement = <video ref={media} src={attachment} alt="attachment" className={classes.mediacontent} controls autoPlay />
+        mediaElement = <video ref={media} src={attachment} alt="attachment" 
+        onLoad={onMediaLoadHandler} className={classes.mediacontent} controls autoPlay />
         break;
       case 'audio':
         mediaElement = <audio ref={media} src={attachment} alt="attachment" controls />
@@ -143,6 +150,7 @@ const Message = forwardRef((props, ref) => {
                   style={{ color: "#0a0a0a", transform: "rotate(90deg) scale(1.5)" }} />
               </button>
               <OverlayActions
+                className={`mesage-overlay-menu ${data.isMine ? 'mine' : ''}`}
                 onClick={() => { setIsActionMenuOpen(false) }}
                 isOpen={isActionMenuOpen}>
                 <button onClick={() => {
@@ -150,14 +158,14 @@ const Message = forwardRef((props, ref) => {
                   props.deleteMessage()
                 }
                 }>
-                  <AiFillDelete size={15} />
+                  <AiFillDelete size={18} />
                   <span>Delete</span>
                 </button>
                 <button onClick={() => {
                   setIsActionMenuOpen(false);
                   props.startEditing(data);
                 }}>
-                  <AiTwotoneEdit size={15} />
+                  <AiTwotoneEdit size={18} />
                   <span> Edit </span>
                 </button>
               </OverlayActions>

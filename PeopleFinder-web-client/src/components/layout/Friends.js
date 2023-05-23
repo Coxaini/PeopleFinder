@@ -10,7 +10,7 @@ import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons
 function Friends() {
 
   return (
-      <div className="navigation-grid">
+      <div className="navigation-grid-centered">
         <div className="border-right navigation">
           <h2>Friends</h2>
           <ul>

@@ -5,7 +5,7 @@ function OverlayActions(props) {
     return (
         <>
 
-            <div className={`${classes.panel} ${!props.isOpen ? 'nonvisible':'' }`} >
+            <div className={`${classes.panel} ${!props.isOpen ? 'nonvisible':''} ${props.className}`} >
                 {props.children}
             </div>
             <div className={`${classes.centeredoverlay} ${!props.isOpen ? 'nonvisible':'' }`} onClick={props.onClick}>
