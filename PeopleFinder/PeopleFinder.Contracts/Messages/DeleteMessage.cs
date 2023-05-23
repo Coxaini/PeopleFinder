@@ -1,3 +1,5 @@
 namespace PeopleFinder.Contracts.Messages;
 
-public record DeleteMessage(Guid ChatId, Guid MessageId);
+public record DeleteMessage(
+    Guid ChatId,
+    Guid MessageId);

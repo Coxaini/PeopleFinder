@@ -27,7 +27,7 @@ public class ChatHub : Hub<IChatHub>
             {
                 foreach (var chat in chats.Value)
                 {
-                    _logger.LogDebug("User ({UserId}) connected to the chat ({ChatId})", userId, chat.Id);
+                    _logger.LogInformation("User ({UserId}) connected to the chat ({ChatId})", userId, chat.Id);
                     await Groups.AddToGroupAsync(Context.ConnectionId, chat.Id.ToString());
                 }
             }

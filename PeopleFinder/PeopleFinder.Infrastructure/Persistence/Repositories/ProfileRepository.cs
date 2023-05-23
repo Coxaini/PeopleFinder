@@ -190,9 +190,9 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                 query = query.Where(f => f.AcknowledgeAt <= after);
             
             var friends = await query.OrderByDescending(f => f.AcknowledgeAt)
-                .Include(f => f.InitiatorProfile.Tags)
-                .Include(f => f.ReceiverProfile.Tags)
-                .AsSplitQuery()
+               // .Include(f => f.InitiatorProfile.Tags)
+               // .Include(f => f.ReceiverProfile.Tags)
+               // .AsSplitQuery()
                 .Select(f => f.InitiatorProfileId == profileId
                     ? new FriendProfile(f.ReceiverProfile, f)
                     : new FriendProfile(f.InitiatorProfile, f))

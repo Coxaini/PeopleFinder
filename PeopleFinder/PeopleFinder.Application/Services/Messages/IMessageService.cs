@@ -12,5 +12,5 @@ public interface IMessageService
     Task<Result<CursorList<UserMessage>>> GetMessages(int profileId, Guid chatId, CursorPaginationParams<DateTime> paginationParams);
     Task<Result<UserMessage>> SendMessage(SendMessageRequest request); 
     Task<Result<UserMessage>> EditMessage(EditMessageRequest request);
-    Task<Result<Message>> DeleteMessage(int profileId, Guid messageId);
+    Task<Result<DeletedMessageResult>> DeleteMessage(int profileId, Guid messageId);
 }

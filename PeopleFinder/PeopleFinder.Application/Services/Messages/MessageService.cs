@@ -176,7 +176,7 @@ public class MessageService : IMessageService
         
     }
 
-    public async Task<Result<Message>> DeleteMessage(int profileId, Guid messageId)
+    public async Task<Result<DeletedMessageResult>> DeleteMessage(int profileId, Guid messageId)
     {
         var message = await _unitOfWork.MessageRepository.GetWithDetailsById(messageId);
         if (message is null)
@@ -200,11 +200,22 @@ public class MessageService : IMessageService
 
         _unitOfWork.MessageRepository.Delete(message);
 
+        var deletedMessageResult = new DeletedMessageResult
+        {
+            ChatId = message.ChatId,
+            MessageId = message.Id,
+        };
+    
         if (message.Id == message.Chat.LastMessageId)
         {
             var newLastMessage = await  _unitOfWork.MessageRepository.GetLastMessage(message.ChatId, message.Id);
-            if(newLastMessage is not null)
-                message.Chat.UpdateLastMessage(newLastMessage.Id,newLastMessage.SentAt, newLastMessage.Text, newLastMessage.Sender);
+            deletedMessageResult.IsLastMessage = true;
+            if (newLastMessage is not null)
+            {
+                deletedMessageResult.SetNewLastMessage(newLastMessage);
+                message.Chat.UpdateLastMessage(newLastMessage.Id, newLastMessage.SentAt, newLastMessage.Text,
+                    newLastMessage.Sender);
+            }
             else
             {
                 message.Chat.DeleteLastMessage();
@@ -213,7 +224,7 @@ public class MessageService : IMessageService
         
         
         await _unitOfWork.SaveAsync();
-        return message;
+        return deletedMessageResult;
 
     }
     

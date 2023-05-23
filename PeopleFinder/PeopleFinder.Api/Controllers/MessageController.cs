@@ -70,7 +70,7 @@ public class MessageController : ApiController
             (message) =>
             {
                 _hubContext.Clients.Group(message.ChatId.ToString())
-                    .MessageSent(_mapper.Map<SendMessageNotification>(message));
+                    .MessageSent(_mapper.Map<MessageNotification>(message));
                 
                 return Ok(_mapper.Map<UserMessageResponse>(message));
             },
@@ -86,7 +86,7 @@ public class MessageController : ApiController
             (deletedMessage) =>
             {
                 _hubContext.Clients.Group(deletedMessage.ChatId.ToString())
-                    .MessageDeleted(new DeleteMessageNotification(messageId, deletedMessage.ChatId));
+                    .MessageDeleted(_mapper.Map<DeleteMessageNotification>(deletedMessage));
                 return Ok("Message deleted");
             },
             Problem);
@@ -104,7 +104,7 @@ public class MessageController : ApiController
             (message) =>
             {
                 _hubContext.Clients.Group(message.ChatId.ToString())
-                    .MessageEdited(_mapper.Map<EditMessageNotification>(message));
+                    .MessageEdited(_mapper.Map<MessageNotification>(message));
                 
                 return Ok(_mapper.Map<UserMessageResponse>(message));
             },

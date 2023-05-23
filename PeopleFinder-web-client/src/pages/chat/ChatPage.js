@@ -15,12 +15,14 @@ import MessageInputBar from "../../components/ui/Chats/MessageInputBar";
 import MessageEditingBarInfo from "../../components/ui/Chats/MessageEditingBarInfo";
 import { imageExtensions } from "../../constants/fileExtensions";
 import MessageFileBarInfo from "../../components/ui/Chats/MessageFileBarInfo";
+import { useContext } from "react";
+import ChatHubContext from "../../context/ChatsHubProvider";
 
 const MessagesPageSize = 20;
 
 function ChatPage(props) {
 
-    const [messages, setMessages] = useStateWithCallbackLazy([]);
+    //const [messages, setMessages] = useStateWithCallbackLazy([]);
     const [activeChat, setActiveChat, setIsChatOpen] = useOutletContext();
 
     const params = useParams();
@@ -41,6 +43,8 @@ function ChatPage(props) {
 
     const [isAnchoring, setIsAnchoring] = useState(false);
 
+    const {hubConnection, messages, setMessages} = useContext(ChatHubContext);
+
     useEffect(() => {
         setMessages([]);
         setMessagesInit(false);
@@ -59,6 +63,11 @@ function ChatPage(props) {
         } else {
             setIsChatLoading(false);
         }
+
+        return () => {
+            setMessages([]);
+        };
+
     }, [params.chatid, apiPrivate, setMessages, setActiveChat]);
 
     useEffect(() => {
@@ -68,8 +77,6 @@ function ChatPage(props) {
 
     const { isLoading, isError, error, metadata }
         = useCursorPagedData(`/messages/${params.chatid}`, setMessages, afterCursor, MessagesPageSize, true);
-
-
 
     useEffect(() => {
         if (messageList.current && !isMessagesInit && messages.length > 0 && !isLoading) {
@@ -185,15 +192,15 @@ function ChatPage(props) {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            const newMessage = { ...response.data, isMine: true };
-            //scrollBarProgress.current = getScrollProportion(messageList);
-            const progress = getScrollProportion(messageList);
+            // const newMessage = { ...response.data, isMine: true };
+            // //scrollBarProgress.current = getScrollProportion(messageList);
+            // const progress = getScrollProportion(messageList);
 
-            setMessages(prev => [...prev, newMessage], () => {
-                if (progress === 1){
-                    scrollToBottom(messageList);
-                }
-            });
+            // setMessages(prev => [...prev, newMessage], () => {
+            //     if (progress === 1){
+            //         scrollToBottom(messageList);
+            //     }
+            // });
             setMessage('');
             clearFileSelection();
         }
@@ -233,7 +240,7 @@ function ChatPage(props) {
         try {
             await apiPrivate.delete(`/messages/${messageId}`);
 
-            setMessages(prev => prev.filter(m => m.id !== messageId));
+            //setMessages(prev => prev.filter(m => m.id !== messageId));
         }
         catch (error) {
             console.log(error);
@@ -273,14 +280,14 @@ function ChatPage(props) {
             formData.append('text', message);
 
             const response = await apiPrivate.put(`/messages`, formData);
-            const newMessage = {
-                ...response.data,
-                isMine: true,
-                displayName: editedMessage.displayName,
-                avatarUrl: editedMessage.avatarUrl
-            };
+            // const newMessage = {
+            //     ...response.data,
+            //     isMine: true,
+            //     displayName: editedMessage.displayName,
+            //     avatarUrl: editedMessage.avatarUrl
+            // };
 
-            setMessages(prev => prev.map(m => m.id === editedMessage.id ? newMessage : m));
+            // setMessages(prev => prev.map(m => m.id === editedMessage.id ? newMessage : m));
         }
         catch (error) {
             console.log(error);

@@ -9,11 +9,13 @@ import useCursorPagedData from '../../hooks/useCursorPagedData';
 import Chat from '../ui/Chats/Chat';
 
 import '../../css/chats.css'
+import { useContext } from 'react';
+import ChatHubContext from '../../context/ChatsHubProvider';
 
 
 function Chats() {
 
-    const [chats, setChats] = useState([]);
+    //const [chats, setChats] = useState([]);
 
     const params = useParams();
     
@@ -23,10 +25,14 @@ function Chats() {
     const [activeChat, setActiveChat] = useState(null);
 
     const [afterCursor, setAfterCursor] = useState(null);
+
+    const {hubConnection,chats, setChats} = useContext(ChatHubContext);
+
     const { isLoading, isError, error, metadata } = useCursorPagedData('/chats', setChats, afterCursor, 20);
 
     const { lastRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
 
+   
     
 
     const navigate = useNavigate();

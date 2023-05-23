@@ -5,6 +5,7 @@ import "../../css/navigation.css"
 import { Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import {MdPersonSearch} from "react-icons/md";
 
 
 function Friends() {
@@ -32,9 +33,9 @@ function Friends() {
             </li>
             <li>
               <Link>
-                <div>
-                  <FontAwesomeIcon icon={faUserTag} />
-                  <span>Sended requests</span>
+                <div className="flexrow aligncenter">
+                  <MdPersonSearch size={27}/>
+                  <span>Search for users</span>
                 </div>
               </Link>
             </li>
