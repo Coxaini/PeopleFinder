@@ -7,5 +7,6 @@ public record EditMessageNotification(
     DateTime EditedAt,
     int? InReplyTo,
     string? AttachmentUrl,
-    DateTime? UpdatedAt
+    DateTime? UpdatedAt,
+    bool IsLastMessage
 );

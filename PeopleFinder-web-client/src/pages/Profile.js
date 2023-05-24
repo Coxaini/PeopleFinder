@@ -90,7 +90,12 @@ function ProfilePage() {
                         <div className='flexlist'>
                             <img src={profile.mainPictureUrl} alt='profile' />
                             <div className={classes.actionslayout}>
-                            <ProfileActions id={profile.id} status={profile.status}/>
+                            <ProfileActions id={profile.id} status={profile.status} 
+                            setStatus={(status)=>{
+                                return setProfile((prev)=>{
+                                    return {...prev, status}
+                                 });
+                            } } />
                         </div>
                         </div>
                         <div className={classes.profilepanel}>

@@ -22,11 +22,10 @@ function Chats() {
     const [isChatOpen, setIsChatOpen] = useState(params.chatid ?true : false);
 
     const [activeChatId, setActiveChatId] = useState(params?.chatid);
-    const [activeChat, setActiveChat] = useState(null);
 
     const [afterCursor, setAfterCursor] = useState(null);
 
-    const {hubConnection,chats, setChats} = useContext(ChatHubContext);
+    const {hubConnection,chats, setChats, activeChat, setActiveChat} = useContext(ChatHubContext);
 
     const { isLoading, isError, error, metadata } = useCursorPagedData('/chats', setChats, afterCursor, 20);
 
@@ -45,7 +44,7 @@ function Chats() {
             }
             navigate(`/chats/${activeChatId}`);
         }
-    }, [activeChatId, chats,navigate]);
+    }, [activeChatId, chats,navigate, setActiveChat]);
 
 
     return (

@@ -34,6 +34,11 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         [Precision(2)]
         public DateTime CreatedAt { get; set; }
         
+        public void UpdateLastMessageText(string text)
+        {
+            LastMessage = text;
+        }
+        
         public void UpdateLastMessage(Guid id, DateTime sentAt, string text, Profile authorProfile)
         {
             LastMessageId = id;

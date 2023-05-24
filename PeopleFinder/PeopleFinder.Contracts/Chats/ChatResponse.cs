@@ -1,5 +1,6 @@
 namespace PeopleFinder.Contracts.Chats;
 
 public record ChatResponse(
-    Guid Id
+    Guid Id,
+    bool IsNew
 );

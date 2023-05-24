@@ -12,6 +12,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore.Internal;
 using PeopleFinder.Application.Common.Constants;
+using PeopleFinder.Application.Common.Errors;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
@@ -231,9 +232,8 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
             var joinedQuery = query
                 .GroupJoin(Context.Relationships,
                     profile => profile.Id,
-                    relationship => relationship.ReceiverProfileId == profileId
-                        ? relationship.InitiatorProfileId
-                        : relationship.ReceiverProfileId,
+                    r => r.ReceiverProfileId == profileId ? r.InitiatorProfileId :
+                        r.InitiatorProfileId == @profileId ? r.ReceiverProfileId : (int?)null,
                     (profile, relationship) => new { Profile = profile, Relationship = relationship })
                 .SelectMany(x => x.Relationship.DefaultIfEmpty(),
                     (x, relationship) => new { x.Profile, Relationship = relationship });

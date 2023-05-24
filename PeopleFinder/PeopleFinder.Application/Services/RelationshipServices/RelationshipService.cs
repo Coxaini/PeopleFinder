@@ -65,8 +65,8 @@ public class RelationshipService : IRelationshipService
     public async Task<Result> ApproveFriendRequest(int profileId, int friendSenderId)
     {
         var relationship = await _unitOfWork.RelationshipRepository.GetRequest(friendSenderId, profileId);
-
-        if (relationship is null)
+        
+        if (relationship is null || relationship.Status != RelationshipStatus.Pending)
             return Result.Fail(FriendRequestErrors.FriendRequestNotFound);
 
         relationship.Status = RelationshipStatus.Approved;
@@ -77,6 +77,19 @@ public class RelationshipService : IRelationshipService
         return Result.Ok();
     }
 
+    public async Task<Result> CancelFriendRequest(int profileId, int receiverId)
+    {
+        var friendRequest = await _unitOfWork.RelationshipRepository.GetSentRequest(profileId, receiverId);
+
+        if (friendRequest is null ||friendRequest.Status != RelationshipStatus.Pending)
+            return Result.Fail(FriendRequestErrors.FriendRequestNotFound);
+        
+        _unitOfWork.RelationshipRepository.Delete(friendRequest);
+        
+        await _unitOfWork.SaveAsync();
+        
+        return Result.Ok();
+    }
     public async Task<Result> RejectFriendRequest(int profileId, int friendSenderId)
     {
 
@@ -91,6 +104,7 @@ public class RelationshipService : IRelationshipService
         
         return Result.Ok();
     }
+    
 
     public async Task<Result> RemoveFriend(int profileId, int friendId)
     {

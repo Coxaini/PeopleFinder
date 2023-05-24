@@ -44,6 +44,22 @@ public class ChatHub : Hub<IChatHub>
         await base.OnConnectedAsync();
     }
 
+    public async Task JoinChat(Guid chatId)
+    {
+        if (Context.UserIdentifier is { } userIdentifier && int.TryParse(userIdentifier, out int userId))
+        {
+            var chat = await _chatService.GetChat(userId, chatId);
+            if (chat.IsSuccess)
+            {
+                _logger.LogInformation("User ({UserId}) connected to the chat ({ChatId})", userId, chatId);
+                await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
+            }
+            else
+            {
+                throw new HubException("Chat not found or you are not a member of this chat");
+            }
+        }
+    }
     public async Task JoinGroups()
     {
         

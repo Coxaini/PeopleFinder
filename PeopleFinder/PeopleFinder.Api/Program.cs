@@ -32,15 +32,44 @@ builder.Services
     .AddApplication(builder.Configuration)
     .AddInfrastructure(builder.Configuration);
 
-builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+  builder.Services.AddCors(options => options.AddPolicy(name: "CorsPolicy",
     policy =>
     {
         policy.WithOrigins("https://localhost:3000")
-            .AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithExposedHeaders("*","X-Pagination");
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithExposedHeaders("*","X-Pagination");
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithExposedHeaders("*","X-Pagination");
         
+        
+        policy.WithOrigins("http://217.66.99.154")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithExposedHeaders("*","X-Pagination"); 
     }));
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder
+                .WithOrigins("http://217.66.99.154")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithExposedHeaders("*","X-Pagination");
+            
+            builder
+                .WithOrigins("http://localhost")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithExposedHeaders("*","X-Pagination");
+        });
+});
+
 
 //add configuration for files 
 builder.Configuration.AddJsonFile("filesettings.json");
@@ -58,25 +87,25 @@ if (app.Environment.IsDevelopment())
     dbcontext.Database.EnsureCreated();
 }
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
         app.UseSwagger();
         app.UseSwaggerUI();
 }
-app.UseCors("NgOrigins");
+app.UseCors("CorsPolicy");
 
 app.UseExceptionHandler("/error");
 
+if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
+
 app.UseMiddleware<AuthTokenSetterMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
 
 app.MapControllers();
-app.MapHub<ChatHub>("chats");
+app.MapHub<ChatHub>("chatHub");
 
 app.Run();

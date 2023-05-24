@@ -118,7 +118,7 @@ namespace PeopleFinder.Api.Controllers
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 MaxAge = TimeSpan.FromDays(300),
-                Secure = true
+               //Secure = true
             });
         }
 
@@ -129,7 +129,7 @@ namespace PeopleFinder.Api.Controllers
                 HttpOnly = true,
                 Expires = expiryTime,
                 SameSite = SameSiteMode.Strict,
-                Secure = true
+                //Secure = true
             };
             Response.Cookies.Append("refreshToken", refreshToken, options);
         }

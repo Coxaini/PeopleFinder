@@ -23,5 +23,6 @@ public interface IRelationshipRepository : IRepo<Relationship>
     Task<PagedList<Relationship>> GetRequestsWithoutAnswer(int profileId, PagedPaginationParams pagedPaginationParams);
     Task DeclineFriendRequest(int profileId, int senderId);
     Task<Relationship?> GetRequest(int senderId, int receiverId);
-    
+    Task<Relationship?> GetSentRequest(int requesterId, int receiverId);
+
 }

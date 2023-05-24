@@ -51,7 +51,7 @@ public class ChatService : IChatService
     }
 
     
-    public async Task<Result<Chat>> CreateDirectChat(CreateDirectChatRequest request)
+    public async Task<Result<ChatCreationResult>> CreateDirectChat(CreateDirectChatRequest request)
     {
 
         if (request.CreatorId == request.FriendId)
@@ -79,7 +79,7 @@ public class ChatService : IChatService
         var existingChat = await _unitOfWork.ChatRepository.GetDirectChatAsync(request.CreatorId, friend.Id);
         if (existingChat is not null)
         {
-            return existingChat;
+            return new ChatCreationResult(existingChat, false);
         }
         
         
@@ -111,7 +111,7 @@ public class ChatService : IChatService
         await _unitOfWork.SaveAsync();
         
 
-        return chat;
+        return new ChatCreationResult(chat, true);
 
     }
 

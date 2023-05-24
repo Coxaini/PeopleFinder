@@ -37,6 +37,7 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
                     DisplayLogoId = cm.Chat.Logo != null ? cm.Chat.Logo.Id : null,
                     ChatType = cm.Chat.ChatType,
                     LastMessageAt = cm.Chat.LastMessageAt,
+                    LastMessageId = cm.Chat.LastMessageId,
                     LastMessage = cm.Chat.LastMessage,
                     LastMessageAuthorName = cm.Chat.LastMessageAuthorProfile != null ? 
                         cm.Chat.LastMessageAuthorProfile.Name : null,
@@ -92,7 +93,9 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
                 ChatType = c.ChatType,
                 LastMessageAt = c.LastMessageAt,
                 LastMessage = c.LastMessage,
+                LastMessageId = c.LastMessageId,
                 LastMessageAuthorName = c.LastMessageAuthorProfile != null ? c.LastMessageAuthorProfile.Name : null,
+                
                 CreatedAt = c.CreatedAt,
                 MembersCount = c.MembersCount
             })
@@ -152,6 +155,7 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
                 UniqueTitle = friend.Username,
                 DisplayLogoId = friend.MainPictureId,
                 ChatType = c.ChatType,
+                LastMessageId = c.LastMessageId,
                 LastMessageAt = c.LastMessageAt,
                 LastMessage = c.LastMessage,
                 LastMessageAuthorName = c.LastMessageAuthorProfile != null ? c.LastMessageAuthorProfile.Name : null,

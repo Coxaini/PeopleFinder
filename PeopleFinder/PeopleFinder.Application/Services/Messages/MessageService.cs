@@ -152,6 +152,16 @@ public class MessageService : IMessageService
         if(request.Attachment is not null)
             message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.Now);
 
+        var lastMessage = await _unitOfWork.MessageRepository.GetLastMessage(message.ChatId);
+        
+        bool isLastMessage = lastMessage?.Id == message.Id;
+
+        if (isLastMessage)
+        {
+            var chat = await _unitOfWork.ChatRepository.GetOne(message.ChatId);
+            chat?.UpdateLastMessageText(message.Text);
+        }
+
         await _unitOfWork.SaveAsync();
         
         var userMessage = new UserMessage()
@@ -168,7 +178,7 @@ public class MessageService : IMessageService
             AttachmentFileId = message.AttachmentFileId,
             AttachmentFileType = message.AttachmentFile?.Type,
             AttachmentName = message.AttachmentFile?.OriginalName,
-            IsMine = true
+            IsMine = true,
         };
 
         return userMessage;

@@ -65,7 +65,14 @@ public class ChatController : ApiController
         
 
         return chatResult.Match(
-            (chat) => CreatedAtAction("GetChat", new { ChatId = chat.Id }, new ChatResponse(chat.Id)),
+            (chat) =>
+            {
+                if(chat.IsNew) 
+                    _hubContext.Clients.User(friendId.ToString()).DirectChatCreated(chat.Chat.Id);
+                
+                return CreatedAtAction("GetChat", new { ChatId = chat.Chat.Id }, 
+                    new ChatResponse(chat.Chat.Id, chat.IsNew));
+            },
             Problem
         );
     }

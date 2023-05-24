@@ -16,6 +16,8 @@ public interface IRelationshipService
     Task<Result> ApproveFriendRequest(int profileId, int friendSenderId);
     
     Task<Result> RejectFriendRequest(int profileId, int friendSenderId);
+
+    Task<Result> CancelFriendRequest(int profileId, int receiverId);
     
     Task<Result> RemoveFriend(int profileId, int friendId);
     

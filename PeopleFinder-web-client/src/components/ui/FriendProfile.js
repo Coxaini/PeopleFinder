@@ -1,12 +1,15 @@
 import React, { forwardRef, useContext } from 'react'
 import classes from './Profile.module.css'
 import useApiPrivate from '../../hooks/useApiPrivate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useProfileApiActions from '../../hooks/useProfileApiActions';
 
 const FriendProfile = forwardRef((props, ref) => {
 
     const apiPrivate = useApiPrivate();
   
+    const {createDirectChat} = useProfileApiActions({id: props.id});
+    const navigate = useNavigate();
 
     async function removeFriend() {
 
@@ -25,6 +28,14 @@ const FriendProfile = forwardRef((props, ref) => {
 
     }
 
+    function handleCreateDirectChat(){
+        createDirectChat().then((res) => {
+            navigate(`/chats/${res.data?.id}`);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     return (
         <Link className='nondecoration' to={`/profile/${props.username}`}>
         <div className={classes.profile} ref={ref} >
@@ -35,7 +46,7 @@ const FriendProfile = forwardRef((props, ref) => {
                 <span className='username'>@{props.username}</span>
                 </div>
                 <div className={classes.horizontallayout}>
-                    <button className={classes.approve}>Send Message</button>
+                    <button className={classes.approve} onClick={handleCreateDirectChat}>Send Message</button>
                     <button className={classes.decline} onClick={(e) => { removeFriend() }}>Remove from Friends</button>
                 </div>
             </div>

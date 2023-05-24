@@ -8,6 +8,7 @@ public record UserChatResponse(
     string? UniqueTitle,
     string DisplayLogoUrl,
     string ChatType,
+    Guid? LastMessageId,
     DateTime? LastMessageAt,
     string? LastMessage,
     string? LastMessageAuthorName,

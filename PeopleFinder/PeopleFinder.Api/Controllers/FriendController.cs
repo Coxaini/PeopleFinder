@@ -39,6 +39,8 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
+        
+        
         [HttpDelete("{friendId:int}")]
         public async Task<IActionResult> RemoveFriend(int friendId)
         {
@@ -49,13 +51,33 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
-        [HttpPut("approve/{friendRequesterId:int}")]
+        [HttpPost("requests/{friendRequesterId:int}")]
         public async Task<IActionResult> ApproveFriendRequest(int friendRequesterId)
         {
             var requestResult = await _relationshipService.ApproveFriendRequest(ProfileIdInClaims, friendRequesterId);
             
             return requestResult.Match(
                 () => Ok("Friend request approved successfully"),
+                Problem);
+        }
+        
+        [HttpPut("requests/{friendRequesterId:int}")]
+        public async Task<IActionResult> RejectFriendRequest(int friendRequesterId)
+        {
+            var requestResult = await _relationshipService.RejectFriendRequest(ProfileIdInClaims, friendRequesterId);
+            
+            return requestResult.Match(
+                () => Ok("Friend request rejected successfully"),
+                Problem);
+        }
+        
+        [HttpDelete("requests/{receiverProfileId:int}")]
+        public async Task<IActionResult> CancelFriendRequest(int receiverProfileId)
+        {
+            var requestResult = await _relationshipService.CancelFriendRequest(ProfileIdInClaims, receiverProfileId);
+            
+            return requestResult.Match(
+                () => Ok("Friend request cancelled successfully"),
                 Problem);
         }
         

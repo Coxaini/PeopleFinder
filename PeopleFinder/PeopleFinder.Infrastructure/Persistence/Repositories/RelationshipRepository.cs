@@ -134,5 +134,11 @@ public class RelationshipRepository : BaseRepo<Relationship>, IRelationshipRepos
             .FirstOrDefaultAsync(r => r.InitiatorProfileId == senderId && r.ReceiverProfileId == receiverId);
     }
     
+    public async Task<Relationship?> GetSentRequest(int requesterId , int receiverId)
+    {
+        return await Context.Relationships
+            .Where(f=>f.Status == RelationshipStatus.Pending)
+            .FirstOrDefaultAsync(r => r.InitiatorProfileId == requesterId && r.ReceiverProfileId == receiverId);
+    }
     
 }
