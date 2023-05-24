@@ -7,13 +7,11 @@ const FriendProfile = forwardRef((props, ref) => {
 
     const apiPrivate = useApiPrivate();
   
-    //const loadmore = useLoadMore("/friends" ,setFriends, pageNum, 10);
 
     async function removeFriend() {
 
         props.setFriends((prev) => {
-            // console.log(prev , props)
-            // console.log( prev.filter(friend => friend.key !== props.key));
+
             return prev.filter(friend => friend.id !== props.id);
         });
 

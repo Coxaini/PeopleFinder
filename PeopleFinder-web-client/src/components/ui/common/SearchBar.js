@@ -6,7 +6,7 @@ import {BiSearchAlt} from 'react-icons/bi'
 import { useEffect } from 'react';
 
 function SearchBar(props) {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState(props.searchQuery || '');
 
   const handleSearchInputChanges = (e) => {
     setSearchValue(e.target.value);

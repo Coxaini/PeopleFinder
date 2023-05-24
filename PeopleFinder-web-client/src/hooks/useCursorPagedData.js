@@ -14,7 +14,9 @@ import useApiPrivate from './useApiPrivate';
  * @returns {isLoading, isError, error, metadata}  The loading state, the error state, the error and the metadata
  */
 
-function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = false, dataPipeLineProcessor = null, searchQuery = null) {
+
+function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = false,
+     dataPipeLineProcessor = null, searchQuery = null, delayed = false) {
 
 
     const [isLoading, setIsLoading] = useState(true)
@@ -24,6 +26,7 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
     const apiPrivate = useApiPrivate();
 
     useEffect(() => {
+        if(delayed) return;
 
         setIsLoading(true);
         setIsError(false);
@@ -64,7 +67,7 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
             });
 
         return () => controller.abort();
-    }, [apiPrivate, url, after, pageSize, isReverse, dataPipeLineProcessor, searchQuery]);
+    }, [apiPrivate, url, after, pageSize, isReverse, dataPipeLineProcessor, searchQuery, delayed]);
 
     return { isLoading, isError, error, metadata }
 }

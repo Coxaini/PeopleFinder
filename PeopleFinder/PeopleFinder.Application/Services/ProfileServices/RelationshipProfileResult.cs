@@ -6,7 +6,7 @@ using PeopleFinder.Domain.Entities;
 
 namespace PeopleFinder.Application.Services.ProfileServices;
 
-public record FriendProfileResult(
+public record RelationshipProfileResult(
     int Id,
     string Username,
     RelationshipResult? Relationship,
@@ -14,6 +14,7 @@ public record FriendProfileResult(
     int? Age,
     string Bio,
     string City,
+    DateTime? LastActivity,
     Gender? Gender,
     Guid? MainPictureId,
     List<TagResponse> Tags

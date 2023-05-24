@@ -23,15 +23,18 @@ namespace PeopleFinder.Mappers.Mapping
 
         public void Register(TypeAdapterConfig config)
         {
-
             
-            config.NewConfig<FriendProfile, ShortProfileResponse>()
+            
+            config.NewConfig<RelationshipProfile, ShortProfileResponse>()
                 .Map(dest=>dest.MainPictureUrl, 
                     src=>MapContext.Current
                         .GetService<IFileUrlService>().GetFileUrl(src.Profile.MainPictureId,"images/default.jpg"))
                 .Map(dest => dest, src => src.Profile);
 
-            config.NewConfig<FriendProfileResult, ShortProfileResponse>()
+            config.NewConfig<RelationshipProfileResult, ShortProfileResponse>()
+                .Map(dest => dest.RelationshipStatus, 
+                    src=>(src.Relationship != null ? src.Relationship.Status.
+                        ToRelationshipStatusResponse( src.Id, src.Relationship) : RelationshipStatusResponse.None).ToString().ToLower())
                 .Map(dest=>dest.MainPictureUrl, 
                     src=>MapContext.Current
                         .GetService<IFileUrlService>().GetFileUrl(src.MainPictureId,"images/default.jpg"))
@@ -47,7 +50,7 @@ namespace PeopleFinder.Mappers.Mapping
 
 
             config
-                .NewConfig<(Profile Profile, Relationship Relationship, CursorList<FriendProfile> MutualFriends),
+                .NewConfig<(Profile Profile, Relationship Relationship, CursorList<RelationshipProfile> MutualFriends),
                     ProfileResult>()
                 .Map(dest => dest.Tags, src => src.Profile.Tags)
                 .Map(dest => dest, src => src.Profile)
@@ -56,12 +59,12 @@ namespace PeopleFinder.Mappers.Mapping
                 .Map(dest => dest.Relationship, src => src.Relationship);
 
             config
-                .NewConfig<FriendProfile, FriendProfileResult>()
+                .NewConfig<RelationshipProfile, RelationshipProfileResult>()
                 .Map(dest => dest, src => src.Profile)
                 .Map(dest => dest.Relationship, src => src.Relationship);
             
             config
-                .NewConfig<(Profile Profile, CursorList<FriendProfile> MutualFriends ), ProfileResult>()
+                .NewConfig<(Profile Profile, CursorList<RelationshipProfile> MutualFriends ), ProfileResult>()
                 .Map(dest => dest, src => src.Profile)
                 .Map(dest => dest.Tags, src => src.Profile.Tags)
                 .Map(dest => dest.MutualFriends, src => src.MutualFriends);

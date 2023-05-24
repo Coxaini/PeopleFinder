@@ -32,7 +32,7 @@ function Friends() {
               </Link>
             </li>
             <li>
-              <Link>
+              <Link to="/friends/search">
                 <div className="flexrow aligncenter">
                   <MdPersonSearch size={27}/>
                   <span>Search for users</span>

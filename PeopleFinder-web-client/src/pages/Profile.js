@@ -77,48 +77,6 @@ function ProfilePage() {
         setMutualFriendsOverlay((prev) => !prev);
     }
 
-    let actions = null;
-    if (profile.id !== Number(userData.id)) {
-        switch (profile.status) {
-            case "friend":
-                actions = <>
-                    <button className={classes.approve}>Message</button>
-                    <button className={classes.decline}>Remove Friend</button>
-                </>
-                break;
-            case "requestsent":
-                actions = <>
-                    <button className={classes.decline}>Cancel request</button>
-                </>
-                break;
-            case "requestreceived":
-                actions = <>
-                    <button className={classes.approve}>Accept Friend Request</button>
-                    <button className={classes.decline}>Decline</button>
-                </>
-                break;
-            case "blockedbyyou" || "blockedbyboth":
-                actions = <>
-                    <button className={classes.decline}>Unblock</button>
-                </>
-                break;
-            case "blockedbyperson":
-                actions = <>
-                    <h1>You are blocked by this profile</h1>
-                </>
-                break;
-            default:
-                actions = <>
-                    <button className={classes.approve}>Add To Friends</button>
-                </>;
-        }
-    }else{
-        actions = <>
-        <button className={classes.approve}>Edit Profile</button>
-    </>;
-    }
-
-
     return (
         <>
             {mutualFriendsOverlay ?

@@ -105,7 +105,7 @@ public class RelationshipService : IRelationshipService
     }
     
 
-    public async Task<Result<CursorList<FriendProfile>>> GetFriends(int profileId, 
+    public async Task<Result<CursorList<RelationshipProfile>>> GetFriends(int profileId, 
         CursorPaginationParams<DateTime> cursorPaginationParams, string? searchQuery = null)
     {
         var profile = await _unitOfWork.ProfileRepository.GetOne(profileId);
@@ -137,7 +137,7 @@ public class RelationshipService : IRelationshipService
         return requests;
     }
 
-    public async Task<Result<CursorList<FriendProfileResult>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams)
+    public async Task<Result<CursorList<RelationshipProfileResult>>> GetMutualFriends(int requesterProfileId, int otherProfileId, CursorPaginationParams<DateTime> cursorPaginationParams)
     {
         if (await _unitOfWork.ProfileRepository.GetOne(otherProfileId) is null)
             return Result.Fail(ProfileErrors.ProfileNotFound);
@@ -145,7 +145,7 @@ public class RelationshipService : IRelationshipService
         var mutualFriends = await _unitOfWork.ProfileRepository.GetMutualFriends(requesterProfileId,
             otherProfileId, cursorPaginationParams.PageSize, cursorPaginationParams.After);
         
-        return  _mapper.Map<CursorList<FriendProfileResult>>(mutualFriends);
+        return  _mapper.Map<CursorList<RelationshipProfileResult>>(mutualFriends);
         
     }
 }

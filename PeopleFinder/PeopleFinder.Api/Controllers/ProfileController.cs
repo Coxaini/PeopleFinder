@@ -112,7 +112,28 @@ namespace PeopleFinder.Api.Controllers
                     return Ok(res);
                 },
                 Problem);
-
+        }
+        
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProfile([FromQuery]string searchQuery, [FromQuery]CursorPagination<DateTime> cursorPaginationParams)
+        {
+            CursorPaginationParams<DateTime> pag = new(20)
+                { PageSize = cursorPaginationParams.PageSize, After = cursorPaginationParams.After, Before = cursorPaginationParams.Before };
+            
+            var profiles = await _profileService.GetProfilesByFilter(ProfileIdInClaims, pag, searchQuery);
+            return profiles.Match(
+                (source) =>
+                {
+                    var metadata = new
+                    {
+                        source.TotalCount,
+                        NextCursor =  source.Next?.LastActivity,
+                    };
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                         
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(source.Items));
+                },
+                Problem);
         }
 
         [HttpGet("{profileId:int}/mutualFriends")]

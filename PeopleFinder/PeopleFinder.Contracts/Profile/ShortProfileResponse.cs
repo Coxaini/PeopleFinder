@@ -8,8 +8,17 @@ using System.Threading.Tasks;
 
 namespace PeopleFinder.Contracts.Profile
 {
-    public record ShortProfileResponse(int Id, string Username , string Name, int? Age,
-        string Bio, string City, Gender Gender, string? MainPictureUrl , List<TagResponse>  Tags);
+    public record ShortProfileResponse(
+        int Id,
+        string Username,
+        string Name,
+        int? Age,
+        string Bio,
+        string City,
+        Gender Gender,
+        string? MainPictureUrl, 
+        string? RelationshipStatus,
+        List<TagResponse> Tags);
     
     
 

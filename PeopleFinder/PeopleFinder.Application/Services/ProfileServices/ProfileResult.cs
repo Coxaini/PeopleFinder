@@ -12,7 +12,7 @@ public record ProfileResult(
     int Id,
     string Username,
     RelationshipResult? Relationship,
-    CursorList<FriendProfileResult> MutualFriends,
+    CursorList<RelationshipProfileResult>? MutualFriends,
     string Name,
     int? Age,
     string Bio,

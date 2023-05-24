@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore.Internal;
 using PeopleFinder.Application.Common.Constants;
 using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Domain.Common.Pagination;
@@ -110,7 +111,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 
         }
 
-        public async Task<CursorList<FriendProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId, int limit, DateTime? after = null) //cache this
+        public async Task<CursorList<RelationshipProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId, int limit, DateTime? after = null) //cache this
         {
 
             var profiles = Context.Relationships
@@ -152,11 +153,11 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
             }
                 
             var result = await query.OrderByDescending(joined => joined.Relationship.AcknowledgeAt)
-                .Select(joined => new FriendProfile(joined.Profile, joined.Relationship))
+                .Select(joined => new RelationshipProfile(joined.Profile, joined.Relationship))
                 .Take(limit+1)
                 .ToListAsync();
 
-            var cursorList = new CursorList<FriendProfile>(result,limit, totalCount);
+            var cursorList = new CursorList<RelationshipProfile>(result,limit, totalCount);
             
             return cursorList;
             
@@ -170,7 +171,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                 .Where(f => f.InitiatorProfileId == profileId || f.ReceiverProfileId == profileId);
             return await query.CountAsync();
         }
-        public async Task<CursorList<FriendProfile>> GetFriends(int profileId, int limit, DateTime? after, string? searchQuery = null)
+        public async Task<CursorList<RelationshipProfile>> GetFriends(int profileId, int limit, DateTime? after, string? searchQuery = null)
         {
             var query = Context.Relationships
                 .Where(f => f.Status == RelationshipStatus.Approved)
@@ -194,12 +195,12 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                // .Include(f => f.ReceiverProfile.Tags)
                // .AsSplitQuery()
                 .Select(f => f.InitiatorProfileId == profileId
-                    ? new FriendProfile(f.ReceiverProfile, f)
-                    : new FriendProfile(f.InitiatorProfile, f))
+                    ? new RelationshipProfile(f.ReceiverProfile, f)
+                    : new RelationshipProfile(f.InitiatorProfile, f))
                 .Take(limit+1)
                 .ToListAsync();
             
-            var cursorList = new CursorList<FriendProfile>(friends,limit, totalCount);
+            var cursorList = new CursorList<RelationshipProfile>(friends,limit, totalCount);
             
             return cursorList;
         }
@@ -217,6 +218,48 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                     , pagedPaginationParams.PageNumber, pagedPaginationParams.PageSize);
             
             return friends;
+        }
+
+        public async Task<CursorList<RelationshipProfile>> GetProfilesByFilter(int profileId, int limit, DateTime? after, string searchQuery)
+        {
+            var query = Context.Profiles
+                .Include(p=>p.Tags)
+                .AsSplitQuery()
+                .Where(p => p.Id != profileId)
+                .Where(p => p.Name.Contains(searchQuery) || p.Username.Contains(searchQuery));
+
+            var joinedQuery = query
+                .GroupJoin(Context.Relationships,
+                    profile => profile.Id,
+                    relationship => relationship.ReceiverProfileId == profileId
+                        ? relationship.InitiatorProfileId
+                        : relationship.ReceiverProfileId,
+                    (profile, relationship) => new { Profile = profile, Relationship = relationship })
+                .SelectMany(x => x.Relationship.DefaultIfEmpty(),
+                    (x, relationship) => new { x.Profile, Relationship = relationship });
+
+              /*query.Join(
+                Context.Relationships.DefaultIfEmpty(),
+                profile => profile.Id,
+                relationship => relationship != null ? relationship.ReceiverProfileId == profileId
+                    ? relationship.InitiatorProfileId
+                    : relationship.ReceiverProfileId : 1,
+                (profile, relationship) => new { Profile = profile, Relationship = relationship }
+            );*/
+
+            if (after != null)
+            {
+                joinedQuery = joinedQuery.Where(joined => joined.Profile.LastActivity <= after);
+            }
+                
+            var result = await joinedQuery.OrderByDescending(joined => joined.Profile.LastActivity)
+                .Select(joined => new RelationshipProfile(joined.Profile, joined.Relationship))
+                .Take(limit+1)
+                .ToListAsync();
+
+            var cursorList = new CursorList<RelationshipProfile>(result,limit);
+            
+            return cursorList;
         }
     }
 }

@@ -23,10 +23,11 @@ namespace PeopleFinder.Domain.Repositories
         public Task<Profile?> GetByIdAsync(int id);
         public Task<IEnumerable<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId);
         
-        public Task<CursorList<FriendProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId,int limit, DateTime? after= null);
-        public Task<CursorList<FriendProfile>> GetFriends(int profileId,int limit, DateTime? after, string? searchQuery = null);
+        public Task<CursorList<RelationshipProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId,int limit, DateTime? after= null);
+        public Task<CursorList<RelationshipProfile>> GetFriends(int profileId,int limit, DateTime? after, string? searchQuery = null);
         public Task<int> GetFriendsCount(int profileId);
         public Task<PagedList<Profile>> GetFriends(int profileId, PagedPaginationParams pagedPaginationParams);
+        public Task<CursorList<RelationshipProfile>> GetProfilesByFilter(int profileId ,int limit, DateTime? after, string searchQuery);
         
     }
 }

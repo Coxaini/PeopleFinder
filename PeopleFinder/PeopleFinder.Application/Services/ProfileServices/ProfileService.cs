@@ -146,7 +146,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
         {
             if (profile.Id == requesterId)
             {
-                return _mapper.Map<ProfileResult>((profile, new CursorList<FriendProfile>()));
+                return _mapper.Map<ProfileResult>((profile, new CursorList<RelationshipProfile>()));
             }
 
             var relationship =
@@ -181,7 +181,18 @@ namespace PeopleFinder.Application.Services.ProfileServices
             return profilePicture;
         }
 
-        
-        
+        public async Task<Result<CursorList<RelationshipProfileResult>>> GetProfilesByFilter(int profileId, CursorPaginationParams<DateTime> curParams, string searchQuery)
+        {
+            
+            if(searchQuery.Length <= 3)
+                return Result.Fail<CursorList<RelationshipProfileResult>>(ProfileErrors.SearchQueryTooShort);
+            
+            
+            var profiles = await _unitOfWork
+                .ProfileRepository.GetProfilesByFilter(profileId, curParams.PageSize, curParams.After, searchQuery);
+            var profilesResult = _mapper.Map<CursorList<RelationshipProfileResult>>(profiles);
+            return profilesResult;
+        }
+ 
     }
 }

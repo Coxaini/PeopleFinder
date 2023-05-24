@@ -18,6 +18,7 @@ import ProfileEdit from "./pages/ProfileEdit";
 
 import ChatNav from "./components/layout/Chats";
 import EmptyChatPage from "./pages/chat/EmptyChatPage";
+import SearchProfiles from "./pages/profiles/SearchProfiles";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/friends" element={<FriendNav />}>
             <Route path="all" element={<AllFriends />} />
             <Route path="requests" element={<FriendRequests />} />
+            <Route path="search" element={<SearchProfiles/>}/>
             <Route index element={<AllFriends />} />
           </Route>
         </Route>
