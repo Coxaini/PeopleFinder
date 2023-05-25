@@ -13,8 +13,7 @@ const formatedDateTime = useMemo(() => formatDateTime(chat.lastMessageAt), [chat
   return (
     <Link id={props.activeChatId=== chat.id ? `${classes.active}`:''} 
     onClick={() => {
-        props.setActiveChatId(chat.id);
-        props.setIsChatOpen(true)
+        props.setActiveChat();
         }}
     className={`${classes.chatitem} nondecoration`} ref={ref}>
         <div className={classes.chaticon}>
