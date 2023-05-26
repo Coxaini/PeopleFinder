@@ -37,7 +37,7 @@ namespace PeopleFinder.Api.Controllers
         }
 
 
-        [HttpPost]      
+        /*[HttpPost]      
         public async Task<IActionResult>CreateProfile(ProfileFillRequest request)
         {
 
@@ -48,7 +48,7 @@ namespace PeopleFinder.Api.Controllers
                     return Created(Request.GetUri() + $"/{profile.Id}", _mapper.Map<ShortProfileResponse>(profile));
                     },
                 Problem);
-        }
+        }*/
         [HttpPut]
         public async Task<IActionResult> EditProfile(ProfileFillRequest request)
         {

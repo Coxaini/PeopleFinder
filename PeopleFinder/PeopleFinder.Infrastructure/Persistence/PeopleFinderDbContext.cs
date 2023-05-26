@@ -79,7 +79,7 @@ public class PeopleFinderDbContext : DbContext
         {
             new Profile()
             {
-                Id = 1, Name = "Vova", UserId = 1, Gender = Gender.Male,Username ="ilya",
+                Id = 1, Name = "Vova", UserId = 1, Gender = Gender.Male,Username ="ilya1",
                 Bio =
                     "My name is Vova and I have a passion for hiking and exploring. I love nothing more than discovering new trails and taking in the breathtaking views. I find it's a great way to stay active and appreciate the natural beauty around us.",
                 BirthDate = new DateTime(2000, 1, 1), City = "Kyiv"
@@ -100,7 +100,7 @@ public class PeopleFinderDbContext : DbContext
             },
             new Profile()
             {
-                Id = 4, Name = "Sasha", UserId = 4, Gender = Gender.Female , Username ="user4",
+                Id = 4, Name = "Sasha", UserId = 4, Gender = Gender.Female , Username ="ilya4",
                 Bio =
                     "I'm Sasha and I love nothing more than exploring new places through hiking. It's a great way to stay active and connect with nature. I find the peace and serenity of the outdoors to be the perfect escape from the hustle and bustle of everyday life.",
                 BirthDate = new DateTime(2000, 1, 1), City = "Kyiv"

@@ -78,11 +78,13 @@ namespace PeopleFinder.Application.Services.ProfileServices
                 return Result.Fail(result.ToErrorList());
             }
 
-            var profileByUserId = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            var profileByUserId = await _unitOfWork.ProfileRepository.GetWithTagsByIdAsync(profileId);
             if(profileByUserId == null)
                 return Result.Fail(ProfileErrors.ProfileNotFound);
 
             var tags = await _unitOfWork.TagRepository.GetByNames(request.Tags);
+
+            tags.RemoveAll((t) => profileByUserId.Tags.Any(x=>x.Id == t.Id));    
 
             profileByUserId.Name = request.Name;
             profileByUserId.BirthDate = request.BirthDate.ToDateTime(new TimeOnly());

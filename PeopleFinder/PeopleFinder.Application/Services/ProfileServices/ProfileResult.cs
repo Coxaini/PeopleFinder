@@ -14,7 +14,7 @@ public record ProfileResult(
     RelationshipResult? Relationship,
     CursorList<RelationshipProfileResult>? MutualFriends,
     string Name,
-    int? Age,
+    DateTime? BirthDate,
     string Bio,
     string City,
     Gender? Gender,

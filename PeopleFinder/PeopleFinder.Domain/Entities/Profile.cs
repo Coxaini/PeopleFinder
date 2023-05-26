@@ -13,6 +13,7 @@ namespace PeopleFinder.Domain.Entities
  
     public enum Gender
     {
+        None = 0,
         Male = 1,
         Female = 2
     }
@@ -21,14 +22,14 @@ namespace PeopleFinder.Domain.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         
-        public string Username { get; set; } = null!;
-        public string Name { get; set; } = null!;
+        public string Username { get; set; }
+        public string Name { get; set; }
         
         public DateTime? BirthDate { get; set; }
         public string Bio { get; set; } = null!;
 
         public string City { get; set; } = null!;
-        public Gender? Gender { get; set; } 
+        public Gender Gender { get; set; } 
         [NotMapped]
         public Gender? GenderInterest { get; set;} //delete
         
@@ -55,8 +56,13 @@ namespace PeopleFinder.Domain.Entities
 
 
         [NotMapped]
-        public int? Age  => BirthDate != null ? (int)((DateTime.Today - BirthDate).Value.TotalDays / 365.25) : null;
+        public int? Age  => BirthDate != null ? (int)((DateTime.UtcNow.Date - BirthDate).Value.TotalDays / 365.25) : null;
        
+        public static int? GetAge(DateTime? birthDate)
+        {
+            if (birthDate == null) return null;
+            return (int)((DateTime.UtcNow.Date - birthDate).Value.TotalDays / 365.25);
+        }
 
 
 

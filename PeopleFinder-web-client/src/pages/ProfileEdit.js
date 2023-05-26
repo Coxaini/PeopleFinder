@@ -21,9 +21,16 @@ function ProfileEdit() {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [city, setCity] = useState('');
+    const [birthdate, setBirthdate] = useState('');
+    const [gender, setGender] = useState('');
+    const [interests , setInterests] = useState([]);
+    const [username, setUsername] = useState('');   
 
     const [imageErrorMsg, setImageErrorMsg] = useState('');
     const [imageLoading, setImageLoading] = useState(false);
+
+
+
 
     useEffect(() => {
         apiPrivate.get(`/profile/${userData.id}`)
@@ -45,11 +52,47 @@ function ProfileEdit() {
             setName(profile.name);
             setBio(profile.bio);
             setCity(profile.city);
+            setBirthdate(profile.birthDate?? '');
+            setUsername(profile.username);
+            switch(profile.gender){
+                case 1: setGender('male'); break;
+                case 2 : setGender('woman'); break;
+                default: setGender('none'); break;
+            }
+            setInterests(profile.tags.map(tag => tag.title));
+
         }
     }, [profile]);
 
     if (isLoading) {
         return <div>Loading...</div>;
+    }
+
+    function handleProfileDataSubmit(e){
+        e.preventDefault();
+        
+        let numberGender = 0;
+        if(gender === 'male'){
+            numberGender = 1;
+        }else if(gender === 'woman'){
+            numberGender = 2;
+        }
+
+        apiPrivate.put(`/profile`, {
+            name,
+            bio,
+            city,
+            gender: numberGender,
+            username,
+            birthdate,
+            tags: interests
+        })
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     function handleImageChange(e) {
@@ -109,7 +152,7 @@ function ProfileEdit() {
                             </div>
                         </div>
                         <div className='avatar-actions'>
-                            <span className='username marginbottom10'>@{profile.username}</span>
+                            <span className='username marginbottom10'>@{username}</span>
                             <button className='upload-btn' onClick={() => fileUpload.current.click()}>Upload new photo</button>
                             <form method="post" encType="multipart/form-data" >
                                 <input type='file' id='upload' accept="image/jpeg,image/png"
@@ -119,7 +162,7 @@ function ProfileEdit() {
                         
                     </div>
                     <span className={`marginbottom10 errormessage ${imageErrorMsg ===''? 'nonvisible' : '' }`}>{imageErrorMsg}</span>
-                    <form>
+                    <form onSubmit={handleProfileDataSubmit}>
                         <div className='input-group'>
                             <div className='label-container'>
                                 <label htmlFor="name">Name:</label>
@@ -127,6 +170,14 @@ function ProfileEdit() {
                             <input type="text" id="name" name="name" value={name}
                                 onChange={(e) => setName(e.target.value)} required />
                         </div>
+                        <div className='input-group'>
+                            <div className='label-container'>
+                                <label htmlFor="username">Username:</label>
+                            </div>
+                            <input type="text" id="username" name="username" value={username}
+                                onChange={(e) => setUsername(e.target.value)} required />
+                        </div>
+
                         <div className='input-group'>
                             <div className='label-container'>
                                 <label htmlFor="bio">Bio:</label>
@@ -139,6 +190,29 @@ function ProfileEdit() {
                             </div>
                             <input type="text" id="city" name="city" value={city} onChange={(e) => setCity(e.target.value)} />
                         </div>
+                        <div>
+                            <div className='input-group'>
+                                <div className='label-container'>
+                                    <label htmlFor='birthdate'>Birthdate:</label>
+                                </div>
+                                <input type='date' id='birthdate' name='birthdate' value={birthdate}
+                                 onChange={(e)=>setBirthdate(e.target.value)} />
+                            </div>
+                        </div>
+                        <div>
+                            <div className='input-group'>
+                                <div className='label-container'>
+                                    <label htmlFor='gender'>Gender :</label>
+                                </div>
+                                <select id='gender' name='gender' value={gender} 
+                                onChange={(e)=>setGender(e.target.value)}>
+                                    <option value={"none"}>None</option>
+                                    <option value={"male"}>Male</option>
+                                    <option value={"woman"}>Woman</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div id="image-preview"></div>
                         <div className='input-group'>
                             <div className='label-container'>

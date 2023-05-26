@@ -12,9 +12,8 @@ namespace PeopleFinder.Application.Common.Extensions.CustomValidators
     {
         public static IRuleBuilderOptions<T, Gender> MustBeAValidGender<T>(this IRuleBuilder<T, Gender> ruleBuilder)
         {
-            return ruleBuilder.IsInEnum().Must(gender => (gender ^ Gender.Male) == 0 ||
-            (gender ^ Gender.Female) == 0)
-                             .WithMessage("Gender must be either Male, Female");
+            
+            return ruleBuilder.IsInEnum().WithMessage("Gender must be either None, Male or Female");
         }
         public static IRuleBuilderOptions<T, Gender> MustBeAValidMultipleGender<T>(this IRuleBuilder<T, Gender> ruleBuilder)
         {

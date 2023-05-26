@@ -233,7 +233,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                 .GroupJoin(Context.Relationships,
                     profile => profile.Id,
                     r => r.ReceiverProfileId == profileId ? r.InitiatorProfileId :
-                        r.InitiatorProfileId == @profileId ? r.ReceiverProfileId : (int?)null,
+                        r.InitiatorProfileId == profileId ? r.ReceiverProfileId : (int?)null,
                     (profile, relationship) => new { Profile = profile, Relationship = relationship })
                 .SelectMany(x => x.Relationship.DefaultIfEmpty(),
                     (x, relationship) => new { x.Profile, Relationship = relationship });

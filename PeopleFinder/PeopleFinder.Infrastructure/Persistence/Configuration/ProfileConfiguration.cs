@@ -8,7 +8,8 @@ namespace PeopleFinder.Infrastructure.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Profile> builder)
         {
-         
+            builder.HasIndex(p=>p.Username).IsUnique();
+            
         }
     }
 }
