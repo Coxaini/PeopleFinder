@@ -9,7 +9,7 @@ import TagsSelection from '../components/ui/Profile/Tags/TagsSelection';
 
 function ProfileEdit() {
 
-    const [userData] = useUserData();
+    const [userData, setUserData] = useUserData();
     const apiPrivate = useApiPrivate();
     const [profile, setProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +89,8 @@ function ProfileEdit() {
             tags: selectedTags.map(tag => tag.title)
         })
         .then(response => {
-            console.log(response);
+
+            setUserData({...userData, username: response.data?.username});
         })
         .catch(error => {
             console.log(error);

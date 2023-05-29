@@ -10,3 +10,10 @@
         left: -92px;
     }
 }
+
+.chatheader-overlay-menu{
+    bottom: -30%;
+    left: -130px;
+    max-height: 400px;
+    min-width: 150px;
+}

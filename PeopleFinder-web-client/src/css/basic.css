@@ -97,6 +97,12 @@ button.emptybutton{
     cursor: pointer;
 }
 
+button.transparentbutton{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 span.errormessage{
     color: rgb(217, 0, 0);
     font-weight: 800;

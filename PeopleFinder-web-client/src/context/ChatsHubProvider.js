@@ -6,16 +6,19 @@ import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import useApiPrivate from "../hooks/useApiPrivate";
 import axios from "axios";
 import { BASE_URL } from './../api/axios';
+import { useNavigate } from "react-router-dom";
 
 
 const ChatHubContext = createContext({});
 export const ChatHubProvider = ({ children }) => {
 
+    const navigate = useNavigate();
+
     const [hubConnection, setHubConnection] = useState(null);
 
     const [messages, setMessages] = useStateWithCallbackLazy([]);
 
-    const [activeChat, setActiveChat] = useState(null);
+    const [activeChat, setActiveChat] = useStateWithCallbackLazy(null);
 
     const [chats, setChats] = useState([]);
     const [userData] = useUserData();
@@ -93,7 +96,10 @@ export const ChatHubProvider = ({ children }) => {
                     chat.lastMessageAt = message.newLastMessageAt;
                     chat.lastMessageAuthorName = message.newLastMessageAuthorName;
 
-                    prevChats.sort((a, b) => { return new Date(b.lastMessageAt) - new Date(a.lastMessageAt) });
+                    prevChats.sort((a, b) => { 
+                        const dateA = a.lastMessageAt ? new Date(a.lastMessageAt) : new Date(a.createdAt);
+                        const dateB = b.lastMessageAt ? new Date(b.lastMessageAt) : new Date(b.createdAt);
+                        return dateB - dateA });
 
                     if (prevChats.length > 20 && prevChats[prevChats.length - 1].id === chat.id) {
                         return [...prevChats.filter(c => c.id !== chat.id)];
@@ -110,8 +116,12 @@ export const ChatHubProvider = ({ children }) => {
     }
 
     function chatCreatedHandler(chatId) {
-        console.log("Chat created", );
         hubConnectionSnapshot.current?.invoke("JoinChat", chatId);
+    }
+
+    function chatDeletedHandler(chatId) {
+        setChats((prevChats) => [...prevChats.filter(c => c.id !== chatId)]);
+        navigate("/chats");
     }
 
 
@@ -121,11 +131,7 @@ export const ChatHubProvider = ({ children }) => {
         const createHubConnection = () => {
             connection = new HubConnectionBuilder()
                 .configureLogging(LogLevel.Debug)
-                //.withUrl("https://localhost:7273/chats")
-                .withUrl(`${process.env.REACT_APP_API_URL}/chatHub`, {
-                    skipNegotiation: true,
-                    transport: HttpTransportType.WebSockets
-                })
+                .withUrl(`${process.env.REACT_APP_API_URL}/chatHub`)
                 .withAutomaticReconnect()
                 .build();
 
@@ -136,6 +142,8 @@ export const ChatHubProvider = ({ children }) => {
             connection.on("MessageEdited", messageEditedHandler)
 
             connection.on("DirectChatCreated", chatCreatedHandler)
+
+            connection.on("ChatDeleted", chatDeletedHandler)
 
             connection.start()
                 .then(() => {

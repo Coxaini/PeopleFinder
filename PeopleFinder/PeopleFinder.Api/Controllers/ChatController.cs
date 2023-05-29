@@ -98,6 +98,19 @@ public class ChatController : ApiController
             Problem
         );
     }
+    
+    [HttpDelete("{chatId:guid}")]
+    public async Task<IActionResult> DeleteChat([FromRoute]Guid chatId)
+    {
+        var deleteResult = await _chatService.DeleteChat(ProfileIdInClaims, chatId);
+        
+        await _hubContext.Clients.Group(chatId.ToString()).ChatDeleted(chatId);
+        
+        return deleteResult.Match(
+            Ok,
+            Problem
+        );
+    }
    
     
     

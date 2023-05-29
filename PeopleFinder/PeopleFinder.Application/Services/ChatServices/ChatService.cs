@@ -22,7 +22,8 @@ public class ChatService : IChatService
     private readonly IValidator<FileDto> _fileValidator;
 
 
-    public ChatService(IUnitOfWork unitOfWork, IFileStorageManager fileStorageManager, IValidator<FileDto> fileValidator)
+    public ChatService(IUnitOfWork unitOfWork, IFileStorageManager fileStorageManager,
+        IValidator<FileDto> fileValidator)
     {
         _unitOfWork = unitOfWork;
         _fileStorageManager = fileStorageManager;
@@ -50,7 +51,27 @@ public class ChatService : IChatService
 
     }
 
-    
+    public async Task<Result> DeleteChat(int profileId, Guid chatId)
+    {
+        var chat = await _unitOfWork.ChatRepository.GetOne(chatId);
+        
+        if (chat is null)
+        {
+            return Result.Fail(ChatErrors.ChatNotFound);
+        }
+        
+        if (!await _unitOfWork.ChatRepository.IsProfileInChatAsync(profileId, chatId))
+        {
+            return Result.Fail(ChatErrors.ProfileNotInChat);
+        }
+        
+        _unitOfWork.ChatRepository.Delete(chat);
+        await _unitOfWork.SaveAsync();
+        
+        return Result.Ok();
+    }
+
+
     public async Task<Result<ChatCreationResult>> CreateDirectChat(CreateDirectChatRequest request)
     {
 

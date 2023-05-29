@@ -151,7 +151,7 @@ const Register = () => {
   return (
     <>
       <div className={classes.section}>
-        <img src={logo} className={classes.logoImage} />
+        
 
         <div className={classes.authform}>
           <form onSubmit={handleSubmit}>

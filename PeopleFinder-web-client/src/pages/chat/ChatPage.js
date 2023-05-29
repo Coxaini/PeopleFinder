@@ -9,7 +9,7 @@ import useInfiniteLoadObserver from "../../hooks/useInfiniteLoadObserver";
 import useCursorPagedData from "../../hooks/useCursorPagedData";
 import useApiPrivate from "../../hooks/useApiPrivate";
 
-import { AiOutlineSend, AiOutlineEdit, AiOutlineCheckCircle, AiOutlinePaperClip, AiFillFile } from "react-icons/ai";
+import { AiOutlineSend, AiOutlineEdit, AiOutlineCheckCircle, AiOutlinePaperClip, AiFillFile, AiFillDelete } from "react-icons/ai";
 import { useStateWithCallbackLazy } from "use-state-with-callback";
 import MessageInputBar from "../../components/ui/Chats/MessageInputBar";
 import MessageEditingBarInfo from "../../components/ui/Chats/MessageEditingBarInfo";
@@ -17,6 +17,7 @@ import { imageExtensions } from "../../constants/fileExtensions";
 import MessageFileBarInfo from "../../components/ui/Chats/MessageFileBarInfo";
 import { useContext } from "react";
 import ChatHubContext from "../../context/ChatsHubProvider";
+import OverlayActions from "../../components/ui/Overlay/OverlayActions";
 
 const MessagesPageSize = 20;
 
@@ -43,7 +44,9 @@ function ChatPage(props) {
 
     const [isAnchoring, setIsAnchoring] = useState(false);
 
-    const {hubConnection, messages, setMessages} = useContext(ChatHubContext);
+    const { hubConnection, messages, setMessages } = useContext(ChatHubContext);
+
+    const [isChatMenuOpen, setIsChatMenuOpen] = useState(false);
 
     useEffect(() => {
         setMessages([]);
@@ -51,8 +54,15 @@ function ChatPage(props) {
         setIsAnchoring(false);
         setAfterCursor(null);
 
-        if (!activeChat) {
-            apiPrivate.get(`/chats/${params.chatid}`)
+        const controller = new AbortController();
+
+
+        if (!activeChat || activeChat.id !== params.chatid) {
+            console.log('chatid changed');
+            setIsChatLoading(true);
+            apiPrivate.get(`/chats/${params.chatid}`, {
+                signal: controller.signal
+            })
                 .then(response => {
                     setActiveChat(response.data);
                     setIsChatLoading(false);
@@ -65,10 +75,11 @@ function ChatPage(props) {
         }
 
         return () => {
+            controller.abort();
             setMessages([]);
         };
 
-    }, [params.chatid, apiPrivate, setMessages, setActiveChat]);
+    }, [params.chatid, apiPrivate, setActiveChat, setMessages]);
 
     useEffect(() => {
         auto_grow();
@@ -331,6 +342,15 @@ function ChatPage(props) {
         fileUpload.current.value = null;
     }
 
+    async function handleChatDelete() {
+        setIsChatOpen(false);
+        try{
+            await apiPrivate.delete(`/chats/${activeChat.id}`)
+        }catch(e){
+            console.log(e);
+        }
+
+    }
 
     return (
         <div className={classes.chat}>
@@ -353,10 +373,21 @@ function ChatPage(props) {
                         </> : <p className='center'>Loading...</p>
                     }
                 </div>
-
-                <div className={classes.chatoptions}>
-                    <FontAwesomeIcon icon={faEllipsisVertical} size='2x' style={{ color: "#0a0a0a", }} />
-                </div>
+                    <div className={classes.chatoptions}> 
+                    <button className={` transparentbutton`}
+                        onClick={() => setIsChatMenuOpen(true)}>
+                        <FontAwesomeIcon icon={faEllipsisVertical} size='2x' style={{ color: "#0a0a0a", }} />
+                    </button>
+                    <OverlayActions className='chatheader-overlay-menu'
+                        onClick={() => setIsChatMenuOpen(false)}
+                        isOpen={isChatMenuOpen}>
+                            <button onClick={handleChatDelete}>
+                                <AiFillDelete size={18} />
+                                <span>Delete chat</span>
+                            </button>
+                    </OverlayActions>
+                    </div>
+                
             </div>
 
             <div className={classes.messagelist} ref={messageList} onScroll={handleMessageListScroll}>

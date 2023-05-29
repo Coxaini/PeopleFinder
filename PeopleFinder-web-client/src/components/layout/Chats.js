@@ -46,9 +46,8 @@ function Chats() {
         if (activeChatId) {
             let chat = chats.find(chat => chat.id === activeChatId);
             if (chat) {
-                setActiveChat(chat);
+                setActiveChat(chat, () => { navigate(`/chats/${activeChatId}`); });
             }
-            navigate(`/chats/${activeChatId}`);
         }
     }, [activeChatId, chats, navigate, setActiveChat]);
 
