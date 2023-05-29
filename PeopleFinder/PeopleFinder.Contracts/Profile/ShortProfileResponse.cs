@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using PeopleFinder.Domain.Common.Models;
 
 namespace PeopleFinder.Contracts.Profile
 {
@@ -18,9 +19,6 @@ namespace PeopleFinder.Contracts.Profile
         Gender Gender,
         string? MainPictureUrl, 
         string? RelationshipStatus,
-        List<TagResponse> Tags);
+        List<UserTag> Tags);
     
-    
-
-    public record TagResponse(int Id, string Title);
 }

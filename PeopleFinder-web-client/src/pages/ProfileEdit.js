@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import useUserData from '../hooks/useUserData';
 import useApiPrivate from '../hooks/useApiPrivate';
 import LoaderSpinner from '../components/ui/LoaderSpinner';
+import TagsSelection from '../components/ui/Profile/Tags/TagsSelection';
 
 function ProfileEdit() {
 
@@ -23,7 +24,7 @@ function ProfileEdit() {
     const [city, setCity] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [gender, setGender] = useState('');
-    const [interests , setInterests] = useState([]);
+    const [selectedTags , setSelectedTags] = useState([]);
     const [username, setUsername] = useState('');   
 
     const [imageErrorMsg, setImageErrorMsg] = useState('');
@@ -59,7 +60,7 @@ function ProfileEdit() {
                 case 2 : setGender('woman'); break;
                 default: setGender('none'); break;
             }
-            setInterests(profile.tags.map(tag => tag.title));
+            setSelectedTags(profile.tags);
 
         }
     }, [profile]);
@@ -85,7 +86,7 @@ function ProfileEdit() {
             gender: numberGender,
             username,
             birthdate,
-            tags: interests
+            tags: selectedTags.map(tag => tag.title)
         })
         .then(response => {
             console.log(response);
@@ -144,7 +145,7 @@ function ProfileEdit() {
             <div className='editform'>
                 <div className='flexlist'>
 
-                    <div className='input-group'>
+                    <div className='image-input-group'>
                         <div className='avatar-image-container'> 
                             <img src={imagePreviewUrl} onClick={() => fileUpload.current.click()} className='avatar-image' alt='profile' />
                             <div className= {`spinner-container ${imageLoading? `` : `nonvisible`}`}>
@@ -218,13 +219,7 @@ function ProfileEdit() {
                             <div className='label-container'>
                                 <label htmlFor="interests">Interests:</label>
                             </div>
-                            <select id="interests" name="interests[]" multiple>
-                                <option value="music">Music</option>
-                                <option value="movies">Movies</option>
-                                <option value="books">Books</option>
-                                <option value="sports">Sports</option>
-                                <option value="travel">Travel</option>
-                            </select>
+                            <TagsSelection selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
                         </div>
                         <button type="submit">Save</button>
                     </form>

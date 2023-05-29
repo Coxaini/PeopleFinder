@@ -24,14 +24,21 @@
 }
 
 
-
 .flexrow{
     display: flex;
     flex-direction: row;
 }
 
+.flexwrap{
+    flex-wrap: wrap;
+}
+
 .spacebetween{
     justify-content: space-between;
+}
+
+.alignselfcenter{
+    align-self: center;
 }
 
 .aligncenter{
@@ -85,7 +92,7 @@ a.nondecoration{
 }
 
 button.emptybutton{
-    background-color: transparent;
+    /* background-color: transparent; */
     border: none;
     cursor: pointer;
 }
@@ -94,4 +101,8 @@ span.errormessage{
     color: rgb(217, 0, 0);
     font-weight: 800;
     
+}
+
+a{
+    z-index: 1;
 }

@@ -1,0 +1,12 @@
+button.add{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #000000;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: 700;
+    height: 1.5em;
+    width: 1.5em;
+    transition: all 0.3s ease;
+}

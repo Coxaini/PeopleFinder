@@ -50,7 +50,7 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }*/
         [HttpPut]
-        public async Task<IActionResult> EditProfile(ProfileFillRequest request)
+        public async Task<IActionResult> EditProfile(ProfileEditRequest request)
         {
             var editResult = await _profileService.UpdateProfile(ProfileIdInClaims, request);
 

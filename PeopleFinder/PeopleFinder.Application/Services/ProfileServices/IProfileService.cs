@@ -14,8 +14,8 @@ namespace PeopleFinder.Application.Services.ProfileServices
 {
     public interface IProfileService
     {
-        Task<Result<Profile>> CreateProfile(int userId, ProfileFillRequest request);
-        Task<Result<Profile>> UpdateProfile(int profileId, ProfileFillRequest request);
+        Task<Result<Profile>> CreateProfile(int userId, ProfileEditRequest request);
+        Task<Result<Profile>> UpdateProfile(int profileId, ProfileEditRequest request);
         Task<Result<Profile>> GetProfileByUsername(string login);
         Task<Result<Profile>> GetProfileById(int profileId);
         Task<Result<ProfileResult>> GetProfileWithRelationshipById(int profileId, int requesterId);

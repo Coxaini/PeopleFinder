@@ -34,9 +34,7 @@
         flex-direction: row;
         justify-content: center;
     }
-    .navigation > h2{
-        display: none;
-    }
+    
 
     .navigation {
         display: flex;
@@ -47,6 +45,9 @@
 }
 
 @media screen and (max-width : 1150px) {
+    .navigation > h2{
+        display: none;
+    }
     .navigation-grid-centered{
         display: flex;
         flex-direction: column;
@@ -60,7 +61,6 @@
 .navigation ul {
     position: sticky;
     top: 0;
-    z-index: 999;
     top: calc( var(--header-height) + 5px);
     list-style: none;
     padding: 0;
@@ -85,7 +85,6 @@
 .navigation ul li {
     padding: 10px;
     margin-bottom: 5px;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 

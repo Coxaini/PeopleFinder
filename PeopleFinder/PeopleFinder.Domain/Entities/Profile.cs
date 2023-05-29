@@ -34,6 +34,8 @@ namespace PeopleFinder.Domain.Entities
         public Gender? GenderInterest { get; set;} //delete
         
         public DateTime LastActivity { get; set; }
+        
+        public bool IsOnline { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public List<Tag> Tags { get; set; } = new();

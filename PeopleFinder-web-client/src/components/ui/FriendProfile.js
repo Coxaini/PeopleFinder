@@ -28,7 +28,8 @@ const FriendProfile = forwardRef((props, ref) => {
 
     }
 
-    function handleCreateDirectChat(){
+    function handleCreateDirectChat(e){
+        e.preventDefault();
         createDirectChat().then((res) => {
             navigate(`/chats/${res.data?.id}`);
         }).catch((err) => {

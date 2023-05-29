@@ -19,11 +19,11 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileStorageManager _storageManager;
-        private readonly IValidator<ProfileFillRequest> _profileFillValidator;
+        private readonly IValidator<ProfileEditRequest> _profileFillValidator;
         private readonly IValidator<FileDto> _profileImageValidator;
         private readonly IMapper _mapper;
 
-        public ProfileService(IUnitOfWork unitOfWork, IFileStorageManager storageManager, IValidator<ProfileFillRequest> profileFillValidator
+        public ProfileService(IUnitOfWork unitOfWork, IFileStorageManager storageManager, IValidator<ProfileEditRequest> profileFillValidator
             ,IValidator<FileDto> profileImageValidator , IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -33,7 +33,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
             _mapper = mapper;
         }
 
-        public async Task<Result<Profile>> CreateProfile(int userId ,ProfileFillRequest request)
+        public async Task<Result<Profile>> CreateProfile(int userId ,ProfileEditRequest request)
         {
 
 
@@ -69,7 +69,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
             return profile;
         }
-        public async Task<Result<Profile>> UpdateProfile(int profileId ,ProfileFillRequest request)
+        public async Task<Result<Profile>> UpdateProfile(int profileId ,ProfileEditRequest request)
         {
             var result = await _profileFillValidator.ValidateAsync(request);
 
@@ -81,12 +81,19 @@ namespace PeopleFinder.Application.Services.ProfileServices
             var profileByUserId = await _unitOfWork.ProfileRepository.GetWithTagsByIdAsync(profileId);
             if(profileByUserId == null)
                 return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            var profileByUsername = await _unitOfWork.ProfileRepository.GetFirstOrDefault(x => x.Username == request.Username);
+            if (profileByUsername is not null && profileByUsername.Id != profileId)
+            {
+                return Result.Fail(ProfileErrors.UsernameIsTaken);
+            }
 
             var tags = await _unitOfWork.TagRepository.GetByNames(request.Tags);
 
-            tags.RemoveAll((t) => profileByUserId.Tags.Any(x=>x.Id == t.Id));    
+            profileByUserId.Tags.RemoveAll((t) => tags.Any(x=>x.Id == t.Id));    
 
             profileByUserId.Name = request.Name;
+            profileByUserId.Username = request.Username;
             profileByUserId.BirthDate = request.BirthDate.ToDateTime(new TimeOnly());
             profileByUserId.Gender= request.Gender;
             profileByUserId.Bio = request.Bio;

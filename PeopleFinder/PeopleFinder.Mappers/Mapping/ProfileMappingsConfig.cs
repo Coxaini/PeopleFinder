@@ -81,9 +81,8 @@ namespace PeopleFinder.Mappers.Mapping
                 .Map(dest=>dest.Status, src=>(src.Relationship != null ? src.Relationship!.Status.
                     ToRelationshipStatusResponse( src.Id, src.Relationship) : RelationshipStatusResponse.None).ToString().ToLower());
             
-            config.NewConfig<Tag, TagResponse>()
+            config.NewConfig<Tag, UserTag>()
                 .Map(dest => dest.Title, src => src.Name);
-
 
         }
     }

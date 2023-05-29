@@ -19,4 +19,4 @@ public record ProfileResult(
     string City,
     Gender? Gender,
     Guid? MainPictureId,
-    List<TagResponse> Tags);
+    List<UserTag> Tags);

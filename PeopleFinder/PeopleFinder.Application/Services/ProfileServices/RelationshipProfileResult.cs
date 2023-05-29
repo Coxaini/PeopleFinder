@@ -17,5 +17,5 @@ public record RelationshipProfileResult(
     DateTime? LastActivity,
     Gender? Gender,
     Guid? MainPictureId,
-    List<TagResponse> Tags
+    List<UserTag> Tags
 );
