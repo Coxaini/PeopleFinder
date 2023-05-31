@@ -34,7 +34,7 @@ public class FileService : IFileService
 
     public async Task<Result<MediaFile>> UploadFileAsync(FileDto fileDto)
     {
-        var uploadTime = DateTime.Now;
+        var uploadTime = DateTime.UtcNow;
         
         var mediaFile = await _fileStorageManager.UploadFileAsync(fileDto);
 

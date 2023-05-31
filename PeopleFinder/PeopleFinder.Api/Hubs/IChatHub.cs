@@ -8,6 +8,8 @@ public interface IChatHub
     Task MessageDeleted (DeleteMessageNotification notification);
     Task MessageEdited (MessageNotification notification);
     Task DirectChatCreated (Guid chatId);
+    Task UserOnline (string username);
+    Task UserOffline (string username, DateTime lastSeenAt);
     Task ChatDeleted (Guid chatId);
     
 }

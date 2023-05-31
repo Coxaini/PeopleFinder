@@ -12,4 +12,7 @@ public record UserChatResponse(
     DateTime? LastMessageAt,
     string? LastMessage,
     string? LastMessageAuthorName,
+    int MembersCount,
+    bool? isOnline,
+    DateTime? LastSeenAt,
     DateTime CreatedAt);

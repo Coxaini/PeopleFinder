@@ -111,7 +111,7 @@ namespace PeopleFinder.Application.Services.Authentication
             
 
             Profile profile = new() {Name = request.Username, Username = request.Username, Bio = String.Empty, City = String.Empty
-                , CreatedAt = DateTime.Now, LastActivity = DateTime.Now};
+                , CreatedAt = DateTime.UtcNow, LastActivity = DateTime.UtcNow};
             User user = new() { Email = request.Email, Password = request.Password, Profile = profile };
             
 
@@ -156,7 +156,7 @@ namespace PeopleFinder.Application.Services.Authentication
             {
                 return Result.Fail(AuthenticationErrors.InvalidRefreshToken);
             }
-            if (user.RefreshTokenExpiryTime < DateTime.Now)
+            if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
             {
                 return Result.Fail(AuthenticationErrors.RefreshTokenExpired);
             }

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Outlet } from 'react-router-dom';
-import ChatsList from '../ui/Chats/ChatsList';
 import useApiPrivate from '../../hooks/useApiPrivate';
 import useInfiniteLoadObserver from '../../hooks/useInfiniteLoadObserver';
 import useCursorPagedData from '../../hooks/useCursorPagedData';
@@ -27,12 +26,13 @@ function Chats() {
 
     const { hubConnection, chats, setChats, activeChat, setActiveChat } = useContext(ChatHubContext);
 
-    const { isLoading, isError, error, metadata } = useCursorPagedData('/chats', setChats, afterCursor, 20);
+    const [delayedChats, setDelayedChats] = useState([]);
+
+
+    const { isLoading, isError, error, metadata } =
+        useCursorPagedData('/chats', setChats, afterCursor, 20, false, (newchats) => setDelayedChats(newchats));
 
     const { lastRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
-
-
-
 
     const navigate = useNavigate();
 
@@ -41,6 +41,18 @@ function Chats() {
             setActiveChatId(params?.chatid);
         }
     }, [params?.chatid]);
+
+    useEffect(() => {
+        if (hubConnection?.state ==="Connected" && delayedChats.length > 0) {
+            hubConnection.invoke('WatchUsersOnlineStatus',
+                delayedChats.filter(chat => chat.chatType === 'Direct')
+                    .map(chat => chat.uniqueTitle))
+                    .then(() => {
+                        setDelayedChats([]); //reset delayed chats
+                    });
+        }
+
+    }, [delayedChats, hubConnection?.state, hubConnection]);
 
     useEffect(() => {
         if (activeChatId) {

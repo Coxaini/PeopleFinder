@@ -69,6 +69,8 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
             if (friend == null)
                 continue;
             
+            chat.IsOnline = friend.IsOnline;
+            chat.LastSeenAt = friend.LastActivity;
             chat.DisplayTitle = friend.Name;
             chat.DisplayLogoId = friend.MainPictureId;
             chat.UniqueTitle = friend.Username;
@@ -118,6 +120,8 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
         if (friend == null)
             return null;
         
+        chat.IsOnline = friend.IsOnline;
+        chat.LastSeenAt = friend.LastActivity;
         chat.DisplayTitle = friend.Name;
         chat.DisplayLogoId = friend.MainPictureId;
         chat.UniqueTitle = friend.Username;
@@ -154,6 +158,8 @@ public class ChatRepository : BaseRepo<Chat>, IChatRepository
                 DisplayTitle = friend.Name,
                 UniqueTitle = friend.Username,
                 DisplayLogoId = friend.MainPictureId,
+                IsOnline = friend.IsOnline,
+                LastSeenAt = friend.LastActivity,
                 ChatType = c.ChatType,
                 LastMessageId = c.LastMessageId,
                 LastMessageAt = c.LastMessageAt,

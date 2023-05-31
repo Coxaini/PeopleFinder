@@ -22,6 +22,9 @@ const Chat = forwardRef((props, ref) => {
             className={`${classes.chatitem} nondecoration`} ref={ref}>
             <div className={classes.chaticon}>
                 <img src={chat.displayLogoUrl} alt='chat icon' />
+                {
+                    chat?.isOnline ? <div className={classes.onlineindicator}></div> : null
+                }
             </div>
             <div className={classes.chatinfo}>
                 <div className={classes.chattop}>

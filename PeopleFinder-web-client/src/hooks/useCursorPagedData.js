@@ -36,11 +36,11 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
 
 
         apiPrivate.get(url + `?pageSize=${pageSize}` + (after ? `&after=${after}` : ``) + (searchQuery ?? ''), { signal })
-            .then(async (data) => {
+            .then( (data) => {
                 //setResults(prev => [...prev, ...data?.data.map((item, key) => { return {...item, keyId: prev.length + key}})]);
                 let proccesedData = data?.data;
                 if (dataPipeLineProcessor) {
-                    proccesedData = await dataPipeLineProcessor(proccesedData);
+                     dataPipeLineProcessor(proccesedData);
                 }
 
                 if (!isReverse)
@@ -67,7 +67,7 @@ function useCursorPagedData(url, setResults, after, pageSize = 10, isReverse = f
             });
 
         return () => controller.abort();
-    }, [apiPrivate, url, after, pageSize, isReverse, dataPipeLineProcessor, searchQuery, delayed]);
+    }, [apiPrivate, url, after, pageSize, isReverse, searchQuery, delayed]);
 
     return { isLoading, isError, error, metadata }
 }

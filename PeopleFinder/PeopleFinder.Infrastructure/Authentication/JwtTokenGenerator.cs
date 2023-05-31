@@ -42,7 +42,7 @@ namespace PeopleFinder.Infrastructure.Authentication
                 claims: claims,
                 issuer: _jwtsettings.Issuer,
                 audience: _jwtsettings.Audience,
-                expires: DateTime.Now.AddMinutes(_jwtsettings.ExpiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(_jwtsettings.ExpiryMinutes),
                 signingCredentials: signingCredentials
                 );
 

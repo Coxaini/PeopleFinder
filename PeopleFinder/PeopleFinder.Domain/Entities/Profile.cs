@@ -22,8 +22,8 @@ namespace PeopleFinder.Domain.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         
-        public string Username { get; set; }
-        public string Name { get; set; }
+        public string Username { get; set; } =null!;
+        public string Name { get; set; }=null!;
         
         public DateTime? BirthDate { get; set; }
         public string Bio { get; set; } = null!;

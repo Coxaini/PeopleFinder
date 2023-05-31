@@ -109,6 +109,10 @@ span.errormessage{
     
 }
 
+.cursorpointer:hover{
+    cursor: pointer;
+}
+
 a{
     z-index: 1;
 }

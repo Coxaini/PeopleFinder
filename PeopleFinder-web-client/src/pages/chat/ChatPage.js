@@ -1,23 +1,20 @@
 import { useOutletContext, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import classes from './Chat.module.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faArrowLeft, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import Message from "../../components/ui/Message/Message";
 
 import useInfiniteLoadObserver from "../../hooks/useInfiniteLoadObserver";
 import useCursorPagedData from "../../hooks/useCursorPagedData";
 import useApiPrivate from "../../hooks/useApiPrivate";
 
-import { AiOutlineSend, AiOutlineEdit, AiOutlineCheckCircle, AiOutlinePaperClip, AiFillFile, AiFillDelete } from "react-icons/ai";
+import { AiOutlineSend, AiOutlineEdit, AiOutlineCheckCircle, AiOutlinePaperClip, AiFillFile } from "react-icons/ai";
 import { useStateWithCallbackLazy } from "use-state-with-callback";
 import MessageInputBar from "../../components/ui/Chats/MessageInputBar";
 import MessageEditingBarInfo from "../../components/ui/Chats/MessageEditingBarInfo";
-import { imageExtensions } from "../../constants/fileExtensions";
 import MessageFileBarInfo from "../../components/ui/Chats/MessageFileBarInfo";
 import { useContext } from "react";
 import ChatHubContext from "../../context/ChatsHubProvider";
-import OverlayActions from "../../components/ui/Overlay/OverlayActions";
+import ChatHeader from "../../components/ui/Chats/ChatHeader";
 
 const MessagesPageSize = 20;
 
@@ -46,7 +43,6 @@ function ChatPage(props) {
 
     const { hubConnection, messages, setMessages } = useContext(ChatHubContext);
 
-    const [isChatMenuOpen, setIsChatMenuOpen] = useState(false);
 
     useEffect(() => {
         setMessages([]);
@@ -57,7 +53,7 @@ function ChatPage(props) {
         const controller = new AbortController();
 
 
-        if (!activeChat || activeChat.id !== params.chatid) {
+        if (activeChat==null || activeChat.id !== params.chatid) {
             console.log('chatid changed');
             setIsChatLoading(true);
             apiPrivate.get(`/chats/${params.chatid}`, {
@@ -342,54 +338,11 @@ function ChatPage(props) {
         fileUpload.current.value = null;
     }
 
-    async function handleChatDelete() {
-        setIsChatOpen(false);
-        try{
-            await apiPrivate.delete(`/chats/${activeChat.id}`)
-        }catch(e){
-            console.log(e);
-        }
 
-    }
 
     return (
         <div className={classes.chat}>
-            <div className={classes.chatheader}>
-                <div className="flexrow">
-                    <div className="center">
-                        <div className={classes.backbutton} onClick={() => { setIsChatOpen(false) }}>
-                            <FontAwesomeIcon icon={faArrowLeft} size='2x' style={{ color: "#0a0a0a", }} />
-                        </div>
-                    </div>
-                    {!isChatLoading ?
-                        <>
-                            <div className={classes.chaticon}>
-                                <img src={activeChat.displayLogoUrl} alt='chat icon' />
-                            </div>
-                            <div className={classes.chatinfo}>
-                                <span className={classes.chattitle}>{activeChat.displayTitle}</span>
-                                <span className={classes.chatstatus}>Last seen 2 hours ago</span>
-                            </div>
-                        </> : <p className='center'>Loading...</p>
-                    }
-                </div>
-                    <div className={classes.chatoptions}> 
-                    <button className={` transparentbutton`}
-                        onClick={() => setIsChatMenuOpen(true)}>
-                        <FontAwesomeIcon icon={faEllipsisVertical} size='2x' style={{ color: "#0a0a0a", }} />
-                    </button>
-                    <OverlayActions className='chatheader-overlay-menu'
-                        onClick={() => setIsChatMenuOpen(false)}
-                        isOpen={isChatMenuOpen}>
-                            <button onClick={handleChatDelete}>
-                                <AiFillDelete size={18} />
-                                <span>Delete chat</span>
-                            </button>
-                    </OverlayActions>
-                    </div>
-                
-            </div>
-
+            <ChatHeader activeChat={activeChat} isChatLoading={isChatLoading} setIsChatOpen={setIsChatOpen}/>
             <div className={classes.messagelist} ref={messageList} onScroll={handleMessageListScroll}>
                 {isLoading && <p className='center'>Loading...</p>}
                 {renderMessages()}

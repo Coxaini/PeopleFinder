@@ -72,11 +72,9 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
             return await Context.Profiles.FindAsync(id);
         }
         
-        public async Task<IEnumerable<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId) //cache this
+        public async Task<PagedList<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId, int page =1 , int pageSize = 10)
         {
-
-
-            var mutualRecs = await Context.MutualFriendsRecommendations
+            var mutualRecsQuery = Context.MutualFriendsRecommendations
                 .FromSql(
 $""" 
 Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles.Username, ', ') Usernames
@@ -98,8 +96,16 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 				where FFId != {profileId}) friendsOfFriend
 		inner join Profiles On FriendId = Profiles.Id
 	Group by FFId
-	Order by MutualCount Desc
-""").AsNoTracking().ToListAsync();
+""");
+            
+            int count = await mutualRecsQuery.CountAsync();
+            
+            var mutualRecs = await mutualRecsQuery
+                .OrderByDescending(x=>x.MutualCount)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
 
            var friendsOfFriends = await Context.Profiles
                .Where(p => mutualRecs.Select(r => r.Id).Contains(p.Id))
@@ -107,8 +113,10 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                .ToListAsync();
             var recs = mutualRecs.Select(x =>
                 new ProfileWithMutualFriends(friendsOfFriends.First(p=>p.Id == x.Id),
-                    x.Usernames.Split(", ")));
-            return recs;
+                    x.Usernames.Split(", "))).ToList();
+            
+            
+            return new PagedList<ProfileWithMutualFriends>(recs, count, page, pageSize);
 
         }
 

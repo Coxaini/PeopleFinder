@@ -50,7 +50,7 @@ public class RelationshipService : IRelationshipService
             InitiatorProfile = senderProfile,
             ReceiverProfile = receiverProfile,
             Status = RelationshipStatus.Pending,
-            SentAt = DateTime.Now
+            SentAt = DateTime.UtcNow
         };
             
         await _unitOfWork.RelationshipRepository.AddAsync(friendRequest);
@@ -70,7 +70,7 @@ public class RelationshipService : IRelationshipService
             return Result.Fail(FriendRequestErrors.FriendRequestNotFound);
 
         relationship.Status = RelationshipStatus.Approved;
-        relationship.AcknowledgeAt = DateTime.Now;
+        relationship.AcknowledgeAt = DateTime.UtcNow;
 
         await _unitOfWork.SaveAsync();
         

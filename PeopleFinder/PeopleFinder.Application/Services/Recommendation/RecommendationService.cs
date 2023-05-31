@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using PeopleFinder.Application.Common.Errors;
 using PeopleFinder.Application.Models.Rating;
+using PeopleFinder.Domain.Common.Pagination.Page;
 using PeopleFinder.Domain.Common.Recommendation;
 using PeopleFinder.Domain.Entities;
 using PeopleFinder.Domain.Repositories.Common;
@@ -32,14 +33,15 @@ namespace PeopleFinder.Application.Services.Recommendation
 
         }
 
-        public async Task<Result<IEnumerable<ProfileWithMutualFriends>>> GetMutualRecommendedProfiles(int profileId)
+        public async Task<Result<PagedList<ProfileWithMutualFriends>>> GetMutualRecommendedProfiles(int profileId, PagedPaginationParams pag)
         {
             var profile = await _unitOfWork.ProfileRepository.GetOne(profileId);
 
             if (profile is null)
                 return Result.Fail(ProfileErrors.ProfileNotFound);
             
-            var recs = await _unitOfWork.ProfileRepository.GetRecommendedByMutualFriends(profile.Id);
+            var recs = 
+                await _unitOfWork.ProfileRepository.GetRecommendedByMutualFriends(profile.Id, pag.PageNumber, pag.PageSize);
 
             return recs.ToResult();
 

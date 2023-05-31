@@ -10,12 +10,15 @@ public class UserChat
     public Guid? DisplayLogoId { get; set; }
     public ChatType ChatType { get; init; }
     public DateTime? LastMessageAt { get; init; }
-    
     public Guid? LastMessageId { get; init; }
     public string? LastMessageAuthorName { get; init; }
     public string? LastMessage { get; init; }
     public int MembersCount { get; init; }
     public DateTime CreatedAt { get; init; }
+    
+    public bool? IsOnline { get; set; }
+    public DateTime? LastSeenAt { get; set; }
 
+    
 
 }

@@ -26,7 +26,12 @@ export const ChatHubProvider = ({ children }) => {
     const apiPrivate = useApiPrivate();
 
     const activeChatSnapshot = useRef(activeChat);
+    const chatsSnapshot = useRef(chats);
     const hubConnectionSnapshot = useRef(hubConnection);
+
+    useEffect(() => {
+        chatsSnapshot.current = chats;
+    }, [chats]);
 
     useEffect(() => {
         activeChatSnapshot.current = activeChat;
@@ -36,10 +41,10 @@ export const ChatHubProvider = ({ children }) => {
         hubConnectionSnapshot.current = hubConnection;
     }, [hubConnection]);
 
+
     const currentMessages = useRef(messages);
 
     function messageSentHandler(message) {
-        console.log("Message received", chats, message.chatId);
 
         if (activeChatSnapshot.current?.id === message.chatId) {
             if (message.senderId === Number(userData.id))
@@ -50,19 +55,19 @@ export const ChatHubProvider = ({ children }) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         }
 
-        const chat = chats.find(chat => chat.id === message.chatId);
+        const prevChats = chatsSnapshot.current;
 
+        const chat = prevChats.find(chat => chat.id === message.chatId);
         if (chat) {
             chat.lastMessage = message.text;
             chat.lastMessageAt = message.sentAt;
             chat.lastMessageAuthorName = message.displayName;
-            setChats((prevChats) => [chat, ...prevChats.filter(c => c.id !== chat.id)]);
+            setChats([chat, ...prevChats.filter(c => c.id !== chat.id)]);
         } else {
             apiPrivate.get(`/chats/${message.chatId}`)
-                .then((response) => {
-                    setChats((prevChats) => [response.data, ...prevChats.filter(c => c.id !== message.chatId)]);
-                });
+                .then(response => setChats([response.data, ...prevChats.filter(c => c.id !== message.chatId)]))
         }
+
     }
 
     function messageEditedHandler(message) {
@@ -96,10 +101,11 @@ export const ChatHubProvider = ({ children }) => {
                     chat.lastMessageAt = message.newLastMessageAt;
                     chat.lastMessageAuthorName = message.newLastMessageAuthorName;
 
-                    prevChats.sort((a, b) => { 
+                    prevChats.sort((a, b) => {
                         const dateA = a.lastMessageAt ? new Date(a.lastMessageAt) : new Date(a.createdAt);
                         const dateB = b.lastMessageAt ? new Date(b.lastMessageAt) : new Date(b.createdAt);
-                        return dateB - dateA });
+                        return dateB - dateA
+                    });
 
                     if (prevChats.length > 20 && prevChats[prevChats.length - 1].id === chat.id) {
                         return [...prevChats.filter(c => c.id !== chat.id)];
@@ -124,6 +130,38 @@ export const ChatHubProvider = ({ children }) => {
         navigate("/chats");
     }
 
+    function userOnlineHandler(username) {
+        setChats((prevChats) => {
+            if (prevChats.find(chat => chat?.uniqueTitle === username))
+                return prevChats.map(chat => chat?.uniqueTitle === username ? { ...chat, isOnline: true } : chat);
+            else
+                return prevChats;
+        });
+        // setActiveChat((prevChat) => { 
+        //     if (prevChat?.uniqueTitle === username)
+        //     return { ...prevChat, isOnline: true } 
+        //     else
+        //     return prevChat;
+        // });
+    }
+
+    function userOfflineHandler(username, lastSeenAt) {
+
+        setChats((prevChats) => {
+            if (prevChats.find(chat => chat?.uniqueTitle === username))
+                return prevChats.map(chat => chat?.uniqueTitle === username ? { ...chat, isOnline: false, lastSeenAt: lastSeenAt } : chat);
+            else
+                return prevChats;
+        });
+        // setActiveChat((prevChat) => { 
+        //     if (prevChat?.uniqueTitle === username)
+        //     return { ...prevChat, isOnline: false, lastSeenAt:lastSeenAt} 
+        //     else
+        //     return prevChat;
+        // });
+
+        //setActiveChat((prevChat) => { return { ...prevChat, isOnline: false, lastSeenAt: lastSeenAt } });
+    }
 
     useEffect(() => {
 
@@ -145,6 +183,10 @@ export const ChatHubProvider = ({ children }) => {
 
             connection.on("ChatDeleted", chatDeletedHandler)
 
+            connection.on("UserOnline", userOnlineHandler)
+
+            connection.on("UserOffline", userOfflineHandler);
+
             connection.start()
                 .then(() => {
                     setHubConnection(connection);
@@ -164,6 +206,7 @@ export const ChatHubProvider = ({ children }) => {
         }
 
     }, []);
+
 
 
     return (

@@ -50,6 +50,8 @@ public class ChatService : IChatService
         return chats.ToResult();
 
     }
+    
+    
 
     public async Task<Result> DeleteChat(int profileId, Guid chatId)
     {
@@ -104,7 +106,7 @@ public class ChatService : IChatService
         }
         
         
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         
         var chat = new Chat()
         {
@@ -117,13 +119,13 @@ public class ChatService : IChatService
                 {
                     ProfileId = request.CreatorId,
                     Role = MemberRole.Admin,
-                    JoinedAt = DateTime.Now
+                    JoinedAt = DateTime.UtcNow
                 },
                 new ChatMember()
                 {
                     ProfileId =  request.FriendId,
                     Role = MemberRole.Admin,
-                    JoinedAt = DateTime.Now
+                    JoinedAt = DateTime.UtcNow
                 }
             },
         };

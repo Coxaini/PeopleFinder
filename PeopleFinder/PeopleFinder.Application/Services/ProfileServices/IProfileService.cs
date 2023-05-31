@@ -20,7 +20,10 @@ namespace PeopleFinder.Application.Services.ProfileServices
         Task<Result<Profile>> GetProfileById(int profileId);
         Task<Result<ProfileResult>> GetProfileWithRelationshipById(int profileId, int requesterId);
         Task<Result<ProfileResult>> GetProfileWithRelationshipByUsername(string profileUsername, int requesterId);
-         Task<Result<MediaFile>> UploadProfilePicture(int profileId, FileDto fileDto);
-         Task<Result<CursorList<RelationshipProfileResult>>> GetProfilesByFilter(int profileId ,CursorPaginationParams<DateTime> cursorPaginationParams, string searchQuery);
+        Task<Result<MediaFile>> UploadProfilePicture(int profileId, FileDto fileDto);
+        Task<Result<CursorList<RelationshipProfileResult>>> GetProfilesByFilter(int profileId ,CursorPaginationParams<DateTime> cursorPaginationParams, string searchQuery);
+        Task<Result<Profile>> SetProfileOnline(int profileId);
+        Task<Result<Profile>> SetProfileOffline(int profileId);
+        
     }
 }

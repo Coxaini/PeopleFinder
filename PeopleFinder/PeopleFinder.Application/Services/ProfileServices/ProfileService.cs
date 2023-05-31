@@ -58,8 +58,8 @@ namespace PeopleFinder.Application.Services.ProfileServices
                 Bio = request.Bio,
                 City = request.City,
                 Tags = tags,
-                CreatedAt = DateTime.Now,
-                LastActivity = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                LastActivity = DateTime.UtcNow
             };
             
             await _unitOfWork.ProfileRepository.AddAsync(profile);
@@ -178,7 +178,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
             
             var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
             
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var profilePicture = await _storageManager.UploadFileAsync(fileDto);
             
             await _unitOfWork.MediaFileRepository.AddAsync(profilePicture);
@@ -202,6 +202,28 @@ namespace PeopleFinder.Application.Services.ProfileServices
             var profilesResult = _mapper.Map<CursorList<RelationshipProfileResult>>(profiles);
             return profilesResult;
         }
- 
+
+        public async Task<Result<Profile>> SetProfileOnline(int profileId)
+        {
+            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            if (profile is null)
+                return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            profile.IsOnline = true;
+            await _unitOfWork.SaveAsync();
+            return profile;
+        }
+
+        public async Task<Result<Profile>> SetProfileOffline(int profileId)
+        {
+            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            if (profile is null)
+                return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            profile.IsOnline = false;
+            profile.LastActivity = DateTime.UtcNow;
+            await _unitOfWork.SaveAsync();
+            return profile;
+        }
     }
 }

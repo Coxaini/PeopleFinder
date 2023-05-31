@@ -26,7 +26,7 @@ public class FileStorageManager : IFileStorageManager
     public async Task<MediaFile> UploadFileAsync(FileDto fileDto)
     {
         
-        var uploadTime = DateTime.Now;
+        var uploadTime = DateTime.UtcNow;
         
         string ext = Path.GetExtension(fileDto.FileName);
         var token = Guid.NewGuid();

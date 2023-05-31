@@ -72,7 +72,7 @@ public class MessageService : IMessageService
             return Result.Fail(ChatErrors.ProfileNotInChat);
         }
 
-        var timeNow = DateTime.Now;
+        var timeNow = DateTime.UtcNow;
         
         var mediaFile = await UploadFileAsync(request.Attachment, chat , timeNow);
         
@@ -135,7 +135,7 @@ public class MessageService : IMessageService
         if (message.SenderId != request.SenderId)
             return Result.Fail(MessageErrors.MessageNotBelongToProfile);
         
-        message.EditedAt = DateTime.Now;
+        message.EditedAt = DateTime.UtcNow;
         message.Text = request.Text;
 
         if (message.AttachmentFile is not null && request.Attachment is not null)
@@ -150,7 +150,7 @@ public class MessageService : IMessageService
             }
         }
         if(request.Attachment is not null)
-            message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.Now);
+            message.AttachmentFile = await UploadFileAsync(request.Attachment, message.Chat, DateTime.UtcNow);
 
         var lastMessage = await _unitOfWork.MessageRepository.GetLastMessage(message.ChatId);
         

@@ -22,9 +22,11 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using PeopleFinder.Application.Common.Interfaces.ConnectionStorage;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.Security;
+using PeopleFinder.Infrastructure.ConnectionStorage;
 using PeopleFinder.Infrastructure.FileStorage;
 using PeopleFinder.Infrastructure.Persistence;
 using PeopleFinder.Infrastructure.Security;
@@ -40,6 +42,7 @@ namespace PeopleFinder.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IFileStorageManager, FileStorageManager>();
+            services.AddSingleton<IConnectionStorage, UserConnectionMemoryStorage>();
             
             return services;
         }

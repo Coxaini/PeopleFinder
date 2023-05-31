@@ -23,7 +23,7 @@ public class RefreshTokenGenerator : IRefreshTokenGenerator
         {
             
             Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            ExpiryTime = DateTime.Now.AddMinutes(_jwtSettings.Value.RefreshTokenExpiryMinutes),
+            ExpiryTime = DateTime.UtcNow.AddMinutes(_jwtSettings.Value.RefreshTokenExpiryMinutes),
         };
 
         return refreshToken;

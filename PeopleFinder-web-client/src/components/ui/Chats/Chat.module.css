@@ -37,6 +37,7 @@
     height: 90px;
     border-radius: 50%;
     margin-right: 0.5rem;
+    position: relative;
 } 
 .chaticon img{
     width: 100%;
@@ -86,5 +87,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.onlineindicator{
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 20px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+    border-radius: 50%;
+    background-color: rgb(8, 182, 8);
+    border: 2px solid white;
+}
+
+.chatitem#active .onlineindicator{
+    border: 2px solid var(--active-chat-color)
 }
 

@@ -22,15 +22,12 @@ public class ChatController : ApiController
 {
     private readonly IChatService _chatService;
     private readonly IMapper _mapper;
-    private readonly IFileTypeResolver _fileTypeResolver;
     private readonly IHubContext<ChatHub, IChatHub> _hubContext;
 
-    public ChatController(IChatService chatService, IMapper mapper, IFileTypeResolver fileTypeResolver,
-        IHubContext<ChatHub,IChatHub> hubContext)
+    public ChatController(IChatService chatService, IMapper mapper, IHubContext<ChatHub,IChatHub> hubContext)
     {
         _chatService = chatService;
         _mapper = mapper;
-        _fileTypeResolver = fileTypeResolver;
         _hubContext = hubContext;
     }
     
