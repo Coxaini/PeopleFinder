@@ -15,8 +15,10 @@ const FriendRequest = forwardRef((props, ref) => {
 
     const {acceptFriendRequest, declineFriendRequest} = useProfileApiActions({id: profile.id});
 
-    function handleAcceptFriendRequest(){
+    function handleAcceptFriendRequest(e){
+        e.preventDefault();
         acceptFriendRequest().then(() => {
+            props.setTotalRequests((prev) => prev-1);
             props.setRequests((prev) => {
                 return prev.filter((item) => item.profile.id !== profile.id);
             });
@@ -25,9 +27,11 @@ const FriendRequest = forwardRef((props, ref) => {
         });
     }
 
-    function handleDeclineFriendRequest(){
+    function handleDeclineFriendRequest(e){
+        e.preventDefault();
         declineFriendRequest().then(() => {
             props.setRequests((prev) => {
+                props.setTotalRequests((prev) => prev-1);
                 return prev.filter((item) => item.profile.id !== profile.id);
             });
         }).catch((err) => {
@@ -37,7 +41,13 @@ const FriendRequest = forwardRef((props, ref) => {
 
     return (
         <Link  to={`/profile/${profile.id}`} className={`${classes.profile} nondecoration`} ref={ref}>
+            <div>
             <img className={classes.largeimage} src={profile.mainPictureUrl} alt="profile" />
+            <div className={classes.actions}>
+                    <button className={classes.approve} onClick={handleAcceptFriendRequest}>Approve</button>
+                    <button className={classes.decline} onClick={handleDeclineFriendRequest} >Reject</button>
+            </div>
+            </div>
             <div className={classes.info}>
                 <div className={classes.horizontallayout}><h2>{profile.name}</h2> <span>sent {timeAgo}</span></div>
                 <span className={classes.bio}>{profile.bio}</span>
@@ -48,10 +58,7 @@ const FriendRequest = forwardRef((props, ref) => {
                         ))}
                     </ul>
                 </div>
-                <div className={classes.actions}>
-                    <button className={classes.approve}>Approve</button>
-                    <button className={classes.decline}>Reject</button>
-                </div>
+                
             </div>
         </Link>
     )

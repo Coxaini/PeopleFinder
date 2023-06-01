@@ -1,0 +1,55 @@
+.recprofile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    width: 300px;
+    /* height: 580px; */
+    max-height: 650px;
+    min-height: 580px;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    padding: 10px 10px 0px 10px;
+}
+
+.recprofile img {
+    align-self: center;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.recprofile .name {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+}
+
+.recprofile .username {
+    font-size: 16px;
+    color: #100a2a;
+}
+
+.recprofile span.bio {
+    font-size: 14px;
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mutualfriends {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.mutualfriends a{
+    color: #300fc4 !important;
+}

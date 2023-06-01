@@ -3,15 +3,19 @@ import classes from './Profile.module.css'
 import useApiPrivate from '../../hooks/useApiPrivate';
 import { Link, useNavigate } from 'react-router-dom';
 import useProfileApiActions from '../../hooks/useProfileApiActions';
+import { AiFillDelete } from 'react-icons/ai'
+import { RiMessage3Fill } from 'react-icons/ri'
 
 const FriendProfile = forwardRef((props, ref) => {
 
     const apiPrivate = useApiPrivate();
-  
-    const {createDirectChat} = useProfileApiActions({id: props.id});
+
+    const { createDirectChat } = useProfileApiActions({ id: props.id });
     const navigate = useNavigate();
 
-    async function removeFriend() {
+    async function handleRemovingFriend(e) {
+
+        e.preventDefault();
 
         props.setFriends((prev) => {
 
@@ -20,6 +24,7 @@ const FriendProfile = forwardRef((props, ref) => {
 
         try {
             await apiPrivate.delete(`/friends/${props.id}`);
+            props.setTotalFriends((prev) => prev - 1);
 
         } catch (error) {
             console.log(error);
@@ -28,7 +33,7 @@ const FriendProfile = forwardRef((props, ref) => {
 
     }
 
-    function handleCreateDirectChat(e){
+    function handleCreateDirectChat(e) {
         e.preventDefault();
         createDirectChat().then((res) => {
             navigate(`/chats/${res.data?.id}`);
@@ -39,19 +44,23 @@ const FriendProfile = forwardRef((props, ref) => {
 
     return (
         <Link className='nondecoration' to={`/profile/${props.username}`}>
-        <div className={classes.profile} ref={ref} >
-            <img className={classes.smallimage} src={props.mainPictureUrl} alt="profile" />
-            <div className={classes.smallinfo}>
-                <div className={classes.columncontainer}>
-                <h2>{props.name}</h2>
-                <span className='username'>@{props.username}</span>
-                </div>
-                <div className={classes.horizontallayout}>
-                    <button className={classes.approve} onClick={handleCreateDirectChat}>Send Message</button>
-                    <button className={classes.decline} onClick={(e) => { removeFriend() }}>Remove from Friends</button>
+            <div className={classes.profile} ref={ref} >
+                <img className={classes.smallimage} src={props.mainPictureUrl} alt="profile" />
+                <div className={classes.smallinfo}>
+                    <div className={classes.columncontainer}>
+                        <h2>{props.name}</h2>
+                        <span className='username'>@{props.username}</span>
+                    </div>
+                    <div className={classes.horizontallayout}>
+                        <button className={classes.approve} title='Send message' onClick={handleCreateDirectChat}>
+                            <RiMessage3Fill size={21} />
+                        </button>
+                        <button className={classes.decline} title="Delete from friends" onClick={handleRemovingFriend}>
+                            <AiFillDelete size={21} />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         </Link>
     )
 });

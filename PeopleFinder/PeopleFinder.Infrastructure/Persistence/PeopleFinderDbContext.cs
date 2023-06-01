@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PeopleFinder.Domain.Entities;
 using PeopleFinder.Domain.Entities.MappingEntities;
@@ -41,10 +42,8 @@ public class PeopleFinderDbContext : DbContext
 
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    private static void ConfigureConversions(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PeopleFinderDbContext).Assembly);
-        
         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
             v => v.ToUniversalTime(),
             v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
@@ -72,10 +71,18 @@ public class PeopleFinderDbContext : DbContext
                 }
             }
         }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PeopleFinderDbContext).Assembly);
         
+        ConfigureConversions(modelBuilder);
+       
+        modelBuilder.Entity<MutualFriendsRecommendation>()
+            .ToTable("MutualFriendsRecommendations", 
+                t => t.ExcludeFromMigrations());
         
-/*        modelBuilder.Entity<User>().ToTable("Users");
-        modelBuilder.Entity<Profile>().ToTable("Users");*/
 
         List<Tag> tags= new List<Tag>()
         {
@@ -202,9 +209,7 @@ public class PeopleFinderDbContext : DbContext
         modelBuilder.Entity<User>().HasData(users);
         modelBuilder.Entity<Profile>().HasData(profiles);
         modelBuilder.Entity<Relationship>().HasData(relationships);
-
-
-        //modelBuilder.ApplyConfigurationsFromAssembly(typeof(PeopleFinderDbContext).Assembly);
+        
     }
 
 }

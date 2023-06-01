@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import useCursorPagedData from '../hooks/useCursorPagedData';
 import useInfiniteLoadObserver from '../hooks/useInfiniteLoadObserver';
@@ -13,13 +13,20 @@ function FriendRequests() {
   const { isLoading, isError, error, metadata } =
   useCursorPagedData("/friends/updates", setRequests,afterCursor, 10 );
 
+  const [totalRequests, setTotalRequests] = useState(0);
+
   const { lastFriendRef } = useInfiniteLoadObserver(metadata, isLoading,setAfterCursor );
+
+  useEffect(() => { 
+    setTotalRequests(metadata?.TotalCount);
+  }, [metadata]);
+
 
   if (isError) return <p className='center'>Error: {error.message}</p>
 
   return (
     <>
-      <h1>Friend requests ({metadata?.TotalCount})</h1>
+      <h1>Friend requests ({totalRequests})</h1>
       <InfiniteVirtualScroller items ={requests}>
                 {(item, index, measure)=>{
                     return (
@@ -28,6 +35,7 @@ function FriendRequests() {
                             length={requests.length} 
                             {...item}
                             setRequests = {setRequests}
+                            setTotalRequests = {setTotalRequests}
                             measure = {measure}
                         />
                     )

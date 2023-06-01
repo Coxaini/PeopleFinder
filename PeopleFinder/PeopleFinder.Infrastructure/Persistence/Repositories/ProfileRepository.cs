@@ -84,7 +84,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 	WHEN f.ReceiverProfileId = {profileId} THEN f.InitiatorProfileId
 	END AS FriendId
 	FROM Relationships f
-	WHERE f.InitiatorProfileId = {profileId} OR f.ReceiverProfileId = {profileId}) as friends 
+	WHERE (f.InitiatorProfileId = {profileId} OR f.ReceiverProfileId = {profileId}) AND f.Status = 1) as friends 
 		cross apply (
 				Select FFId from
 				(SELECT CASE
@@ -92,8 +92,13 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 				WHEN f1.ReceiverProfileId = FriendId THEN f1.InitiatorProfileId
 				END AS FFId
 				FROM Relationships f1
-				WHERE f1.InitiatorProfileId = FriendId OR f1.ReceiverProfileId = FriendId) as friendsOfFriend
-				where FFId != {profileId}) friendsOfFriend
+				WHERE (f1.InitiatorProfileId = FriendId OR f1.ReceiverProfileId = FriendId) AND f1.Status = 1 
+				) as friendsOfFriend
+				where FFId != {profileId} AND NOT EXISTS 
+				(SELECT * FROM Relationships f2 
+				WHERE (f2.InitiatorProfileId = {profileId} AND f2.ReceiverProfileId = FFId) 
+				OR (f2.ReceiverProfileId = {profileId} AND f2.InitiatorProfileId = FFId))
+				) friendsOfFriend
 		inner join Profiles On FriendId = Profiles.Id
 	Group by FFId
 """);

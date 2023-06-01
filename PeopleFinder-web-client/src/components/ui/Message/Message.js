@@ -48,13 +48,13 @@ const Message = forwardRef((props, ref) => {
       if (url) URL.revokeObjectURL(url);
     }
 
-  }, [ data.attachmentUrl]);
+  }, [data.attachmentUrl]);
 
 
   function onMediaLoadHandler() {
     setIsMediaLoaded(true);
-    if(!isMediaLoaded)
-    props.onMediaLoad()
+    if (!isMediaLoaded)
+      props.onMediaLoad()
   }
 
   function renderMedia() {
@@ -64,12 +64,12 @@ const Message = forwardRef((props, ref) => {
     let mediaElement;
     switch (data.attachmentType) {
       case 'image':
-        mediaElement = <img ref={media} src={attachment} alt="attachment" 
-        className={classes.mediacontent} onLoad={onMediaLoadHandler}/>
+        mediaElement = <img ref={media} src={attachment} alt="attachment"
+          className={classes.mediacontent} onLoad={onMediaLoadHandler} />
         break;
       case 'video':
-        mediaElement = <video ref={media} src={attachment} alt="attachment" 
-        onLoad={onMediaLoadHandler} className={classes.mediacontent} controls autoPlay />
+        mediaElement = <video ref={media} src={attachment} alt="attachment"
+          onLoad={onMediaLoadHandler} className={classes.mediacontent} controls autoPlay />
         break;
       case 'audio':
         mediaElement = <audio ref={media} src={attachment} alt="attachment" controls />
@@ -78,10 +78,10 @@ const Message = forwardRef((props, ref) => {
 
         mediaElement = (
           <div className={classes.filecontent} onClick={() => fileLink.current.click()}>
-            <button className='emptybutton'>
+            <button className='transparentbutton'>
               <BsFillFileEarmarkBinaryFill size={30} />
             </button>
-            <a href={attachment} ref={fileLink}  rel="noreferrer" hidden></a>
+            <a href={attachment} ref={fileLink} rel="noreferrer" hidden></a>
             <div className={classes.fileinfo}>
               <span className={classes.filename}>{data.attachmentName}</span>
             </div>
@@ -145,7 +145,8 @@ const Message = forwardRef((props, ref) => {
           <div className={classes.bottombar}>
             <span className={classes.time}>{!editedtime ? datetime.senttime : `edited at ${editedtime}`}</span>
             <div className={classes.actionbuttoncontainer}>
-              <button className={classes.action} onClick={() => { setIsActionMenuOpen(true) }}>
+              <button className={`${classes.action} ${data?.isMine ? '' : 'nonvisible'}`}
+                onClick={() => { setIsActionMenuOpen(true) }}>
                 <FontAwesomeIcon className='' icon={faEllipsisVertical}
                   style={{ color: "#0a0a0a", transform: "rotate(90deg) scale(1.5)" }} />
               </button>

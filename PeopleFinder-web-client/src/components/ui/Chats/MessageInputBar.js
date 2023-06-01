@@ -14,7 +14,7 @@ function MessageInputBar(props) {
         {props.children} 
         </div>
       </div>
-      <button className='emptybutton' onClick={props.onCancel}>
+      <button type='button' className='transparentbutton' onClick={props.onCancel}>
         <ImCancelCircle size={36} />
       </button>
     </div>

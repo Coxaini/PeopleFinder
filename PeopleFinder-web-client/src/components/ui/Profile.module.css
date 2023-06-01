@@ -12,9 +12,9 @@
  }
 
   .profile img.largeimage{
-    width: 240px;
-    height: 240px;
-  
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
     border-radius: 5%;
     margin-right: 30px;
     margin-bottom: 10px;
@@ -72,8 +72,9 @@
   
   .interests li {
     font-size: 14px;
-    background-color: #f2f2f2;
-    color: #333;
+    font-weight: 700;
+    background-color: #bdbdbd;
+    color: #140115;
     padding: 5px 10px;
     margin-right: 10px;
     border-radius: 5px;
@@ -94,6 +95,7 @@
   
   .approve,
   .decline {
+    min-width: 70px;
     font-size: 16px;
     padding: 10px;
     border: none;

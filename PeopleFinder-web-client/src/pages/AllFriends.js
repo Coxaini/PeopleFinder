@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState } from 'react'
 
 import useCursorPagedData from '../hooks/useCursorPagedData';
 import useInfiniteLoadObserver from '../hooks/useInfiniteLoadObserver';
@@ -13,39 +13,46 @@ function AllFriends() {
   const [afterCursor, setAfterCursor] = useState(null);
   const [friends, setFriends] = useState([])
   const [searchQuery, setSearchQuery] = useState('');
-  
-  const {isLoading, isError, error, metadata} = 
-  useCursorPagedData("/friends", setFriends, afterCursor, 10,false, null, `&searchQuery=${searchQuery}`);
 
-   const { lastFriendRef } = useInfiniteLoadObserver( metadata, isLoading, setAfterCursor);
+  const { isLoading, isError, error, metadata } =
+    useCursorPagedData("/friends", setFriends, afterCursor, 10, false, null, `&searchQuery=${searchQuery}`);
 
-    if (isError) return <p className='center'>Error: {error.message}</p>
+  const { lastFriendRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
+
+  const [totalFriends, setTotalFriends] = useState(0);
+
+  useEffect(() => {
+    setTotalFriends(metadata?.TotalCount);
+  }, [metadata]);
+
+  if (isError) return <p className='center'>Error: {error.message}</p>
 
   function searchFriends(search) {
-      if(search === searchQuery) return;
-      //setFriends([]);
-      
-      setAfterCursor(null);
-      setSearchQuery(search);
+    if (search === searchQuery) return;
+    //setFriends([]);
+
+    setAfterCursor(null);
+    setSearchQuery(search);
   }
 
   return (
-    <>    
-      <SearchBar placeholder={"search for friends"} delay={100} search={searchFriends}/>
-      <h1>{metadata?.TotalCount} friends</h1>
-      <InfiniteVirtualScroller items ={friends}>
-                {(item, index, measure)=>{
-                    return (
-                        <FriendProfile
-                            ref={index === friends.length - 1 ? lastFriendRef : null}
-                            length={friends.length} 
-                            {...item}
-                            setFriends = {setFriends}
-                            measure = {measure}
-                        />
-                    )
-                }}
-            </InfiniteVirtualScroller>
+    <>
+      <SearchBar placeholder={"search for friends"} delay={100} search={searchFriends} />
+      <h1>{totalFriends} friends</h1>
+      <InfiniteVirtualScroller items={friends}>
+        {(item, index, measure) => {
+          return (
+            <FriendProfile
+              ref={index === friends.length - 1 ? lastFriendRef : null}
+              length={friends.length}
+              {...item}
+              setFriends={setFriends}
+              setTotalFriends={setTotalFriends}
+              measure={measure}
+            />
+          )
+        }}
+      </InfiniteVirtualScroller>
 
       {/* <ProfileList ref={lastFriendRef} length={friends.length} profiles={friends} Profile = {FriendProfile} /> */}
       {isLoading && <p>Loading...</p>}

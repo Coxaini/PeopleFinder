@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
-import FindPeoplePage from "./pages/FindPeople";
+import FindPeoplePage from "./pages/recommendations/FindPeople";
 import ProfilePage from "./pages/Profile";
 import ChatPage from "./pages/chat/ChatPage";
 import FriendNav from "./components/layout/Friends";
