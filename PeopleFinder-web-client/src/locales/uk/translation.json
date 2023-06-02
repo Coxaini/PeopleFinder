@@ -1,0 +1,141 @@
+{
+    "common": {
+        "serverError": "Помилка сервера",
+        "noServerResponse": "Немає відповіді від сервера.",
+        "loading": "Завантаження...",
+        "error": "Помилка",
+        "save": "Зберегти"
+    },
+    "registration": {
+        "username": "Ім'я користувача",
+        "email": "Електронна пошта",
+        "password": "Пароль",
+        "confirmPassword": "Підтвердити пароль",
+        "registration": "Реєстрація",
+        "usernameRequirements": "Ім'я користувача повинно містити щонайменше 4 символи та починатися з літери. Воно може містити лише літери, цифри, дефіси та підкреслення.",
+        "usernameTaken": "Ім'я користувача вже зайняте. Будь ласка, виберіть інше.",
+        "emailIncorrect": "Некоректна електронна пошта.",
+        "emailTaken": "Електронна пошта вже використовується. Будь ласка, виберіть іншу.",
+        "passwordRequirements": "Пароль повинен містити від 8 до 24 символів і містити щонайменше одну велику літеру, одну малу літеру та одну цифру.",
+        "passwordMatch": "Паролі повинні співпадати.",
+        "showPassword": "Показати пароль",
+        "registerButton": "Зареєструватися",
+        "fillFieldsCorrectly": "Будь ласка, заповніть всі поля правильно.",
+        "noServerResponse": "Немає відповіді від сервера.",
+        "userExists": "Користувач з таким ім'ям вже існує.",
+        "userEmailExists": "Користувач з таким ім'ям користувача та електронною поштою вже існує.",
+        "emailExists": "Користувач з такою електронною поштою вже існує.",
+        "loginFailed": "Не вдалося увійти.",
+        "haveAccount": "Вже маєте обліковий запис?",
+        "login": "Увійти",
+        "log_in": "Увійти",
+        "register": "Зареєструватися",
+        "forgotPassword": "Забули пароль?",
+        "noAccount": "Не маєте облікового запису?",
+        "wrongCredentials": "Неправильні облікові дані.",
+        "userNotFound": "Користувача не знайдено.",
+        "unauthorized": "Неавторизованно."
+    },
+    "file": {
+        "sizeIsTooBig100Mb": "Розмір файлу занадто великий. Максимальний розмір файлу - 100 Мб."
+    },
+    "chat": {
+        "selectOrStartConversation": "Виберіть чат або розпочніть нову розмову",
+        "header": {
+            "activeNow": "У мережі",
+            "deleteChat": "Видалити чат",
+            "lastSeen": "відвідини -",
+            "justNow": "недавно"
+        },
+        "messageList": {
+            "emptyText": "Немає доступних повідомлень."
+        },
+        "messageInputBar": {
+            "editingInfoTitle": "Редагування..."
+        },
+        "message": {
+            "deleteText": "Видалити",
+            "editText": "Редагувати",
+            "editedAt": "редаговано о"
+        },
+        "messageForm": {
+            "fileButtonText": "Додати файл",
+            "placeholderText": "Введіть ваше повідомлення..."
+        }
+    },
+    "timeAgo": {
+        "minuteAgo_one": "{{count}} хвилину тому",
+        "minuteAgo_few": "{{count}} хвилини тому",
+        "minuteAgo_many": "{{count}} хвилин тому",
+        "minuteAgo_other": "{{count}} хвилин тому",
+        "hourAgo_few": "{{count}} години тому",
+        "hourAgo_many": "{{count}} годин тому",
+        "hourAgo_one": "{{count}} годину тому",
+        "hourAgo_other": "{{count}} годин тому",
+        "dayAgo_few": "{{count}} дні тому",
+        "dayAgo_many": "{{count}} днів тому",
+        "dayAgo_one": "1 день тому",
+        "dayAgo_other": "{{count}} дня тому"
+    },
+    "profile": {
+        "approve": "Схвалити",
+        "reject": "Відхилити",
+        "message": "Повідомлення",
+        "removeFriend": "Видалити друга",
+        "cancelRequest": "Скасувати запит",
+        "acceptRequest": "Прийняти запит на дружбу",
+        "declineRequest": "Відхилити",
+        "unblock": "Розблокувати",
+        "youAreBlocked": "Вас заблокував цей користувач",
+        "block": "Заблокувати",
+        "addToFriends": "Додати в друзі",
+        "editProfile": "Редагувати профіль",
+        "sendMessage": "Надіслати повідомлення",
+        "deleteFromFriends": "Видалити з друзів",
+        "searchForPeople": "Шукати людей",
+        "mutualFriends": "Спільні друзі: ",
+        "friendWith": "Друг з: ",
+        "andMore": "і ще {{count}}",
+        "bio": "Про себе",
+        "typeAtLeast4chars": "Введіть принаймні 4 символи для пошуку",
+        "noUsersFound": "Користувачів не знайдено"
+    },
+    "profileEdit": {
+        "uploadNewPhoto": "Завантажити нове фото",
+        "imageSizeError": "Розмір файлу занадто великий. Максимальний розмір файлу - 5 Мб.",
+        "imageUploadError": "Виникла помилка під час завантаження зображення",
+        "name": "Ім'я",
+        "city": "Місто",
+        "birthdate": "Дата народження",
+        "gender": "Стать",
+        "none": "Не вказано",
+        "male": "Чоловіча",
+        "woman": "Жіноча",
+        "interests": "Інтереси"
+    },
+    "account": {
+        "account": "Обліковий запис",
+        "profile": "Профіль",
+        "settings": "Налаштування"
+    },
+    "friends": {
+        "friends": "Друзі",
+        "allFriends": "Усі друзі",
+        "friendRequests": "Запити на дружбу",
+        "searchForUsers": "Пошук користувачів",
+        "searchForFriends": "Пошук друзів",
+        "friends_one": "{{count}} Друг",
+        "friends_few": "{{count}} Друга",
+        "friends_many": "{{count}} Друзів"
+    },
+    "navigation": {
+        "profile": "Профіль",
+        "messages": "Повідомлення",
+        "findPeople": "Знайти людей",
+        "friends": "Друзі"
+    },
+    "recs": {
+        "recsByMutual": "Рекомендації за спільними друзями",
+        "noReccomendations": "Рекомендацій не знайдено"
+    }
+}

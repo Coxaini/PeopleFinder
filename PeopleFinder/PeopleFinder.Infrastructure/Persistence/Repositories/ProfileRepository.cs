@@ -250,15 +250,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                     (profile, relationship) => new { Profile = profile, Relationship = relationship })
                 .SelectMany(x => x.Relationship.DefaultIfEmpty(),
                     (x, relationship) => new { x.Profile, Relationship = relationship });
-
-              /*query.Join(
-                Context.Relationships.DefaultIfEmpty(),
-                profile => profile.Id,
-                relationship => relationship != null ? relationship.ReceiverProfileId == profileId
-                    ? relationship.InitiatorProfileId
-                    : relationship.ReceiverProfileId : 1,
-                (profile, relationship) => new { Profile = profile, Relationship = relationship }
-            );*/
+            
 
             if (after != null)
             {

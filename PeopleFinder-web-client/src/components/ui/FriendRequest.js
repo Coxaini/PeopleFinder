@@ -1,15 +1,16 @@
 import React, { forwardRef } from 'react'
 import classes from './Profile.module.css'
 import { useMemo } from 'react'
-import getTimeAgo from '../../helpers/getTimeAgo'
+import formatTimeAgo from '../../helpers/formatTimeAgo'
 import useProfileApiActions from '../../hooks/useProfileApiActions';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const FriendRequest = forwardRef((props, ref) => {
 
 
-    
-    const timeAgo = useMemo(() => getTimeAgo(new Date(props.sentAt)), [props.sentAt]);
+    const {t} = useTranslation();
+    const timeAgo = useMemo(() => formatTimeAgo(new Date(props.sentAt)), [props.sentAt]);
 
     const profile = props.profile;
 
@@ -44,8 +45,8 @@ const FriendRequest = forwardRef((props, ref) => {
             <div>
             <img className={classes.largeimage} src={profile.mainPictureUrl} alt="profile" />
             <div className={classes.actions}>
-                    <button className={classes.approve} onClick={handleAcceptFriendRequest}>Approve</button>
-                    <button className={classes.decline} onClick={handleDeclineFriendRequest} >Reject</button>
+                    <button className={classes.approve} onClick={handleAcceptFriendRequest}>{t("profile.approve")}</button>
+                    <button className={classes.decline} onClick={handleDeclineFriendRequest} >{t("profile.reject")}</button>
             </div>
             </div>
             <div className={classes.info}>

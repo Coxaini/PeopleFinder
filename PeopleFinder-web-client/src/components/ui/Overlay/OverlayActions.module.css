@@ -33,7 +33,7 @@
 
  .panel button{
     width: 100%;
-    height: 30px;
+    height: min-content;
     background-color:whitesmoke;
     border: none;
     font-size: 20px;

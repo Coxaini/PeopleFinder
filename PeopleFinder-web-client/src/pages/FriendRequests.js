@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-
 import useCursorPagedData from '../hooks/useCursorPagedData';
 import useInfiniteLoadObserver from '../hooks/useInfiniteLoadObserver';
-
 import FriendRequest from '../components/ui/FriendRequest';
-
 import InfiniteVirtualScroller from '../components/ui/InfiniteVirtualScroller';
+import { useTranslation } from 'react-i18next';
+
 function FriendRequests() {
+  const {t} = useTranslation();
   const [afterCursor, setAfterCursor] = useState(null);
 
   const [requests, setRequests] = useState([]);
@@ -26,7 +26,7 @@ function FriendRequests() {
 
   return (
     <>
-      <h1>Friend requests ({totalRequests})</h1>
+      <h1>{t("friends.friendRequests")} ({totalRequests})</h1>
       <InfiniteVirtualScroller items ={requests}>
                 {(item, index, measure)=>{
                     return (

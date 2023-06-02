@@ -1,9 +1,11 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 function EmptyChatPage() {
+    const {t} = useTranslation()
     return (
         <div className="centerpanel">
-            Select a chat or start a new conversation
+            {t("chat.selectOrStartConversation")}
         </div>
     );
 }

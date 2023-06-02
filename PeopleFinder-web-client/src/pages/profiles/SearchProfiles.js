@@ -6,6 +6,7 @@ import ShortProfile from '../../components/ui/Profile/ShortProfile';
 import useInfiniteLoadObserver from '../../hooks/useInfiniteLoadObserver';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 function SearchProfiles() {
 
@@ -16,6 +17,7 @@ function SearchProfiles() {
     const [isSearching, setIsSearching] = useState(false);
     const navigate = useNavigate()
     
+    const {t} = useTranslation();
 
     const { isLoading, isError, error, metadata } =
         useCursorPagedData("/profile/search", setProfiles, afterCursor, 10, false, null, `&searchQuery=${searchQuery}`, !isSearching);
@@ -41,7 +43,7 @@ function SearchProfiles() {
 
     return (
         <>
-            <SearchBar placeholder={"search for profiles"} delay={100} search={searchProfiles} searchQuery={searchQuery} />
+            <SearchBar placeholder={t("profile.searchForPeople")} delay={100} search={searchProfiles} searchQuery={searchQuery} />
              <div className="flexlist width100 basicmargin">
                 {profiles.map((profile, index) => {
                     return(
@@ -52,9 +54,9 @@ function SearchProfiles() {
                     )
                 })}
             </div>
-            { !isSearching ? <h2 className='center'>Type at least 4 characters to search</h2> : null}
-            {!isLoading && profiles.length === 0 && isSearching ? <h2 className='center'>No profiles found</h2> : null}
-            {isLoading && isSearching ? <p>Loading...</p> : null}
+            { !isSearching ? <h2 className='center'>{t("profile.typeAtLeast4chars")}</h2> : null}
+            {!isLoading && profiles.length === 0 && isSearching ? <h2 className='center'>{t("profile.noUsersFound")}</h2> : null}
+            {isLoading && isSearching ? <p>{t("common.loading")}</p> : null}
         </>
     )
 }

@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import useApiPrivate from '../../../hooks/useApiPrivate';
-import formatLastSeen from '../../../helpers/formatLastSeen';
+import formatTimeAgo from '../../../helpers/formatTimeAgo';
 import ChatHubContext from '../../../context/ChatsHubProvider';
 import { faEllipsisVertical, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import OverlayActions from '../Overlay/OverlayActions';
 import { AiFillDelete } from 'react-icons/ai';
+import { useTranslation } from 'react-i18next';
 
 
 function ChatHeader({ activeChat, isChatLoading, setIsChatOpen }) {
@@ -22,16 +23,17 @@ function ChatHeader({ activeChat, isChatLoading, setIsChatOpen }) {
     const { hubConnection } = useContext(ChatHubContext);
     const [isChatMenuOpen, setIsChatMenuOpen] = useState(false);
 
+    const {t} = useTranslation();
 
 
     useEffect(() => {
         console.log(!activeChat);
         let interval = null;
         if (activeChat) {
-            setLastSeenAt(formatLastSeen(new Date(activeChat.lastSeenAt)));
+            setLastSeenAt(formatTimeAgo(new Date(activeChat.lastSeenAt)));
 
             interval = setInterval(() => {
-                setLastSeenAt(formatLastSeen(new Date(activeChat.lastSeenAt)));
+                setLastSeenAt(formatTimeAgo(new Date(activeChat.lastSeenAt)));
             }, 60000);
         }
         return () => {
@@ -79,7 +81,8 @@ function ChatHeader({ activeChat, isChatLoading, setIsChatOpen }) {
                             <span className={classes.chattitle}>{activeChat.displayTitle}</span>
                             {activeChat?.chatType === 'Direct' ?
                                 <span className={classes.chatstatus}>
-                                    {activeChat?.isOnline ? "Active now" : `Last seen ${lastSeenAt}`}
+                                    {activeChat?.isOnline ? t("chat.header.activeNow") :
+                                     `${t("chat.header.lastSeen")} ${lastSeenAt}`}
                                 </span>
                                 : null}
                         </div>
@@ -96,7 +99,7 @@ function ChatHeader({ activeChat, isChatLoading, setIsChatOpen }) {
                     isOpen={isChatMenuOpen}>
                     <button onClick={handleChatDelete}>
                         <AiFillDelete size={18} />
-                        <span>Delete chat</span>
+                        <span>{t("chat.header.deleteChat")}</span>
                     </button>
                 </OverlayActions>
             </div>

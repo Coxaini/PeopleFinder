@@ -7,19 +7,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import {MdPersonSearch} from "react-icons/md";
 
+import { useTranslation } from 'react-i18next';
 
 function Friends() {
+
+  const {t} = useTranslation();
 
   return (
       <div className="navigation-grid-centered">
         <div className="border-right navigation">
-          <h2>Friends</h2>
+          <h2>{t("friends.friends")}</h2>
           <ul>
             <li>
               <Link to="/friends/all">
                 <div>
                   <FontAwesomeIcon icon={faUser} />
-                  <span>All friends</span>
+                  <span>{t("friends.allFriends")}</span>
                 </div>
               </Link>
             </li>
@@ -27,7 +30,7 @@ function Friends() {
               <Link to="/friends/requests">
                 <div>
                   <FontAwesomeIcon icon={faUserPlus} />
-                  <span>Friend requests</span>
+                  <span>{t("friends.friendRequests")}</span>
                 </div>
               </Link>
             </li>
@@ -35,7 +38,7 @@ function Friends() {
               <Link to="/friends/search">
                 <div className="flexrow aligncenter">
                   <MdPersonSearch size={27}/>
-                  <span>Search for users</span>
+                  <span>{t("friends.searchForUsers")}</span>
                 </div>
               </Link>
             </li>

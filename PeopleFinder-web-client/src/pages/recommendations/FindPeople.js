@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useApiPrivate from "../../hooks/useApiPrivate";
 import classes from './FindPeople.module.css';
 import RecommendedProfile from "../../components/ui/Profile/RecommendedProfile";
-
+import { useTranslation } from "react-i18next";
 
 
 function FindPeoplePage() {
@@ -10,6 +10,7 @@ function FindPeoplePage() {
     const [mutualrecs, setMutualrecs] = useState([]);
     const apiPrivate = useApiPrivate();
     const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation();
 
     useEffect(() => {
         async function getMutualRecs() {
@@ -29,7 +30,7 @@ function FindPeoplePage() {
 
     return (
         <div className="panel">
-            <h2 className="center">Profile recommendations by mutual friends</h2>
+            <h2 className="center">{t("recs.recsByMutual")}</h2>
             <div className={classes.recslist}>
                 {mutualrecs.map((profile) => {
                     return <RecommendedProfile key={profile.id} profile={profile} />

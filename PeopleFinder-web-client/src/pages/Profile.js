@@ -12,10 +12,11 @@ import { useNavigate } from 'react-router-dom';
 import OverlayCentredPanel from '../components/ui/Overlay/OverlayCentredPanel';
 import MutualFriendsList from '../components/ui/Profile/MutualFriendsList';
 import ProfileActions from '../components/ui/Profile/ProfileActions';
-
+import { useTranslation } from 'react-i18next';
 
 function ProfilePage() {
 
+    const {t} = useTranslation();
     const params = useParams();
     const [userData] = useUserData();
 
@@ -49,7 +50,7 @@ function ProfilePage() {
 
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>{t("common.loading")}</div>;
     }
 
     let mutualFriends = null;
@@ -57,7 +58,7 @@ function ProfilePage() {
     if (profile.mutualFriends.length > 0) {
         mutualFriends = (
             <Link onClick={toggleMutualFriendsOverlay} className={`${classes.horizontallayout} ${classes.textlink}`}>
-                <span className={classes.rightoffset}>friend with : </span>
+                <span className={classes.rightoffset}>{t("profile.friendWith")}</span>
                 {profile.mutualFriends.map((friend, i) => (
                     <div key={i}>
                         {i > 0 ? <span>, </span> : null}
@@ -66,7 +67,7 @@ function ProfilePage() {
                 ))}
                 {mutualFriendsCount > profile.mutualFriends.length ?
                     <span className={classes.leftoffset}>
-                        and {mutualFriendsCount - profile.mutualFriends.length} more
+                        {t("profile.andMore", mutualFriendsCount - profile.mutualFriends.length)}
                     </span> : null}
 
             </Link>
@@ -80,7 +81,7 @@ function ProfilePage() {
     return (
         <>
             {mutualFriendsOverlay ?
-                <OverlayCentredPanel onClick={toggleMutualFriendsOverlay} title={"Mutual Friends"}>
+                <OverlayCentredPanel onClick={toggleMutualFriendsOverlay} title={t("profile.mutualFriends")}>
                     <MutualFriendsList profileId={profile.id} />
                 </OverlayCentredPanel> : null}
 
@@ -116,7 +117,7 @@ function ProfilePage() {
                                     </div>
                                     : null
                                 }
-                                <h2>Bio</h2>
+                                <h2>{t("profile.bio")}</h2>
                                 <span className={classes.bio}>{profile.bio}</span>
 
                             </div>

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useProfileApiActions from '../../hooks/useProfileApiActions';
 import { AiFillDelete } from 'react-icons/ai'
 import { RiMessage3Fill } from 'react-icons/ri'
+import { useTranslation } from 'react-i18next';
 
 const FriendProfile = forwardRef((props, ref) => {
 
@@ -12,6 +13,8 @@ const FriendProfile = forwardRef((props, ref) => {
 
     const { createDirectChat } = useProfileApiActions({ id: props.id });
     const navigate = useNavigate();
+
+    const { t } = useTranslation();
 
     async function handleRemovingFriend(e) {
 
@@ -52,10 +55,11 @@ const FriendProfile = forwardRef((props, ref) => {
                         <span className='username'>@{props.username}</span>
                     </div>
                     <div className={classes.horizontallayout}>
-                        <button className={classes.approve} title='Send message' onClick={handleCreateDirectChat}>
+                        <button className={classes.approve} title={t("profile.sendMessage")} onClick={handleCreateDirectChat}>
                             <RiMessage3Fill size={21} />
                         </button>
-                        <button className={classes.decline} title="Delete from friends" onClick={handleRemovingFriend}>
+                        <button className={classes.decline}
+                            title={t("profile.deleteFromFriends")} onClick={handleRemovingFriend}>
                             <AiFillDelete size={21} />
                         </button>
                     </div>

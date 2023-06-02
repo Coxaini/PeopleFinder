@@ -15,6 +15,7 @@ import MessageFileBarInfo from "../../components/ui/Chats/MessageFileBarInfo";
 import { useContext } from "react";
 import ChatHubContext from "../../context/ChatsHubProvider";
 import ChatHeader from "../../components/ui/Chats/ChatHeader";
+import { useTranslation } from "react-i18next";
 
 const MessagesPageSize = 20;
 
@@ -43,6 +44,7 @@ function ChatPage(props) {
 
     const { hubConnection, messages, setMessages } = useContext(ChatHubContext);
 
+    const {t} = useTranslation();
 
     useEffect(() => {
         setMessages([]);
@@ -54,7 +56,6 @@ function ChatPage(props) {
 
 
         if (activeChat==null || activeChat.id !== params.chatid) {
-            console.log('chatid changed');
             setIsChatLoading(true);
             apiPrivate.get(`/chats/${params.chatid}`, {
                 signal: controller.signal
@@ -87,31 +88,16 @@ function ChatPage(props) {
 
     useEffect(() => {
         if (messageList.current && !isMessagesInit && messages.length > 0 && !isLoading) {
-
-            console.log('scrolling to bottom');
             scrollToBottom(messageList);
             setMessagesInit(true);
         }
 
     }, [messages, isLoading, isMessagesInit]);
 
-    // useEffect(() => {
-    //     if (messageList.current && isMessagesInit) {
-    //         const c = getScrollProportion(messageList);
-    //         if (c === 1) {
-    //             setIsAnchoring(true);
-    //         } else {
-    //             if (isAnchoring)
-    //                 setIsAnchoring(false);
-    //         }
-    //     }
-
-    // }, [messageList.current?.scrollHeight]);
 
     const { lastRef } = useInfiniteLoadObserver(metadata, isLoading, setAfterCursor);
 
     function handleMediaLoad() {
-        console.log('media loaded');
         if (messages.length <= MessagesPageSize) {
             scrollToBottom(messageList);
         }
@@ -189,7 +175,6 @@ function ChatPage(props) {
             formData.append('Text', messageText);
 
             if (attachmentFile) {
-                console.log(attachmentFile);
                 formData.append('Attachment', attachmentFile);
             }
 
@@ -287,14 +272,7 @@ function ChatPage(props) {
             formData.append('text', message);
 
             const response = await apiPrivate.put(`/messages`, formData);
-            // const newMessage = {
-            //     ...response.data,
-            //     isMine: true,
-            //     displayName: editedMessage.displayName,
-            //     avatarUrl: editedMessage.avatarUrl
-            // };
-
-            // setMessages(prev => prev.map(m => m.id === editedMessage.id ? newMessage : m));
+          
         }
         catch (error) {
             console.log(error);
@@ -344,7 +322,7 @@ function ChatPage(props) {
         <div className={classes.chat}>
             <ChatHeader activeChat={activeChat} isChatLoading={isChatLoading} setIsChatOpen={setIsChatOpen}/>
             <div className={classes.messagelist} ref={messageList} onScroll={handleMessageListScroll}>
-                {isLoading && <p className='center'>Loading...</p>}
+                {isLoading && <p className='center'>{t("common.loading")}</p>}
                 {renderMessages()}
                 <div id={classes.anchor}></div>
             </div>
@@ -356,7 +334,9 @@ function ChatPage(props) {
                                 setEditableMessage(null);
                                 setMessage('');
                             }}>
-                            <MessageEditingBarInfo title={"Editing..."} info={editableMessage.text} />
+                            <MessageEditingBarInfo 
+                            title={t("chat.messageInputBar.editingInfoTitle")} 
+                            info={editableMessage.text} />
                         </MessageInputBar>
                         : attachment &&
                         <MessageInputBar icon={<AiFillFile size={36} />}
@@ -382,7 +362,7 @@ function ChatPage(props) {
                         value={message}
                         onChange={(event) => { setMessage(event.target.value) }}
                         ref={messageTextArea}
-                        placeholder="Type your message..."
+                        placeholder={t("chat.messageForm.placeholderText")}
                     />
                     {
                         !editableMessage || attachment !== null ?

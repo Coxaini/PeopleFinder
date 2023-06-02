@@ -8,8 +8,11 @@ import FriendProfile from '../components/ui/FriendProfile';
 import InfiniteVirtualScroller from '../components/ui/InfiniteVirtualScroller';
 import FixedVirtualScroller from '../components/ui/FixedVirtualScroller';
 import SearchBar from '../components/ui/common/SearchBar';
+import { useTranslation } from 'react-i18next';
+
 function AllFriends() {
 
+  const {t} = useTranslation();
   const [afterCursor, setAfterCursor] = useState(null);
   const [friends, setFriends] = useState([])
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +28,7 @@ function AllFriends() {
     setTotalFriends(metadata?.TotalCount);
   }, [metadata]);
 
-  if (isError) return <p className='center'>Error: {error.message}</p>
+  if (isError) return <p className='center'>{t("common.error")}: {error.message}</p>
 
   function searchFriends(search) {
     if (search === searchQuery) return;
@@ -37,8 +40,9 @@ function AllFriends() {
 
   return (
     <>
-      <SearchBar placeholder={"search for friends"} delay={100} search={searchFriends} />
-      <h1>{totalFriends} friends</h1>
+      <SearchBar placeholder={t("friends.searchForFriends")}
+       delay={100} search={searchFriends} />
+      <h1>{t("friends.friends", {count : totalFriends})}</h1>
       <InfiniteVirtualScroller items={friends}>
         {(item, index, measure) => {
           return (
@@ -55,7 +59,7 @@ function AllFriends() {
       </InfiniteVirtualScroller>
 
       {/* <ProfileList ref={lastFriendRef} length={friends.length} profiles={friends} Profile = {FriendProfile} /> */}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p>{t("common.loading")}</p>}
     </>
   )
 }

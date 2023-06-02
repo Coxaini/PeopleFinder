@@ -7,6 +7,7 @@ import OverlayCentredPanel from '../Overlay/OverlayCentredPanel';
 import { useNavigate } from 'react-router-dom';
 import useApiPrivate from './../../../hooks/useApiPrivate';
 import useProfileApiActions from '../../../hooks/useProfileApiActions';
+import { useTranslation } from 'react-i18next';
 function ProfileActions(props) {
 
 
@@ -15,6 +16,8 @@ function ProfileActions(props) {
     const apiPrivate = useApiPrivate();
     const {addToFriends, removeFromFriends, acceptFriendRequest,declineFriendRequest,cancelFriendRequest ,createDirectChat} = useProfileApiActions({id:props.id});
     const [error , setError] = useState(null);
+
+    const {t} = useTranslation();
 
     function gotoEdit() {
         navigate('/edit');
@@ -77,39 +80,39 @@ function ProfileActions(props) {
         switch (props.status) {
             case "friend":
                 actions = <>
-                    <button className='approve' onClick={handleCreateDirectChat}>Message</button>
-                    <button className='decline' onClick={handleRemoveFromFriends}>Remove Friend</button>
+                    <button className='approve' onClick={handleCreateDirectChat}>{t("profile.message")}</button>
+                    <button className='decline' onClick={handleRemoveFromFriends}>{t("profile.removeFriend")}</button>
                 </>
                 break;
             case "requestsent":
                 actions = <>
-                    <button className='decline' onClick={handleCancelFriendRequest}>Cancel request</button>
+                    <button className='decline' onClick={handleCancelFriendRequest}>{t("profile.cancelRequest")}</button>
                 </>
                 break;
             case "requestreceived":
                 actions = <>
-                    <button className='approve' onClick={handleAcceptFriendRequest}>Accept Friend Request</button>
-                    <button className='decline' onClick={handleDeclineFriendRequest}>Decline</button>
+                    <button className='approve' onClick={handleAcceptFriendRequest}>{t("profile.acceptRequest")}</button>
+                    <button className='decline' onClick={handleDeclineFriendRequest}>{t("profile.declineRequest")}</button>
                 </>
                 break;
             case "blockedbyyou" || "blockedbyboth":
                 actions = <>
-                    <button className='decline'>Unblock</button>
+                    <button className='decline'>{t("profile.unblock")}</button>
                 </>
                 break;
             case "blockedbyperson":
                 actions = <>
-                    <h1>You are blocked by this profile</h1>
+                    <h1>{t("profile.youAreBlocked")}</h1>
                 </>
                 break;
             default:
                 actions = <>
-                    <button className='approve' onClick={handleAddToFriends}>Add To Friends</button>
+                    <button className='approve' onClick={handleAddToFriends}>{t("profile.addToFriends")}</button>
                 </>;
         }
     } else {
         actions = <>
-            <button className='approve' onClick={gotoEdit}>Edit Profile</button>
+            <button className='approve' onClick={gotoEdit}>{t("profile.editProfile")}</button>
         </>;
     }
 

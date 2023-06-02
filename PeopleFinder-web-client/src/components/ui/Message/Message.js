@@ -7,8 +7,12 @@ import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
 import { BsFillFileEarmarkBinaryFill } from 'react-icons/bs'
 import { apiPrivate } from '../../../api/axios';
 import '../../../css/overlaymenu.css'
+import { useTranslation } from 'react-i18next';
 
 const Message = forwardRef((props, ref) => {
+
+
+  const {t} = useTranslation()
 
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const messageRef = useRef(null);
@@ -27,7 +31,6 @@ const Message = forwardRef((props, ref) => {
     let url;
     async function loadFile() {
       if (data.attachmentUrl) {
-        //media.current.height = 500; 
 
         if (data.attachmentType === 'image') {
           const response = await apiPrivate.get(`${data.attachmentUrl}`, { responseType: 'blob' });
@@ -40,8 +43,6 @@ const Message = forwardRef((props, ref) => {
         }
       }
 
-      //get image height from attachment
-      // media.current.height = 500;
     }
     loadFile();
     return () => {
@@ -143,7 +144,8 @@ const Message = forwardRef((props, ref) => {
           }
           <span className={classes.textcontent}>{data.text}</span>
           <div className={classes.bottombar}>
-            <span className={classes.time}>{!editedtime ? datetime.senttime : `edited at ${editedtime}`}</span>
+            <span className={classes.time}>{!editedtime ? datetime.senttime : 
+            `${t("chat.message.editedAt")} ${editedtime}`}</span>
             <div className={classes.actionbuttoncontainer}>
               <button className={`${classes.action} ${data?.isMine ? '' : 'nonvisible'}`}
                 onClick={() => { setIsActionMenuOpen(true) }}>
@@ -160,14 +162,14 @@ const Message = forwardRef((props, ref) => {
                 }
                 }>
                   <AiFillDelete size={18} />
-                  <span>Delete</span>
+                  <span>{t("chat.message.deleteText")}</span>
                 </button>
                 <button onClick={() => {
                   setIsActionMenuOpen(false);
                   props.startEditing(data);
                 }}>
                   <AiTwotoneEdit size={18} />
-                  <span> Edit </span>
+                  <span>{t("chat.message.editText")}</span>
                 </button>
               </OverlayActions>
             </div>

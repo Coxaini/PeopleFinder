@@ -3,9 +3,11 @@ import classes from './RecommendedProfile.module.css'
 import profileclasses from '../Profile.module.css'
 import { Link } from 'react-router-dom'
 import useProfileApiActions from '../../../hooks/useProfileApiActions'
-
+import { useTranslation } from 'react-i18next';
 
 function RecommendedProfile({ profile }) {
+
+  const {t} = useTranslation();
 
   const { addToFriends, cancelFriendRequest } = useProfileApiActions({ id: profile.id });
 
@@ -33,7 +35,7 @@ function RecommendedProfile({ profile }) {
         {
           profile.mutualFriends?.length > 0 &&
           <div className={classes.mutualfriends}>
-            <span className='marginright10'>Mutual friends: </span>
+            <span className='marginright10'>{t("profile.mutualFriends")}: </span>
             {
               profile.mutualFriends?.map((friend, index) => (
                 <Link className='nondecoration' to={`profile/${friend}`} key={index}>
@@ -57,9 +59,13 @@ function RecommendedProfile({ profile }) {
         }
         {
           status === 'none' ?
-            <button className={`${profileclasses.approve} justifyselfend`} onClick={handleAddToFriends}>Add friend</button>
+            <button className={`${profileclasses.approve} justifyselfend`} onClick={handleAddToFriends}>
+              {t("profile.addToFriends")}
+            </button>
             :
-            <button className={`${profileclasses.decline} justifyselfend`} onClick={handleCancelFriendRequest}>Cancel request</button>
+            <button className={`${profileclasses.decline} justifyselfend`} onClick={handleCancelFriendRequest}>
+              {t("profile.cancelRequest")}
+              </button>
         }
       </div>
     )
