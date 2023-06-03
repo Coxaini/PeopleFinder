@@ -40,6 +40,7 @@ namespace PeopleFinder.Api.Controllers
                     var metadata = new
                     {
                         recs.TotalPages,
+                        recs.TotalCount,
                         recs.HasNext,
                         recs.HasPrevious,
                     };

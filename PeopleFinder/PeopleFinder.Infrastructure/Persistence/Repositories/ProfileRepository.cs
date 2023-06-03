@@ -77,11 +77,14 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
             var mutualRecsQuery = Context.MutualFriendsRecommendations
                 .FromSql(
 $""" 
-Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles.Username, ', ') Usernames
+select m.Id, Max(m.MutualCount) as MutualCount, STRING_AGG(m.Username, ', ') Usernames from 
+(
+Select FFId as Id, Count(Profiles.Id) Over(Partition by FFId) as MutualCount,
+	ROW_NUMBER() Over (Partition by FFId order by Profiles.LastActivity ASC) as rowN , Profiles.Username as Username
 	from 
 	(SELECT CASE
 	WHEN f.InitiatorProfileId = {profileId} THEN f.ReceiverProfileId
-	WHEN f.ReceiverProfileId = {profileId} THEN f.InitiatorProfileId
+	WHEN f.ReceiverProfileId =  {profileId} THEN f.InitiatorProfileId
 	END AS FriendId
 	FROM Relationships f
 	WHERE (f.InitiatorProfileId = {profileId} OR f.ReceiverProfileId = {profileId}) AND f.Status = 1) as friends 
@@ -94,13 +97,16 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
 				FROM Relationships f1
 				WHERE (f1.InitiatorProfileId = FriendId OR f1.ReceiverProfileId = FriendId) AND f1.Status = 1 
 				) as friendsOfFriend
-				where FFId != {profileId} AND NOT EXISTS 
+				where FFId !=  {profileId} AND NOT EXISTS 
 				(SELECT * FROM Relationships f2 
 				WHERE (f2.InitiatorProfileId = {profileId} AND f2.ReceiverProfileId = FFId) 
 				OR (f2.ReceiverProfileId = {profileId} AND f2.InitiatorProfileId = FFId))
 				) friendsOfFriend
 		inner join Profiles On FriendId = Profiles.Id
-	Group by FFId
+		
+) as m
+where m.rowN < 3
+Group by m.Id
 """);
             
             int count = await mutualRecsQuery.CountAsync();
@@ -118,7 +124,7 @@ Select FFId as Id, Count (Profiles.Username) as MutualCount, STRING_AGG(Profiles
                .ToListAsync();
             var recs = mutualRecs.Select(x =>
                 new ProfileWithMutualFriends(friendsOfFriends.First(p=>p.Id == x.Id),
-                    x.Usernames.Split(", "))).ToList();
+                    x.Usernames.Split(", "), x.MutualCount)).ToList();
             
             
             return new PagedList<ProfileWithMutualFriends>(recs, count, page, pageSize);

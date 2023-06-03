@@ -2,22 +2,31 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    margin: 20px;
-    width: 300px;
+    margin: 5px;
+    width: 350px;
     /* height: 580px; */
     max-height: 650px;
     min-height: 580px;
-    background-color: #f3f3f3;
-    border-radius: 10px;
+    border: 1px solid #000000;
+    border-radius: 5px;
     padding: 10px 10px 0px 10px;
 }
 
 .recprofile img {
     align-self: center;
-    width: 300px;
-    height: 300px;
+    aspect-ratio: 1/1;
+    width: 100%;
     margin-bottom: 10px;
     object-fit: cover;
+}
+
+
+@media screen and (max-width: 600px) {
+    .recprofile {
+        width: 100%;
+        min-height: 700px;
+        max-height: min-content;
+    }
 }
 
 .recprofile .name {
@@ -45,11 +54,14 @@
 }
 
 .mutualfriends {
+
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .mutualfriends a{
+
     color: #300fc4 !important;
 }

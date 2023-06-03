@@ -1,42 +1,30 @@
 import { useEffect, useState } from "react";
 import useApiPrivate from "../../hooks/useApiPrivate";
 import classes from './FindPeople.module.css';
-import RecommendedProfile from "../../components/ui/Profile/RecommendedProfile";
+
 import { useTranslation } from "react-i18next";
+import RecsByMutual from "../../components/ui/Recommendations/RecsByMutual";
 
 
 function FindPeoplePage() {
 
-    const [mutualrecs, setMutualrecs] = useState([]);
-    const apiPrivate = useApiPrivate();
-    const [isLoading, setIsLoading] = useState(true);
+
     const { t } = useTranslation();
 
-    useEffect(() => {
-        async function getMutualRecs() {
 
-            try {
-                const res = await apiPrivate.get("/recs/mutual");
-                setMutualrecs(res.data);
-                setIsLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        getMutualRecs();
-    }, []);
 
 
     return (
         <div className="panel">
             <h2 className="center">{t("recs.recsByMutual")}</h2>
-            <div className={classes.recslist}>
+            <RecsByMutual />
+            <h2 className="center">Suggestions by insterests</h2>
+           {/*  <div className={classes.recslist}>
                 {mutualrecs.map((profile) => {
                     return <RecommendedProfile key={profile.id} profile={profile} />
                 }
                 )}
-            </div>
+            </div> */}
 
         </div>
     );

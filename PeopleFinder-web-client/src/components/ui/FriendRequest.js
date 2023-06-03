@@ -42,7 +42,7 @@ const FriendRequest = forwardRef((props, ref) => {
 
     return (
         <Link  to={`/profile/${profile.id}`} className={`${classes.profile} nondecoration`} ref={ref}>
-            <div>
+            <div className='flexlist marginright10'>
             <img className={classes.largeimage} src={profile.mainPictureUrl} alt="profile" />
             <div className={classes.actions}>
                     <button className={classes.approve} onClick={handleAcceptFriendRequest}>{t("profile.approve")}</button>
