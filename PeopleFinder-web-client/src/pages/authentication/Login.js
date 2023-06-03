@@ -94,7 +94,7 @@ const Login = () => {
             </div>
 
 
-            <input type="submit" value="Login" />
+            <input type="submit" value={t("registration.login")} />
             <p>
               {t("registration.noAccount")}<br />
               <span className={classes.line}>

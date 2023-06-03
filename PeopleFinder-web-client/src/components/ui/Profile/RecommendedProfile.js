@@ -32,7 +32,7 @@ function RecommendedProfile({ profile }) {
     <div className={classes.recprofile}>
       <div className={classes.name}>{profile.name + ", " + profile.age} </div>
       <img className={classes.image} src={profile.mainPictureUrl} alt="profile" />
-      <Link to={`profile/${profile.username}`} className='username nondecoration'>@{profile.username}</Link>
+      <Link to={`/profile/${profile.username}`} className='username nondecoration'>@{profile.username}</Link>
       <div className='flexgrow'>
         <span className={classes.bio}>{profile.bio}</span>
       </div>
@@ -50,7 +50,7 @@ function RecommendedProfile({ profile }) {
           <span className='marginright10'>{t("profile.mutualFriends")}</span>
           {
             profile.mutualFriends?.map((friend, index) => (
-              <Link className='nondecoration' to={`profile/${friend}`} key={index}>
+              <Link className='nondecoration' to={`/profile/${friend}`} key={index}>
                 @{friend}{index < profile.mutualFriends.length - 1 ? "," : ""}&nbsp;
               </Link>
             ))
@@ -64,11 +64,11 @@ function RecommendedProfile({ profile }) {
       }
       {
         status === 'none' ?
-          <button className={`${profileclasses.approve} justifyselfend`} onClick={handleAddToFriends}>
+          <button className={`${profileclasses.approve} justifyselfend margintop10`} onClick={handleAddToFriends}>
             {t("profile.addToFriends")}
           </button>
           :
-          <button className={`${profileclasses.decline} justifyselfend`} onClick={handleCancelFriendRequest}>
+          <button className={`${profileclasses.decline} justifyselfend margintop10`} onClick={handleCancelFriendRequest}>
             {t("profile.cancelRequest")}
           </button>
       }

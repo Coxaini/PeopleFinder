@@ -33,8 +33,17 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin-top: 20px;
     }
-    
+
+    .navigation ul li span{
+        display: none;
+    }
+    .navigation ul li svg{
+        transform: scale(2);
+        margin-right: 20px;
+        margin-left: 20px;
+    }
 
     .navigation {
         display: flex;
@@ -64,7 +73,7 @@
     top: calc( var(--header-height) + 5px);
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-bottom: 0px;
 }
 
 .navigation a span{

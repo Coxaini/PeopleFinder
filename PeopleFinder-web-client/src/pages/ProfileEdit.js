@@ -25,7 +25,7 @@ function ProfileEdit() {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [city, setCity] = useState('');
-    const [birthdate, setBirthdate] = useState('');
+    const [birthdate, setBirthdate] = useState(null);
     const [gender, setGender] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [username, setUsername] = useState('');
@@ -56,7 +56,7 @@ function ProfileEdit() {
             setName(profile.name);
             setBio(profile.bio);
             setCity(profile.city);
-            setBirthdate(profile.birthDate ?? '');
+            setBirthdate(profile.birthDate ?? null);
             setUsername(profile.username);
             switch (profile.gender) {
                 case 1: setGender('male'); break;
@@ -178,24 +178,14 @@ function ProfileEdit() {
                         <input type="text" id="username" name="username" value={username}
                             onChange={(e) => setUsername(e.target.value)} required />
 
-
-
                         <label htmlFor="bio">{t("profile.bio")}</label>
-
                         <textarea id="bio" name="bio" value={bio} onChange={(e) => setBio(e.target.value)} />
-
                         <label htmlFor="city" >{t("profileEdit.city")}</label>
-
                         <input type="text" id="city" name="city" value={city} onChange={(e) => setCity(e.target.value)} />
-
-
                         <label htmlFor='birthdate'>{t("profileEdit.birthdate")}</label>
 
                         <input type='date' id='birthdate' name='birthdate' value={birthdate}
                             onChange={(e) => setBirthdate(e.target.value)} />
-
-
-
                         <label htmlFor='gender'>{t("profileEdit.gender")}</label>
 
                         <select id='gender' name='gender' value={gender}
@@ -204,13 +194,8 @@ function ProfileEdit() {
                             <option value={"male"}>{t("profileEdit.male")}</option>
                             <option value={"woman"}>{t("profileEdit.woman")}</option>
                         </select>
-
-
-
                         <label htmlFor="interests">{t("profileEdit.interests")}</label>
-
                         <TagsSelection selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-
                         <button type="submit">{t("common.save")}</button>
                     </form>
 

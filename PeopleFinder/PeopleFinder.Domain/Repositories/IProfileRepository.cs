@@ -21,6 +21,7 @@ namespace PeopleFinder.Domain.Repositories
         public Task<Profile?> GetByUserIdAsync(int userId);
         public Task<Profile?> GetWithTagsByIdAsync(int id);
         public Task<Profile?> GetByIdAsync(int id);
+        public Task<IList<Profile>> GetRecommendedByTags(Profile profile, int limit);
         public Task<PagedList<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId, int page =1 , int pageSize = 10);
         
         public Task<CursorList<RelationshipProfile>> GetMutualFriends(int requesterProfileId, int otherProfileId,int limit, DateTime? after= null);

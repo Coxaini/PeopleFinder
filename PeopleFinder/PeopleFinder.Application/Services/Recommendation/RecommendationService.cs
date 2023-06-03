@@ -20,14 +20,14 @@ namespace PeopleFinder.Application.Services.Recommendation
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<IEnumerable<Profile>>> GetNewRecommendedProfiles(int userId)
+        public async Task<Result<IList<Profile>>> GetNewRecommendedProfiles(int profileId)
         {
-            var profile = await _unitOfWork.ProfileRepository.GetOne(userId);
+            var profile = await _unitOfWork.ProfileRepository.GetWithTagsByIdAsync(profileId);
 
             if (profile is null)
                 return Result.Fail(ProfileErrors.ProfileNotFound);
 
-            var recs = await _unitOfWork.RecommendationRepository.GetProfileRecommendations(profile);
+            var recs = await _unitOfWork.ProfileRepository.GetRecommendedByTags(profile, 15);
 
             return recs.ToResult();
 

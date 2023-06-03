@@ -1,9 +1,3 @@
-.recslist{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
 button.loadmore{
     margin: 20px auto;
     display: block;
@@ -16,7 +10,7 @@ button.loadmore{
     cursor: pointer;
 }
 
-.loadmorecontainer {
+div.loadmorecontainer {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -27,11 +21,4 @@ button.loadmore{
     min-height: 580px;
     border: 1px dashed #000000;
     border-radius: 5px;
-}
-
-@media screen and (max-width: 600px) {
-    .loadmorecontainer {
-        width: 100%;
-        min-height: 200px;
-    }
 }

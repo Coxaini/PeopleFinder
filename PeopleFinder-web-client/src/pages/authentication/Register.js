@@ -126,7 +126,7 @@ const Register = () => {
         });
 
       setUserData(response?.data);
-      navigate(from, { replace: true });
+      navigate("/edit", { replace: true });
 
     } catch (err) {
       if (!err?.response) {

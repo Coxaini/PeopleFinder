@@ -119,16 +119,19 @@
     "searchForUsers": "Search for users",
     "searchForFriends": "Search for friends",
     "friends_one": "{{count}} Friend",
-    "friends_other": "{{count}} Friends"
+    "friends_other": "{{count}} Friends",
+    "recsByMutualFriends": "Recommendations by mutual friends"
   },
   "navigation": {
     "profile": "Profile",
     "messages": "Messages",
-    "findPeople": "Find people",
+    "discoverPeople": "Discover people",
     "friends": "Friends"
   },
   "recs": {
     "recsByMutual": "Recommendations by mutual friends",
-    "noReccomendations": "No recommendations available."
+    "noRecommendations": "No recommendations available. Try to select more interests or enter your city to see recommendations.",
+    "recsByInterests": "Recommendations for common interests in your city",
+    "noMutualFriends": "No mutual friends available. Try to add some friends to see recommendations."
   }
 }

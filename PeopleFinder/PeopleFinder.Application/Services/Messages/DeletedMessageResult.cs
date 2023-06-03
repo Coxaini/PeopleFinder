@@ -10,6 +10,7 @@ public class DeletedMessageResult
     public bool IsLastMessage { get;  set; }
     public string? NewLastMessage { get; private set; } = null!;
     public DateTime? NewLastMessageAt { get; private set; }
+    public Guid? NewLastMessageId { get; private set; }
     public string? NewLastMessageAuthorName { get; private set; } = null!;
     
     public void SetNewLastMessage(Message newLastMessage)
@@ -17,5 +18,6 @@ public class DeletedMessageResult
         NewLastMessage = newLastMessage.Text;
         NewLastMessageAt = newLastMessage.SentAt;
         NewLastMessageAuthorName = newLastMessage.Sender.Name;
+        NewLastMessageId = newLastMessage.Id;
     }
 }

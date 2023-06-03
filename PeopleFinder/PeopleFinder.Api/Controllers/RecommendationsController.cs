@@ -50,6 +50,15 @@ namespace PeopleFinder.Api.Controllers
                 },
                 Problem);
         }
+        
+        [HttpGet("new")]
+        public async Task<IActionResult> GetNewRecommendation()
+        {
+            var recsResult = await _recommendationService.GetNewRecommendedProfiles(ProfileIdInClaims);
+            return recsResult.Match(
+                (recs) => Ok(_mapper.Map<IList<ShortProfileResponse>>(recs)),
+                Problem);
+        }
 
     }
 }

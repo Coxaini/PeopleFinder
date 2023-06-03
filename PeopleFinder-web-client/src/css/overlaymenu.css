@@ -1,13 +1,13 @@
 .mesage-overlay-menu {
     bottom: 80%;
-    left: 80%;
+    transform: translateX(10%);
     max-height: 300px;
     min-width: 100px;
 } 
 
 @media screen and (max-width: 1000px){
     .mine.mesage-overlay-menu{
-        left: -92px;
+        transform: translateX(-85%);
     }
 }
 

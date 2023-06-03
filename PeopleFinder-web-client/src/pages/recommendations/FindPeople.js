@@ -4,6 +4,7 @@ import classes from './FindPeople.module.css';
 
 import { useTranslation } from "react-i18next";
 import RecsByMutual from "../../components/ui/Recommendations/RecsByMutual";
+import RecsByTags from "../../components/ui/Recommendations/RecsByTags";
 
 
 function FindPeoplePage() {
@@ -16,16 +17,8 @@ function FindPeoplePage() {
 
     return (
         <div className="panel">
-            <h2 className="center">{t("recs.recsByMutual")}</h2>
-            <RecsByMutual />
-            <h2 className="center">Suggestions by insterests</h2>
-           {/*  <div className={classes.recslist}>
-                {mutualrecs.map((profile) => {
-                    return <RecommendedProfile key={profile.id} profile={profile} />
-                }
-                )}
-            </div> */}
-
+            <h1 className="center">{t("recs.recsByInterests")}</h1>
+            <RecsByTags />
         </div>
     );
 

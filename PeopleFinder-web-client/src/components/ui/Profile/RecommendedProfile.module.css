@@ -21,7 +21,7 @@
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 740px) {
     .recprofile {
         width: 100%;
         min-height: 700px;
@@ -31,8 +31,8 @@
 
 .recprofile .name {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     font-size: 24px;
     color: rgb(0, 0, 0);
     font-weight: 700;
@@ -55,7 +55,6 @@
 
 .mutualfriends {
 
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

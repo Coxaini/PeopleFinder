@@ -20,11 +20,13 @@ namespace PeopleFinder.Application.Models.Profile
             
             RuleFor(x => x.Name).MustBeAValidName();
 
-            RuleFor(x => x.BirthDate).MustBeAValidBirthDate();
+            RuleFor(x => x.BirthDate.Value)
+                .MustBeAValidBirthDate()
+                .When(x => x.BirthDate.HasValue);
 
             RuleFor(x => x.Gender).Cascade(CascadeMode.Stop).MustBeAValidGender();
             RuleFor(x => x.Username).Cascade(CascadeMode.Stop).MinimumLength(5).MaximumLength(30);
-            RuleFor(x => x.Bio).MaximumLength(400).NotEmpty();
+            RuleFor(x => x.Bio).MaximumLength(400);
             RuleFor(x => x.City).MaximumLength(40);
 
             RuleFor(x => x.Tags).Cascade(CascadeMode.Stop).

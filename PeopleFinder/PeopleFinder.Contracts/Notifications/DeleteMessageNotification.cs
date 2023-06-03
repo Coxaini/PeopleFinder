@@ -6,5 +6,6 @@ public record DeleteMessageNotification(
     bool IsLastMessage,
     string? NewLastMessage,
     DateTime? NewLastMessageAt,
+    Guid? NewLastMessageId,
     string? NewLastMessageAuthorName
     );

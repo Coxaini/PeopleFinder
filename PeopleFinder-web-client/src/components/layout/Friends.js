@@ -4,8 +4,9 @@ import "../../css/basic.css"
 import "../../css/navigation.css"
 import { Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faUserPlus, faUserTag} from "@fortawesome/free-solid-svg-icons";
 import {MdPersonSearch} from "react-icons/md";
+import {IoSparkles} from "react-icons/io5";
 
 import { useTranslation } from 'react-i18next';
 
@@ -31,6 +32,14 @@ function Friends() {
                 <div>
                   <FontAwesomeIcon icon={faUserPlus} />
                   <span>{t("friends.friendRequests")}</span>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link to="/friends/mutual">
+                <div className="flexrow aligncenter">
+                  <IoSparkles size={27}/>
+                  <span>{t("friends.recsByMutualFriends")}</span>
                 </div>
               </Link>
             </li>

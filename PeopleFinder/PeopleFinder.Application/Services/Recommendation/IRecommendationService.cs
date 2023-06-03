@@ -13,7 +13,7 @@ namespace PeopleFinder.Application.Services.Recommendation
 {
     public interface IRecommendationService
     {
-        Task<Result<IEnumerable<Profile>>> GetNewRecommendedProfiles(int userId);
+        Task<Result<IList<Profile>>> GetNewRecommendedProfiles(int profileId);
         Task<Result<PagedList<ProfileWithMutualFriends>>> GetMutualRecommendedProfiles(int profileId, PagedPaginationParams pag);
 
         

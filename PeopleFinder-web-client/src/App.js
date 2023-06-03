@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import FindPeoplePage from "./pages/recommendations/FindPeople";
 import ProfilePage from "./pages/Profile";
@@ -19,6 +19,7 @@ import ProfileEdit from "./pages/ProfileEdit";
 import ChatNav from "./components/layout/Chats";
 import EmptyChatPage from "./pages/chat/EmptyChatPage";
 import SearchProfiles from "./pages/profiles/SearchProfiles";
+import MutualFriendsProfiles from "./pages/profiles/MutualFriendsProfiles";
 
 function App() {
   return (
@@ -27,11 +28,12 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route element={<RequireAuth />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<FindPeoplePage />} />
+          <Route path="/discover" element={<FindPeoplePage />} />
           <Route path="/chats" element={<ChatNav />} >
             <Route path=":chatid?" element={<ChatPage />} />
             <Route index element={<EmptyChatPage />} />
           </Route>
+          <Route path="/" element={<Navigate to={"/chats"} />}/>
           <Route path="/edit" element={<AccountEdit />}>
             <Route path="profile" element={<ProfileEdit />} />
             <Route path="user" element={<UserEdit />} />
@@ -41,6 +43,7 @@ function App() {
           <Route path="/friends" element={<FriendNav />}>
             <Route path="all" element={<AllFriends />} />
             <Route path="requests" element={<FriendRequests />} />
+            <Route path="mutual" element={<MutualFriendsProfiles />} />
             <Route path="search" element={<SearchProfiles/>}/>
             <Route index element={<AllFriends />} />
           </Route>

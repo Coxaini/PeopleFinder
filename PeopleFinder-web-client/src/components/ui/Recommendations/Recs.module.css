@@ -1,0 +1,12 @@
+.recslist{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width: 600px) {
+    .loadmorecontainer {
+        width: 100%;
+        min-height: 200px;
+    }
+}

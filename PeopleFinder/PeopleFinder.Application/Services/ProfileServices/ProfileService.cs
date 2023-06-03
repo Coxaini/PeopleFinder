@@ -53,7 +53,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
             Profile profile = new() {
                 UserId = userId,
                 Name= request.Name,
-                BirthDate = request.BirthDate.ToDateTime(new TimeOnly()),
+                BirthDate = request.BirthDate?.ToDateTime(new TimeOnly()),
                 Gender= request.Gender,
                 Bio = request.Bio,
                 City = request.City,
@@ -94,7 +94,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
             profileByUserId.Name = request.Name;
             profileByUserId.Username = request.Username;
-            profileByUserId.BirthDate = request.BirthDate.ToDateTime(new TimeOnly());
+            profileByUserId.BirthDate = request.BirthDate?.ToDateTime(new TimeOnly());
             profileByUserId.Gender= request.Gender;
             profileByUserId.Bio = request.Bio;
             profileByUserId.City = request.City;

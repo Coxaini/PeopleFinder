@@ -47,10 +47,10 @@ function MainNavigation() {
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/discover">
                 <div className={classes.icon} id={classes["search"]}>
                 <FontAwesomeIcon icon={faUsersViewfinder} className={classes.linkicon} />
-                  <span>{t("navigation.findPeople")}</span>
+                  <span>{t("navigation.discoverPeople")}</span>
                 </div>
               </Link>
             </li>

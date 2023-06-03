@@ -126,16 +126,19 @@
         "searchForFriends": "Пошук друзів",
         "friends_one": "{{count}} Друг",
         "friends_few": "{{count}} Друга",
-        "friends_many": "{{count}} Друзів"
+        "friends_many": "{{count}} Друзів",
+        "recsByMutualFriends": "Рекомендації за спільними друзями"
     },
     "navigation": {
         "profile": "Профіль",
         "messages": "Повідомлення",
-        "findPeople": "Знайти людей",
+        "discoverPeople": "Знайти нових друзів",
         "friends": "Друзі"
     },
     "recs": {
         "recsByMutual": "Рекомендації за спільними друзями",
-        "noReccomendations": "Рекомендацій не знайдено"
+        "noRecommendations": "Рекомендацій не знайдено. Спробуйте вибрати ваші інтереси та місто в налаштуваннях профілю.",
+        "recsByInterests": "Рекомендації за спільними інтересами у вашому місті",
+        "noMutualFriends": "Спільних друзів не знайдено. Спробуйте додати друзів, щоб отримати більше рекомендацій."
     }
 }

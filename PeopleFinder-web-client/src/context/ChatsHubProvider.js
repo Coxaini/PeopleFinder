@@ -56,12 +56,14 @@ export const ChatHubProvider = ({ children }) => {
         }
 
         const prevChats = chatsSnapshot.current;
+        console.log("prevChats", prevChats);
 
         const chat = prevChats.find(chat => chat.id === message.chatId);
         if (chat) {
             chat.lastMessage = message.text;
             chat.lastMessageAt = message.sentAt;
             chat.lastMessageAuthorName = message.displayName;
+            chat.lastMessageId = message.id;
             setChats([chat, ...prevChats.filter(c => c.id !== chat.id)]);
         } else {
             apiPrivate.get(`/chats/${message.chatId}`)
@@ -80,7 +82,7 @@ export const ChatHubProvider = ({ children }) => {
 
             setMessages(prev => prev.map(m => m.id === message.id ? message : m));
         }
-
+        
         setChats((prevChats) => {
             return prevChats.map(chat => chat.lastMessageId === message.id ? { ...chat, lastMessage: message.text } : chat);
         });
@@ -95,25 +97,28 @@ export const ChatHubProvider = ({ children }) => {
         }
         if (Boolean(message.isLastMessage) === true) {
             setChats((prevChats) => {
-                const chat = prevChats.find(chat => chat.id === message.chatId);
+                const newChats = [...prevChats];
+                const chat = newChats.find(chat => chat.id === message.chatId);
                 if (chat) {
                     chat.lastMessage = message.newLastMessage;
                     chat.lastMessageAt = message.newLastMessageAt;
                     chat.lastMessageAuthorName = message.newLastMessageAuthorName;
-
-                    prevChats.sort((a, b) => {
+                    chat.lastMessageId = message.newLastMessageId;
+                    
+                    console.log('last message changed', chat);
+                    newChats.sort((a, b) => {
                         const dateA = a.lastMessageAt ? new Date(a.lastMessageAt) : new Date(a.createdAt);
                         const dateB = b.lastMessageAt ? new Date(b.lastMessageAt) : new Date(b.createdAt);
                         return dateB - dateA
                     });
 
-                    if (prevChats.length > 20 && prevChats[prevChats.length - 1].id === chat.id) {
-                        return [...prevChats.filter(c => c.id !== chat.id)];
+                    if (newChats.length > 20 && newChats[newChats.length - 1].id === chat.id) {
+                        return [...newChats.filter(c => c.id !== chat.id)];
                     } else {
-                        return prevChats;
+                        return newChats;
                     }
                 } else {
-                    return prevChats;
+                    return newChats;
                 }
             });
         }

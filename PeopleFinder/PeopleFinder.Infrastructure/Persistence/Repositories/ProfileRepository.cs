@@ -20,6 +20,7 @@ using PeopleFinder.Domain.Common.Pagination.Page;
 using PeopleFinder.Domain.Common.Recommendation;
 using PeopleFinder.Domain.Entities.MessagingEntities;
 using PeopleFinder.Infrastructure.Persistence.Common;
+using PeopleFinder.Infrastructure.Persistence.Common.Extensions;
 
 namespace PeopleFinder.Infrastructure.Persistence.Repositories
 {
@@ -71,7 +72,29 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         {
             return await Context.Profiles.FindAsync(id);
         }
-        
+
+        public async Task<IList<Profile>> GetRecommendedByTags(Profile profile, int limit)
+        {
+
+            var recs = await Context.Profiles
+                .Where(x => x.City == profile.City)
+                .Where(x => x.Id != profile.Id)
+                .Where(x => !Context.Relationships
+                    .Any(r => (r.InitiatorProfileId == profile.Id && x.Id == r.ReceiverProfileId)
+                              || (r.InitiatorProfileId == x.Id && r.ReceiverProfileId == profile.Id)))
+                .OrderByDescending(x => x.IsOnline)
+                .ThenByDescending(x => x.LastActivity.Date)
+                .Take(50)
+                .OrderByTagsIntersection(profile.Tags)
+                .Take(limit)
+                .Include(x => x.Tags)
+                .ToListAsync();
+            
+
+            return recs;
+
+        }
+
         public async Task<PagedList<ProfileWithMutualFriends>> GetRecommendedByMutualFriends(int profileId, int page =1 , int pageSize = 10)
         {
             var mutualRecsQuery = Context.MutualFriendsRecommendations
