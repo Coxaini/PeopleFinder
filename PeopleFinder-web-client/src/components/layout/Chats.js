@@ -37,6 +37,7 @@ function Chats() {
     const navigate = useNavigate();
 
     useEffect(() => {
+
         if (params?.chatid !== activeChatId) {
             setActiveChatId(params?.chatid);
         }
@@ -60,6 +61,8 @@ function Chats() {
             if (chat) {
                 setActiveChat(chat, () => { navigate(`/chats/${activeChatId}`); });
             }
+        }else{
+            setActiveChat(null);
         }
     }, [activeChatId, chats, navigate, setActiveChat]);
 

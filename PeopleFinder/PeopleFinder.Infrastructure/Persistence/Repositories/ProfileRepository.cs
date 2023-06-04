@@ -77,7 +77,7 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         {
 
             var recs = await Context.Profiles
-                .Where(x => x.City == profile.City)
+                .Where(x => x.City == profile.City || profile.City == "")
                 .Where(x => x.Id != profile.Id)
                 .Where(x => !Context.Relationships
                     .Any(r => (r.InitiatorProfileId == profile.Id && x.Id == r.ReceiverProfileId)

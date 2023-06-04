@@ -173,7 +173,6 @@ export const ChatHubProvider = ({ children }) => {
         let connection = null;
         const createHubConnection = () => {
             connection = new HubConnectionBuilder()
-                .configureLogging(LogLevel.Debug)
                 .withUrl(`${process.env.REACT_APP_API_URL}/chatHub`)
                 .withAutomaticReconnect()
                 .build();

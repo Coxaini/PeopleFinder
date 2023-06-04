@@ -119,6 +119,25 @@ span.errormessage{
     font-weight: 800;
     
 }
+.errormsg{
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    display: inline-block;
+}
+.successmsg{
+    color: green;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    display: inline-block;
+}
+
+.input-block{
+    position: relative;
+    width: 100%;
+}
 
 .cursorpointer:hover{
     cursor: pointer;

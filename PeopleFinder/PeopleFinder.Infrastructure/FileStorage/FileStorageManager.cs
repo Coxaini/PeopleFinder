@@ -71,7 +71,7 @@ public class FileStorageManager : IFileStorageManager
         return stream;
 
     }
-
+    /// <exception cref="IOException">Cannot delete the file because the stream is open</exception>
     public void DeleteFileAsync(MediaFile mediaFile)
     {
         string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);

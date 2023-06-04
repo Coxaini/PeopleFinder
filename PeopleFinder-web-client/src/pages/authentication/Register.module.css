@@ -112,13 +112,7 @@
     display: none !important;
 }
 
-.errormsg{
-    color: red;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 10px 0 10px 0;
-    display: inline-block;
-}
+
 form .pwdsection{
    
     vertical-align:middle;

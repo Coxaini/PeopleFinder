@@ -105,7 +105,9 @@
     "none": "None",
     "male": "Male",
     "woman": "Woman",
-    "interests": "Interests"
+    "interests": "Interests",
+    "nameRequirements": "Name must be at least 4 characters long and less than 20 characters long.",
+    "success" : "Profile updated successfully."
   },
   "account": {
     "account": "Account",

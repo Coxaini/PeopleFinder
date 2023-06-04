@@ -10,6 +10,7 @@ import api from "../../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import useUserData from "../../hooks/useUserData";
 import { useTranslation } from 'react-i18next';
+import useValidationCheck from "../../hooks/useValidationCheck";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -21,12 +22,11 @@ const Register = () => {
 
   const [user, setUser] = useState('');
   const [validName, setValidName] = useState(false);
-  const [nameAvailable, setNameAvailable] = useState(true);
   const [userFocus, setUserFocus] = useState(false);
 
   const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
-  const [emailAvailable, setEmailAvailable] = useState(false);
+
   const [emailFocus, setEmailFocus] = useState(false);
 
   const [pwd, setPwd] = useState('');
@@ -71,41 +71,8 @@ const Register = () => {
     setErrMsg('');
   }, [user, email, pwd, matchPwd])
 
-  useEffect(() => {
-    if (validName) {
-      setNameAvailable(true);
-      const checkUser = setTimeout(async () => {
-        try {
-          const response = await api.get(`/auth/check_username/${user}`);
-          setNameAvailable(true);
-        } catch (err) {
-          if (err.response.status === 409) {
-            setNameAvailable(false);
-          }
-        }
-      }, 300)
-
-      return () => clearTimeout(checkUser);
-    }
-  }, [user, validName])
-
-  useEffect(() => {
-    setEmailAvailable(true);
-    if (validEmail) {
-      const checkEmail = setTimeout(async () => {
-        try {
-          const response = await api.get(`/auth/check_email/${email}`);
-          setEmailAvailable(true);
-        } catch (err) {
-          if (err.response.status === 409) {
-            setEmailAvailable(false);
-          }
-        }
-      }, 300)
-
-      return () => clearTimeout(checkEmail);
-    }
-  }, [email, validEmail])
+  const nameAvailable = useValidationCheck(user, validName,"/auth/check_username");
+  const emailAvailable = useValidationCheck(email, validEmail,"/auth/check_email");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -161,13 +128,13 @@ const Register = () => {
               />
               <Tooltip icontype={faInfoCircle}
                 tiptext={t('registration.usernameRequirements')}
-                className={user && !validName ? '' : classes.offscreen}
-                hiddentip={userFocus === true ? false : true} />
+                isVisible={user && !validName}
+                hiddentip={!userFocus} />
               <Tooltip icontype={faCircleQuestion}
-                tiptext={t('registration.emailTaken')}
+                tiptext={t('registration.usernameTaken')}
                 color="#1900f7"
-                className={user && validName && !nameAvailable ? '' : classes.offscreen}
-                hiddentip={userFocus === true ? false : true} />
+                isVisible={user && validName && !nameAvailable}
+                hiddentip={!userFocus} />
             </div>
 
             <label htmlFor="email">{t('registration.email')}</label>
@@ -179,13 +146,13 @@ const Register = () => {
               />
               <Tooltip icontype={faInfoCircle}
                 tiptext={t("registration.emailIncorrect")}
-                className={email && !validEmail ? '' : classes.offscreen}
-                hiddentip={emailFocus === true ? false : true} />
+                isVisible={email && !validEmail}
+                hiddentip={!emailFocus} />
               <Tooltip icontype={faCircleQuestion}
                 tiptext={t('registration.emailTaken')}
                 color="#1900f7"
-                className={email && validEmail && !emailAvailable ? '' : classes.offscreen}
-                hiddentip={emailFocus === true ? false : true} />
+                isVisible={email && validEmail && !emailAvailable}
+                hiddentip={!emailFocus} />
             </div>
 
             <label htmlFor="password">{t('registration.password')}</label>
@@ -198,8 +165,8 @@ const Register = () => {
               />
               <Tooltip icontype={faInfoCircle}
                 tiptext={t('registration.passwordRequirements')}
-                className={pwd && !validPwd ? '' : classes.offscreen}
-                hiddentip={pwdFocus === true ? false : true} />
+                isVisible={pwd && !validPwd}
+                hiddentip={!pwdFocus} />
             </div>
 
             <label htmlFor="password2">{t('registration.confirmPassword')}</label>
@@ -212,8 +179,8 @@ const Register = () => {
               />
               <Tooltip icontype={faInfoCircle}
                 tiptext={t('registration.passwordMatch')}
-                className={matchPwd && !validMatch ? '' : classes.offscreen}
-                hiddentip={matchFocus === true ? false : true}
+                isVisible={matchPwd && !validMatch}
+                hiddentip={!matchFocus}
               />
             </div>
 
@@ -226,7 +193,7 @@ const Register = () => {
 
           </form>
 
-          <div className={`${classes.errormsg} ${errmsg ? '' : classes.offscreen}`}>
+          <div className={`errormsg ${errmsg ? '' : classes.offscreen}`}>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />
             <span>{errmsg}</span>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />

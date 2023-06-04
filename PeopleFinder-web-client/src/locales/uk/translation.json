@@ -60,7 +60,7 @@
         },
         "messageForm": {
             "fileButtonText": "Додати файл",
-            "placeholderText": "Введіть ваше повідомлення..."
+            "placeholderText": "Написати повідомлення..."
         }
     },
     "timeAgo": {
@@ -111,7 +111,9 @@
         "none": "Не вказано",
         "male": "Чоловіча",
         "woman": "Жіноча",
-        "interests": "Інтереси"
+        "interests": "Інтереси",
+        "nameRequirements": "Ім'я повинно містити від 3 до 20 символів",
+        "success" : "Профіль успішно оновлено"
     },
     "account": {
         "account": "Обліковий запис",

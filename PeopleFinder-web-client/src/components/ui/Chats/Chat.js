@@ -12,11 +12,14 @@ const Chat = forwardRef((props, ref) => {
         return formatDateTime(chat.lastMessageAt)}
         , [chat.lastMessageAt, chat.createdAt]
     );
+    const navigate = useNavigate();
 
 
     return (
         <Link id={props.activeChatId === chat.id ? `${classes.active}` : ''}
-            onClick={() => {
+            onClick={(e) => {
+                e.preventDefault();
+                //navigate(`/chats/${chat.id}`)
                 props.setActiveChat();
             }}
             className={`${classes.chatitem} nondecoration`} ref={ref}>
