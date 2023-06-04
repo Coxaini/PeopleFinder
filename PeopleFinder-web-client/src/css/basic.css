@@ -64,6 +64,10 @@
     align-items: center;
 }
 
+.justifyselfcenter{
+    justify-content: center;
+}
+
 .justifyselfend{
     justify-content: flex-end;
 }

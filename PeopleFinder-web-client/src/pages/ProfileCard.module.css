@@ -114,7 +114,8 @@ span.highlight {
 }
 
 .interests li {
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 700;
     background-color: #f2f2f2;
     color: #333;
     padding: 5px 10px;

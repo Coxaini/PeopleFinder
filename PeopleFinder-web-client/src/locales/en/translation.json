@@ -107,7 +107,8 @@
     "woman": "Woman",
     "interests": "Interests",
     "nameRequirements": "Name must be at least 4 characters long and less than 20 characters long.",
-    "success" : "Profile updated successfully."
+    "success" : "Profile updated successfully.",
+    "chooseTagsMax6": "Choose up to 6 tags."
   },
   "account": {
     "account": "Account",
@@ -135,5 +136,48 @@
     "noRecommendations": "No recommendations available. Try to select more interests or enter your city to see recommendations.",
     "recsByInterests": "Recommendations for common interests in your city",
     "noMutualFriends": "No mutual friends available. Try to add some friends to see recommendations."
+  },
+  "tags" :
+  {
+    "Gaming": "Gaming",
+    "Fishing": "Fishing",
+    "Cycling": "Cycling",
+    "Hiking": "Hiking",
+    "Cooking": "Cooking",
+    "Reading": "Reading",
+    "Photography": "Photography",
+    "Painting": "Painting",
+    "Traveling": "Traveling",
+    "Writing": "Writing",
+    "Swimming": "Swimming",
+    "Running": "Running",
+    "Gardening": "Gardening",
+    "Chess": "Chess",
+    "Knitting": "Knitting",
+    "Music": "Music",
+    "Dancing": "Dancing",
+    "Singing": "Singing",
+    "Drawing": "Drawing",
+    "Yoga": "Yoga",
+    "Meditation": "Meditation",
+    "Basketball": "Basketball",
+    "Football": "Football",
+    "Tennis": "Tennis",
+    "Golf": "Golf",
+    "Soccer": "Soccer",
+    "Volleyball": "Volleyball",
+    "Badminton": "Badminton",
+    "Surfing": "Surfing",
+    "Scuba Diving": "Scuba Diving",
+    "Programming": "Programming",
+    "Software Development": "Software Development",
+    "Web Development": "Web Development",
+    "Data Science": "Data Science",
+    "Artificial Intelligence": "Artificial Intelligence",
+    "Machine Learning": "Machine Learning",
+    "Cybersecurity": "Cybersecurity",
+    "Networking": "Networking",
+    "Robotics": "Robotics",
+    "Embedded Systems": "Embedded Systems"
   }
 }

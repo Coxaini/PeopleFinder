@@ -57,7 +57,7 @@ function ProfileEdit() {
     }, [username])
 
     useEffect(() => {
-        if (name.length > 4 && name.length < 20) {
+        if (name.length > 3 && name.length < 20) {
             setValidName(true);
         } else {
             setValidName(false);

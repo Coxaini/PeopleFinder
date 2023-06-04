@@ -55,7 +55,7 @@ const FriendRequest = forwardRef((props, ref) => {
                 <div>
                     <ul className={classes.interests}>
                         {profile.tags?.map((interest) => (
-                            <li key={interest.id}>{interest.title}</li>
+                            <li key={interest.id}>{t(`tags.${interest.title}`)}</li>
                         ))}
                     </ul>
                 </div>

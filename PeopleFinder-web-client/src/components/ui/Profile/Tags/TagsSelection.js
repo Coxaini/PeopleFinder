@@ -5,6 +5,7 @@ import useApiPrivate from '../../../../hooks/useApiPrivate';
 import Tag from './Tag';
 import OverlayCentredPanel from './../../Overlay/OverlayCentredPanel';
 import classes from './TagSelection.module.css'
+import { useTranslation } from 'react-i18next';
 
 function TagsSelection({ selectedTags, setSelectedTags }) {
 
@@ -13,6 +14,8 @@ function TagsSelection({ selectedTags, setSelectedTags }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectionOverlayToggle, setSelectionOverlayToggle] = useState(false);
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,13 +29,24 @@ function TagsSelection({ selectedTags, setSelectedTags }) {
 
   }, [apiPrivate])
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>{t("common.loading")}</div>;
+
+  function handleTagSelection(tag, isSelected) {
+
+    if(selectedTags.length >= 6 && isSelected) return;
+
+    if (isSelected ) {
+      setSelectedTags((prev) => [...prev, tag]);
+    } else {
+      setSelectedTags((prev) => prev.filter((x) => x.id !== tag.id));
+    }
+  }
 
   return (
     <div className='flexlist width100'>
       <div className='flexrow flexwrap aligncenter'>
         {selectedTags.map((tag) => {
-          return <Tag key={tag.id} title={tag.title}
+          return <Tag key={tag.id} title={t(`tags.${tag.title}`)}
             isSelected={true} setIsSelected={()=>{
               setSelectedTags((prev) => prev.filter((x) => x.id !== tag.id));
             }} />
@@ -43,17 +57,13 @@ function TagsSelection({ selectedTags, setSelectedTags }) {
       {
         selectionOverlayToggle &&
         (
-          <OverlayCentredPanel onClick={() => setSelectionOverlayToggle((prev) => !prev)} title={'Choose tags'}>
-            <div className='flexrow flexwrap'>
+          <OverlayCentredPanel onClick={() => setSelectionOverlayToggle((prev) => !prev)} title={t("profileEdit.chooseTagsMax6")}>
+            <div className='flexrow flexwrap justifyselfcenter'>
               {tags.map((tag) => {
-                return <Tag key={tag.id} title={tag.title}
+                return <Tag key={tag.id} title={t(`tags.${tag.title}`)}
                   isSelected={selectedTags.find((x) => x.id === tag.id)}
                   setIsSelected={(sel) => {
-                    if (sel) {
-                      setSelectedTags((prev) => [...prev, tag]);
-                    } else {
-                      setSelectedTags((prev) => prev.filter((x) => x.id !== tag.id));
-                    }
+                    handleTagSelection(tag, sel);
                   }} />
               })}
             </div>
