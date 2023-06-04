@@ -14,7 +14,6 @@ namespace PeopleFinder.Domain.Repositories.Common
         IProfileRepository ProfileRepository { get; }
         ITagRepository TagRepository { get; }
         IUserRepository UserRepository { get; }
-        IRecommendationRepository RecommendationRepository { get; }
         IChatRepository ChatRepository { get; }
         IMediaFileRepository MediaFileRepository { get; }
         

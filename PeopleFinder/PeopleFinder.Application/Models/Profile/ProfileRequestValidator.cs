@@ -30,7 +30,7 @@ namespace PeopleFinder.Application.Models.Profile
             RuleFor(x => x.City).MaximumLength(40);
 
             RuleFor(x => x.Tags).Cascade(CascadeMode.Stop).
-                Must(x => x.Count < 6).
+                Must(x => x.Count <= 6).
                 WithMessage("No more than 6 tags are allowed").
                 ForEach(tag =>
                 {

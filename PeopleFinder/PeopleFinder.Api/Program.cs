@@ -80,12 +80,12 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     var dbcontext = app.Services.CreateScope().ServiceProvider.GetRequiredService<PeopleFinderDbContext>();
-//dbcontext.Database.EnsureDeleted();
+    //dbcontext.Database.EnsureDeleted();
     dbcontext.Database.EnsureCreated();
-}
+}*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

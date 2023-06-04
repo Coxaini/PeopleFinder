@@ -29,27 +29,16 @@ namespace PeopleFinder.Domain.Entities
         public string Bio { get; set; } = null!;
 
         public string City { get; set; } = null!;
-        public Gender Gender { get; set; } 
-        [NotMapped]
-        public Gender? GenderInterest { get; set;} //delete
-        
+        public Gender Gender { get; set; }
         public DateTime LastActivity { get; set; }
-        
         public bool IsOnline { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public List<Tag> Tags { get; set; } = new();
-
-
         public Guid? MainPictureId { get; set; }
         public MediaFile? MainPicture { get; set; } = null!;
-
-        public List<Recommendation> ReceivedRecommendations = new();
-        public List<Recommendation> PromotedRecommendations = new();
-        
         public List<Relationship> InitiatedRelationships { get; set; } = new();
         public List<Relationship> ReceivedRelationships { get; set; } = new();
-        
         public List<Chat> LastAuthorSenderChats { get; set; } = new();
         public List<Chat> Chats { get; set; } = null!;
         public List<ChatMember> ChatMembers { get; set; } = new();

@@ -15,7 +15,6 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         private IProfileRepository? _profileRepository;
         private IUserRepository? _userRepository;
         private ITagRepository? _tagRepository;
-        private IRecommendationRepository? _recommendationRepository;
         private IChatRepository? _chatRepository;
         private IRelationshipRepository? _relationshipRepository;
         private IMediaFileRepository? _mediaFileRepository;
@@ -32,7 +31,6 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_dbContext);
         
-        public IRecommendationRepository RecommendationRepository => _recommendationRepository ??= new RecommendationRepository(_dbContext);
         public IChatRepository ChatRepository => _chatRepository ??= new ChatRepository(_dbContext);
         public IRelationshipRepository RelationshipRepository => _relationshipRepository ??= new RelationshipRepository(_dbContext);
 

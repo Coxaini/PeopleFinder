@@ -16,6 +16,18 @@ public class FileDto
     public Stream ContentStream { get; init; }
     
     public MediaFileType Type { get; init; }
+    
+    public MediaFile ToMediaFile()
+    {
+        return new MediaFile()
+        {
+            Id = Guid.NewGuid(),
+            OriginalName = this.FileName,
+            Type = this.Type,
+            UploadTime = DateTime.UtcNow,
+            Extension = Path.GetExtension(this.FileName)[1..]
+        };
+    }
 
     public static FileDto? FromFormFile(IFormFile? file, MediaFileType fileType)
     {
