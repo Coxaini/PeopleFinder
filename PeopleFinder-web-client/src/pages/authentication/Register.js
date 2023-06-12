@@ -4,7 +4,6 @@ import { faCheck, faTimes, faInfoCircle, faCircleQuestion, faRedo } from "@forta
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./Register.module.css";
 import Tooltip from "../../components/ui/Tooltip";
-import logo from "../../images/PeopleFinder.png"
 import { Link } from "react-router-dom";
 import api from "../../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";

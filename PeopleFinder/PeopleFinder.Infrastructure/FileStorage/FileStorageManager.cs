@@ -54,7 +54,7 @@ public class FileStorageManager : IFileStorageManager
 
     
     
-    public FileStream GetFileAsync(MediaFile mediaFile)
+    public Task<Stream> GetFileAsync(MediaFile mediaFile)
     {
         string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);
 
@@ -68,11 +68,11 @@ public class FileStorageManager : IFileStorageManager
         }
         var stream = new FileStream(filePath, FileMode.Open);
         
-        return stream;
+        return Task.FromResult(stream as Stream);
 
     }
     /// <exception cref="IOException">Cannot delete the file because the stream is open</exception>
-    public void DeleteFileAsync(MediaFile mediaFile)
+    public Task DeleteFileAsync(MediaFile mediaFile)
     {
         string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);
 
@@ -87,5 +87,6 @@ public class FileStorageManager : IFileStorageManager
         
         File.Delete(filePath);
         _logger.LogInformation("File {fileName} deleted", fileName);
+        return Task.CompletedTask;
     }
 }

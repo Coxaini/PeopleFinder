@@ -7,6 +7,13 @@
     
 }
 
+img.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 3px;
+}
+
 .message .datestamp {
     display: flex;
     justify-content: center;
@@ -20,6 +27,8 @@
 .message .messagedatacontainer {
     font-size: 14px;
     display: flex;
+    flex-direction: row;
+    align-items: flex-end;
     
 }
 
@@ -153,7 +162,11 @@ button.action{
 }
  
 
-
+@media screen and (max-width: 1000px) {
+    img.avatar{
+        display: none;
+    }
+}
 
 @media screen and (min-width: 1000px) {
     .message.mine .messagedatacontainer {

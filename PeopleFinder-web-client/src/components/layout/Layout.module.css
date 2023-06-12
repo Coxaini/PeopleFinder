@@ -1,4 +1,5 @@
 .main {
     min-height: calc(100vh - var(--header-height));
+    min-height: calc(100svh - var(--header-height));
   
 }

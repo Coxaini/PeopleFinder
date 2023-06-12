@@ -50,8 +50,7 @@ const FriendRequest = forwardRef((props, ref) => {
             </div>
             </div>
             <div className={classes.info}>
-                <div className={classes.horizontallayout}><h2>{profile.name}</h2> <span>sent {timeAgo}</span></div>
-                <span className={classes.bio}>{profile.bio}</span>
+                <div className={classes.horizontallayout}><h2>{profile.name},{` ${profile.age}`}</h2> <span>{t("friends.sent")} {timeAgo}</span></div>
                 <div>
                     <ul className={classes.interests}>
                         {profile.tags?.map((interest) => (
@@ -59,6 +58,8 @@ const FriendRequest = forwardRef((props, ref) => {
                         ))}
                     </ul>
                 </div>
+                <span className={classes.bio}>{profile.bio}</span>
+               
                 
             </div>
         </Link>

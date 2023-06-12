@@ -7,8 +7,8 @@ public interface IFileStorageManager
 {
     Task<MediaFile> UploadFileAsync(FileDto fileDto);
     /// <exception cref="FileNotFoundException"></exception>
-    FileStream GetFileAsync(MediaFile mediaFile);
+    Task<Stream> GetFileAsync(MediaFile mediaFile);
     
     
-    void DeleteFileAsync(MediaFile mediaFile);
+    Task DeleteFileAsync(MediaFile mediaFile);
 }

@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using PeopleFinder.Application.Common.Errors;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Models.File;
@@ -12,11 +13,13 @@ public class FileService : IFileService
     
     private readonly IFileStorageManager _fileStorageManager;
     private readonly IUnitOfWork _unitOfWork;
-    
-    public FileService(IFileStorageManager fileStorageManager, IUnitOfWork unitOfWork)
+    private readonly ILogger<FileService> _logger;
+
+    public FileService(IFileStorageManager fileStorageManager, IUnitOfWork unitOfWork, ILogger<FileService> logger)
     {
         _fileStorageManager = fileStorageManager;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<Result<FileResult>> GetFileAsync(Guid token)
@@ -24,10 +27,22 @@ public class FileService : IFileService
         var media = await _unitOfWork.MediaFileRepository.GetByToken(token);
 
         if (media is null)
+        {
+            _logger.LogInformation("File with token {token} not found in a database", token);
             return Result.Fail(FileErrors.FileNotFound);
-        
-        FileStream fileStream = _fileStorageManager.GetFileAsync(media);
-        
+        }
+
+        Stream fileStream;
+        try
+        {
+            fileStream = await _fileStorageManager.GetFileAsync(media);
+        }
+        catch (FileNotFoundException e)
+        {
+            _logger.LogError(e, "File with token {token} not found in a file storage", token);
+            return Result.Fail(FileErrors.FileNotFound);
+        }
+
         return Result.Ok(new FileResult(media.OriginalName,media.Type, media.Extension, fileStream));
         
     }

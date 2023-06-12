@@ -130,7 +130,8 @@
         "friends_one": "{{count}} Друг",
         "friends_few": "{{count}} Друга",
         "friends_many": "{{count}} Друзів",
-        "recsByMutualFriends": "Рекомендації за спільними друзями"
+        "recsByMutualFriends": "Рекомендації за спільними друзями",
+        "sent" : "відправлено"
     },
     "navigation": {
         "profile": "Профіль",

@@ -30,7 +30,7 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services
     .AddMappings()
     .AddApplication(builder.Configuration)
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration, builder.Environment.IsDevelopment());
 
   builder.Services.AddCors(options => options.AddPolicy(name: "CorsPolicy",
     policy =>
@@ -40,36 +40,18 @@ builder.Services
             .AllowAnyHeader()
             .AllowCredentials()
             .WithExposedHeaders("*","X-Pagination");
-        
-        
         policy.WithOrigins("http://217.66.99.154")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
             .WithExposedHeaders("*","X-Pagination"); 
+        policy.WithOrigins("https://peoplefinderreact.azurewebsites.net")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithExposedHeaders("*","X-Pagination"); 
+        
     }));
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder
-                .WithOrigins("http://217.66.99.154")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials()
-                .WithExposedHeaders("*","X-Pagination");
-            
-            builder
-                .WithOrigins("http://localhost")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials()
-                .WithExposedHeaders("*","X-Pagination");
-        });
-});
-
 
 //add configuration for files 
 builder.Configuration.AddJsonFile("filesettings.json");
@@ -79,13 +61,6 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 
 app.UseStaticFiles();
-
-/*if (app.Environment.IsDevelopment())
-{
-    var dbcontext = app.Services.CreateScope().ServiceProvider.GetRequiredService<PeopleFinderDbContext>();
-    //dbcontext.Database.EnsureDeleted();
-    dbcontext.Database.EnsureCreated();
-}*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

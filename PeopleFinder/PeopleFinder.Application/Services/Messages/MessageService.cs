@@ -142,7 +142,7 @@ public class MessageService : IMessageService
         {
             try
             {
-                _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+                await _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
             }
             catch (IOException)
             {
@@ -200,7 +200,7 @@ public class MessageService : IMessageService
         {
             try
             {
-                _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
+                await _fileStorageManager.DeleteFileAsync(message.AttachmentFile);
             }
             catch (IOException)
             {

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/e952b5ab-0958-4072-a956-c4254fa74d3f/resourceGroups/PeopleFinder/providers/Microsoft.Web/sites/peoplefinderreact",
+    "appService.deploySubpath": "build"
+}

@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 const Message = forwardRef((props, ref) => {
 
 
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const messageRef = useRef(null);
@@ -138,14 +138,15 @@ const Message = forwardRef((props, ref) => {
       }
       <div className={classes.messagedatacontainer}>
 
+        <img src={data.avatarUrl} alt="avatar" className={classes.avatar} />
         <div className={classes.bubble}>
           {
             renderMedia()
           }
           <span className={classes.textcontent}>{data.text}</span>
           <div className={classes.bottombar}>
-            <span className={classes.time}>{!editedtime ? datetime.senttime : 
-            `${t("chat.message.editedAt")} ${editedtime}`}</span>
+            <span className={classes.time}>{!editedtime ? datetime.senttime :
+              `${t("chat.message.editedAt")} ${editedtime}`}</span>
             <div className={classes.actionbuttoncontainer}>
               <button className={`${classes.action} ${data?.isMine ? '' : 'nonvisible'}`}
                 onClick={() => { setIsActionMenuOpen(true) }}>

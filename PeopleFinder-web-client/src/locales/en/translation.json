@@ -123,7 +123,8 @@
     "searchForFriends": "Search for friends",
     "friends_one": "{{count}} Friend",
     "friends_other": "{{count}} Friends",
-    "recsByMutualFriends": "Recommendations by mutual friends"
+    "recsByMutualFriends": "Recommendations by mutual friends",
+    "sent" : "sent"
   },
   "navigation": {
     "profile": "Profile",
