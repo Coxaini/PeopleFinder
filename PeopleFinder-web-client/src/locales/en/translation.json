@@ -180,5 +180,8 @@
     "Networking": "Networking",
     "Robotics": "Robotics",
     "Embedded Systems": "Embedded Systems"
+  },
+  "settings":{
+    "chooseLanguage": "Choose language"
   }
 }

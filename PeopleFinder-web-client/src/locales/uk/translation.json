@@ -186,5 +186,8 @@
         "Networking": "Мережі",
         "Robotics": "Робототехніка",
         "Embedded Systems": "Вбудовані системи"
+    },
+    "settings":{
+        "chooseLanguage": "Виберіть мову"
     }
 }

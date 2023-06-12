@@ -37,21 +37,22 @@ namespace PeopleFinder.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration, bool isDevelopment)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+            ConfigurationManager configuration, bool isDevelopment)
         {
             services.AddAuth(configuration);
             services.AddPersistence(configuration);
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
-            /*if (isDevelopment)
+            if (isDevelopment)
             {
                 services.AddFolderStorage(configuration);
             }
             else
-            {*/
+            {
                 services.AddAzureStorage(configuration);
-            //
-            
+            }
+
             services.AddSingleton<IConnectionStorage, UserConnectionMemoryStorage>();
             
             return services;

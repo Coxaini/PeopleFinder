@@ -7,11 +7,16 @@
     
 }
 
-img.avatar {
-    width: 60px;
-    height: 60px;
+.avatarcontainer img {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     margin-right: 3px;
+}
+
+.avatarcontainer{
+    width: 60px;
+    height: 60px;
 }
 
 .message .datestamp {
@@ -163,7 +168,7 @@ button.action{
  
 
 @media screen and (max-width: 1000px) {
-    img.avatar{
+    .avatarcontainer{
         display: none;
     }
 }

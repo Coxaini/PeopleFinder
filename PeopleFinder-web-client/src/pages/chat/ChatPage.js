@@ -296,6 +296,12 @@ function ChatPage(props) {
                     showDateStamp = false;
                 }
             }
+            let showAvatar = true;
+            if(next){
+                if(next.senderId === message.senderId){
+                    showAvatar = false;
+                }
+            }
             return (
                 <Message
                     ref={index === 0 && isMessagesInit ? lastRef : null}
@@ -303,6 +309,7 @@ function ChatPage(props) {
                     key={message.id}
                     data={message}
                     showDateStamp={showDateStamp}
+                    showAvatar={showAvatar}
                     onMediaLoad={handleMediaLoad}
                     deleteMessage={() => { deleteMessage(message.id) }}
                     startEditing={() => { startEditingMessage(message) }}

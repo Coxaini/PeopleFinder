@@ -12,7 +12,7 @@ import Layout from "./components/layout/Layout";
 import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
 import RequireAuth from "./components/layout/RequireAuth";
-import UserEdit from "./pages/UserEdit";
+import AccountSettings from "./pages/AccountSettings";
 import AccountEdit from "./components/layout/AccountEdit";
 import ProfileEdit from "./pages/ProfileEdit";
 
@@ -36,7 +36,7 @@ function App() {
           <Route path="/" element={<Navigate to={"/chats"} />}/>
           <Route path="/edit" element={<AccountEdit />}>
             <Route path="profile" element={<ProfileEdit />} />
-            <Route path="user" element={<UserEdit />} />
+            <Route path="user" element={<AccountSettings />} />
             <Route index element={<ProfileEdit />} />
           </Route>
           <Route path="/profile/:username?" element={<ProfilePage />} />

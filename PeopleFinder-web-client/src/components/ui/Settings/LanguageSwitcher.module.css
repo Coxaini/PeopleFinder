@@ -1,0 +1,22 @@
+.switcher{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+}
+
+.switcher button{
+    margin-right: 10px;
+    border: 1px solid black;
+    background-color: #dedede;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: color 0.3s ease-in-out;
+}
+
+.switcher #selected{
+    border: 3px double black;
+}

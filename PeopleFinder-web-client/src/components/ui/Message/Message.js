@@ -20,7 +20,8 @@ const Message = forwardRef((props, ref) => {
   const media = useRef(null);
   const {
     data,
-    showDateStamp
+    showDateStamp,
+    showAvatar
   } = props;
 
   const [attachment, setAttachment] = useState(null);
@@ -137,8 +138,13 @@ const Message = forwardRef((props, ref) => {
         </div>
       }
       <div className={classes.messagedatacontainer}>
-
-        <img src={data.avatarUrl} alt="avatar" className={classes.avatar} />
+        <div className={classes.avatarcontainer}>
+          {
+            showAvatar ?
+              <img src={data.avatarUrl} alt="avatar"/>
+              : null
+          }
+        </div>
         <div className={classes.bubble}>
           {
             renderMedia()
