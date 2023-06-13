@@ -12,10 +12,9 @@ public class ChatMember
 {
     public Guid ChatId { get; set; }
     public int ProfileId { get; set; }
-    public Chat? Chat { get; set; } = null!;
-    public Profile? Profile { get; set; } = null!;
+    public Chat Chat { get; set; } = null!;
+    public Profile Profile { get; set; } = null!;
     
-    [DataType(DataType.DateTime)]
     public  DateTime JoinedAt { get; set; }
     public MemberRole Role { get; set; }
     

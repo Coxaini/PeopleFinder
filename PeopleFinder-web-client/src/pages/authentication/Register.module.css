@@ -22,13 +22,12 @@
     
 
 
-.authform, form{
+.authform form{
     
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
-    
+
 }
 
 .section{
@@ -40,7 +39,8 @@
 }
 
 .authform{
-    
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
     width: 100%;
     max-width: 550px;
@@ -104,17 +104,15 @@
     position: relative;
 }
 
+.inputblock input{
+    width: 100%;
+}
+
 .offscreen{
     display: none !important;
 }
 
-.errormsg{
-    color: red;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 10px 0 10px 0;
-    display: inline-block;
-}
+
 form .pwdsection{
    
     vertical-align:middle;

@@ -1,0 +1,83 @@
+.messagelist {
+    display: flex;
+    flex-direction: column;
+    /* height: calc(100vh - 58px - 77px - 66px); */
+    overflow-y: scroll;
+    /* height: calc(100vh - var(--header-height)); */
+
+}
+
+.lastmessage {
+    overflow-anchor:none;
+}
+#anchor {
+    overflow-anchor: auto;
+    min-height: 5px;
+}
+
+
+.chat {
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    height: calc(100svh - var(--header-height));
+    display: grid;
+    grid-template-rows: 77px 1fr auto;
+    /* display: flex;
+    flex-direction: column; */
+    scroll-snap-type: y mandatory;
+}
+
+.chatbottom{
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.messagesendform { 
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-top: 1px solid #eeeef1;
+    position: relative;
+    bottom: 0px;
+    background-color: #ffffff;
+    align-items: flex-end;
+    font-size: 21px;
+}
+
+.messagesendform textarea {
+    
+    border: none;
+    font-size: 21px;
+    flex : 1;
+    background: none;
+    margin-top: 0;
+    resize:none;
+    max-height: 300px;
+    min-height: 64px;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    height: 3em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.messagesendform textarea::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+
+.messagesendform textarea {
+    outline: none;
+}
+
+.messagesendform button {
+    
+    height: 64px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+   
+    background-color:white;
+}

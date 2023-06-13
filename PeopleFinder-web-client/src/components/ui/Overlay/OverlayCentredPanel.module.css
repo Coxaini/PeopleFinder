@@ -1,0 +1,98 @@
+.centeredoverlay {
+    position: fixed;
+    left: -100vw;
+    right: -100vw;
+    top: -100vh;
+    bottom: -100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    z-index: 20;
+}
+
+.centeredpanel{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    z-index: 25;
+}
+
+.whitepanel {
+    min-height: 300px;
+    max-height: 100%;
+    max-width: 700px;
+    min-width: 500px;
+    background-color: var(--main-bg-panel-color);
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+@media screen and (max-width: 800px) {
+    .whitepanel {
+        min-width: 100%;
+        border-radius: 0px;
+    }
+    
+
+
+}
+
+.panelheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: max-content;
+    position: relative;
+
+    border-bottom: 1px solid rgb(54, 54, 54);
+}
+
+.panelbody{
+    overflow-y:visible;
+    overflow-x: hidden;
+}
+
+.panelheader h1 {
+    font-size: 28px;
+    
+    font-weight: 700;
+    color: #333;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.leftspacer {
+    float: left;
+}
+.spacer{
+    position: relative;
+    height: 100%;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.rightspacer {
+    float: right;
+}
+
+.cancelbutton {
+}
+
+.cancelbutton:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 160);
+}

@@ -4,23 +4,26 @@ import "../../css/basic.css"
 import "../../css/navigation.css"
 import { Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
-import { FriendsProvider } from "../../context/FriendsProvider";
+import { faUser, faUserPlus, faUserTag} from "@fortawesome/free-solid-svg-icons";
+import {MdPersonSearch} from "react-icons/md";
+import {IoSparkles} from "react-icons/io5";
+
+import { useTranslation } from 'react-i18next';
 
 function Friends() {
 
+  const {t} = useTranslation();
+
   return (
-    <FriendsProvider>
-      <div className="navigation-grid">
-        <div className="panel navigation">
-          <h2>Friends</h2>
+      <div className="navigation-grid-centered">
+        <div className="border-right navigation">
+          <h2>{t("friends.friends")}</h2>
           <ul>
             <li>
-
               <Link to="/friends/all">
                 <div>
                   <FontAwesomeIcon icon={faUser} />
-                  <span>All friends</span>
+                  <span>{t("friends.allFriends")}</span>
                 </div>
               </Link>
             </li>
@@ -28,15 +31,23 @@ function Friends() {
               <Link to="/friends/requests">
                 <div>
                   <FontAwesomeIcon icon={faUserPlus} />
-                  <span>Friend requests</span>
+                  <span>{t("friends.friendRequests")}</span>
                 </div>
               </Link>
             </li>
             <li>
-              <Link>
-                <div>
-                  <FontAwesomeIcon icon={faUserTag} />
-                  <span>Sended requests</span>
+              <Link to="/friends/mutual">
+                <div className="flexrow aligncenter">
+                  <IoSparkles size={27}/>
+                  <span>{t("friends.recsByMutualFriends")}</span>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link to="/friends/search">
+                <div className="flexrow aligncenter">
+                  <MdPersonSearch size={27}/>
+                  <span>{t("friends.searchForUsers")}</span>
                 </div>
               </Link>
             </li>
@@ -50,7 +61,6 @@ function Friends() {
         </section>
 
       </div>
-    </FriendsProvider>
   );
 }
 

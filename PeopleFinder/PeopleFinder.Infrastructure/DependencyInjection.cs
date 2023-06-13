@@ -22,8 +22,13 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Azure.Core.Diagnostics;
+using Azure.Identity;
+using PeopleFinder.Application.Common.Interfaces.ConnectionStorage;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Services.FileStorage;
 using PeopleFinder.Application.Services.Security;
+using PeopleFinder.Infrastructure.ConnectionStorage;
 using PeopleFinder.Infrastructure.FileStorage;
 using PeopleFinder.Infrastructure.Persistence;
 using PeopleFinder.Infrastructure.Security;
@@ -32,17 +37,44 @@ namespace PeopleFinder.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+            ConfigurationManager configuration, bool isDevelopment)
         {
             services.AddAuth(configuration);
             services.AddPersistence(configuration);
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
-            services.AddSingleton<IFileStorageManager, FileStorageManager>();;
+            if (isDevelopment)
+            {
+                services.AddFolderStorage(configuration);
+            }
+            else
+            {
+                services.AddAzureStorage(configuration);
+            }
+
+            services.AddSingleton<IConnectionStorage, UserConnectionMemoryStorage>();
+            
+            return services;
+        }
+        
+        private static IServiceCollection AddFolderStorage(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            services.AddSingleton<IFileStorageManager, FileStorageManager>();
+            return services;
+        }
+        private static IServiceCollection AddAzureStorage(this IServiceCollection services,ConfigurationManager configuration)
+        {
+            var keyVaultUrl = new Uri(configuration.GetValue<string>("KeyVaultUrl")!);
+
+            var azureCredentials = new DefaultAzureCredential();
+            configuration.AddAzureKeyVault(keyVaultUrl, azureCredentials);
+            
+            services.AddSingleton<IFileStorageManager, AzureBlobStorage>();
             return services;
         }
 
-        public static IServiceCollection AddPersistence(this IServiceCollection services,
+        private static IServiceCollection AddPersistence(this IServiceCollection services,
         IConfiguration configuration)
         {
             string connectionString = configuration.GetConnectionString("DefaultConnection") 
@@ -51,25 +83,26 @@ namespace PeopleFinder.Infrastructure
             services.AddDbContext<PeopleFinderDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-               // o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
-                
+                // o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
             });
-
-            /*services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IProfileRepository, ProfileRepository>();  */
+            
+            services.BuildServiceProvider().GetService<PeopleFinderDbContext>()?.Database.Migrate();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
 
-        public static IServiceCollection AddAuth(this IServiceCollection services,
+        private static IServiceCollection AddAuth(this IServiceCollection services,
         IConfiguration configuration)
         {
              var jwtSettings = new JwtSettings();
              configuration.Bind("JwtSettings", jwtSettings);
 
             services.AddSingleton(Options.Create(jwtSettings));
+           
+            
+            
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
            

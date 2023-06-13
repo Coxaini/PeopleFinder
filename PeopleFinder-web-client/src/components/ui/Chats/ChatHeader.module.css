@@ -1,0 +1,68 @@
+.chatheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    border-bottom: 1px solid #eeeef1;
+    position: relative;
+    top: 0px;
+    padding: 5px;
+}
+
+.backbutton{
+    width: 50px;
+    height: 50px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backbutton:hover{
+    background-color: #dddddd;
+    border-radius: 50%;
+}
+
+@media screen and (min-width: 1000px) {
+    .backbutton {
+        display: none;
+    }
+}
+
+.chatheader .chaticon {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.chaticon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.chatheader .chatinfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.chatinfo .chattitle {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.chatinfo .chatstatus {
+    font-size: 14px;
+    color: gray;
+}
+
+.chatoptions {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+}

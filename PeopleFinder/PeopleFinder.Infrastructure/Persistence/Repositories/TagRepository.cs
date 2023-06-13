@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PeopleFinder.Domain.Common.Models;
 using PeopleFinder.Infrastructure.Persistence.Common;
 
 namespace PeopleFinder.Infrastructure.Persistence.Repositories
@@ -19,6 +20,11 @@ namespace PeopleFinder.Infrastructure.Persistence.Repositories
         public Task<List<Tag>> GetByNames(ICollection<string> names)
         {
             return Context.Tags.Where(x => names.Contains(x.Name)).ToListAsync();
+        }
+
+        public async Task<List<UserTag>> GetAll()
+        {
+            return Context.Tags.Select(x => new UserTag(x.Id, x.Name)).ToList();
         }
     }
 }

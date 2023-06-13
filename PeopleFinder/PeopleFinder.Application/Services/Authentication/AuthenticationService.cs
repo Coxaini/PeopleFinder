@@ -58,7 +58,7 @@ namespace PeopleFinder.Application.Services.Authentication
                 return Result.Fail(result.ToErrorList());
             }
             
-            var user = await _unitOfWork.UserRepository.GetByEmailOrLoginAsync(request.EmailOrUsername);
+            var user = await _unitOfWork.UserRepository.GetByUsernameAsync(request.EmailOrUsername);
             if(user is null) {
                 return AuthenticationErrors.UserNotFound;
             }
@@ -97,22 +97,22 @@ namespace PeopleFinder.Application.Services.Authentication
                 return Result.Fail(result.ToErrorList());
             }
 
-            bool emailExists = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email) is not null;
+            //bool emailExists = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email) is not null;
             bool loginExists = await _unitOfWork.UserRepository.GetByUsernameAsync(request.Username) is not null;
             
-            if(emailExists && loginExists)
+            /*if(emailExists && loginExists)
             {
                 return Result.Fail(AuthenticationErrors.UserEmailAndLoginAlreadyExists);
             }
             if(emailExists)
-                return AuthenticationErrors.UserEmailAlreadyExists;
+                return AuthenticationErrors.UserEmailAlreadyExists;*/
             if(loginExists)
                 return AuthenticationErrors.UserLoginAlreadyExists;
             
 
-            Profile profile = new() {Name = String.Empty, Username = request.Username, Bio = String.Empty, City = String.Empty
-                , CreatedAt = DateTime.Now, LastActivity = DateTime.Now};
-            User user = new() { Email = request.Email, Password = request.Password, Profile = profile };
+            Profile profile = new() {Name = request.Username, Username = request.Username, Bio = String.Empty, City = String.Empty
+                , CreatedAt = DateTime.UtcNow, LastActivity = DateTime.UtcNow};
+            User user = new() { Email = String.Empty, Password = request.Password, Profile = profile };
             
 
             await _unitOfWork.ProfileRepository.AddAsync(profile);
@@ -156,7 +156,7 @@ namespace PeopleFinder.Application.Services.Authentication
             {
                 return Result.Fail(AuthenticationErrors.InvalidRefreshToken);
             }
-            if (user.RefreshTokenExpiryTime < DateTime.Now)
+            if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
             {
                 return Result.Fail(AuthenticationErrors.RefreshTokenExpired);
             }

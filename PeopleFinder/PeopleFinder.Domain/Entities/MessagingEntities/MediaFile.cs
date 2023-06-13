@@ -12,7 +12,8 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
     {
         Image,
         Video,
-        Audio
+        Audio,
+        File
     }
     public class MediaFile
     {
@@ -27,7 +28,7 @@ namespace PeopleFinder.Domain.Entities.MessagingEntities
         public MediaFileType Type { get; set; }
         public DateTime UploadTime { get; set; }
         
-        public bool IsPublic { get; set; }
+        public bool IsInPrivateChat { get; set; } = false;
 
     }
 }

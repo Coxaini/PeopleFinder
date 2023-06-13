@@ -12,9 +12,8 @@ namespace PeopleFinder.Application.Common.Extensions.CustomValidators
     {
         public static IRuleBuilderOptions<T, Gender> MustBeAValidGender<T>(this IRuleBuilder<T, Gender> ruleBuilder)
         {
-            return ruleBuilder.IsInEnum().Must(gender => (gender ^ Gender.Male) == 0 ||
-            (gender ^ Gender.Female) == 0)
-                             .WithMessage("Gender must be either Male, Female");
+            
+            return ruleBuilder.IsInEnum().WithMessage("Gender must be either None, Male or Female");
         }
         public static IRuleBuilderOptions<T, Gender> MustBeAValidMultipleGender<T>(this IRuleBuilder<T, Gender> ruleBuilder)
         {
@@ -31,8 +30,10 @@ namespace PeopleFinder.Application.Common.Extensions.CustomValidators
 
         public static IRuleBuilderOptions<T, DateOnly> MustBeAValidBirthDate<T>(this IRuleBuilder<T, DateOnly> ruleBuilder)
         {
-            return ruleBuilder.Must(d => d < DateOnly.FromDateTime(DateTime.Today)).
-                WithMessage("Birth date must be in the past and not greater than today's date");
+            return ruleBuilder.Must(d => d < DateOnly.FromDateTime(DateTime.Today))
+                .WithMessage("Birth date must be in the past and not greater than today's date")
+                .Must(d => d > DateOnly.FromDateTime(DateTime.Today.AddYears(-120)))
+                .WithMessage("Birth date must be in the past and not less than 120 years ago");
         }
 
     }

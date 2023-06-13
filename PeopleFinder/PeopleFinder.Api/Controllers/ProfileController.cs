@@ -12,8 +12,9 @@ using PeopleFinder.Api.Controllers.Common;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using PeopleFinder.Application.Models.File;
-using PeopleFinder.Application.Services.FriendsService;
-using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Application.Services.FileStorage;
+using PeopleFinder.Application.Services.RelationshipServices;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Domain.Common.Pagination.Cursor;
 using PeopleFinder.Domain.Entities.MessagingEntities;
 
@@ -25,16 +26,18 @@ namespace PeopleFinder.Api.Controllers
     {
         private readonly IProfileService _profileService;
         private readonly IRelationshipService _relationshipService;
+        private readonly IFileTypeResolver _fileTypeResolver;
         private readonly IMapper _mapper;
-        public ProfileController(IProfileService profileService,  IMapper mapper, IRelationshipService relationshipService)
+        public ProfileController(IProfileService profileService,  IMapper mapper, IRelationshipService relationshipService, IFileTypeResolver fileTypeResolver)
         {
             _profileService = profileService;
             _mapper = mapper;
             _relationshipService = relationshipService;
+            _fileTypeResolver = fileTypeResolver;
         }
 
 
-        [HttpPost]      
+        /*[HttpPost]      
         public async Task<IActionResult>CreateProfile(ProfileFillRequest request)
         {
 
@@ -45,9 +48,9 @@ namespace PeopleFinder.Api.Controllers
                     return Created(Request.GetUri() + $"/{profile.Id}", _mapper.Map<ShortProfileResponse>(profile));
                     },
                 Problem);
-        }
+        }*/
         [HttpPut]
-        public async Task<IActionResult> EditProfile(ProfileFillRequest request)
+        public async Task<IActionResult> EditProfile(ProfileEditRequest request)
         {
             var editResult = await _profileService.UpdateProfile(ProfileIdInClaims, request);
 
@@ -109,13 +112,34 @@ namespace PeopleFinder.Api.Controllers
                     return Ok(res);
                 },
                 Problem);
-
+        }
+        
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProfile([FromQuery]string searchQuery, [FromQuery]CursorPagination<DateTime> cursorPaginationParams)
+        {
+            CursorPaginationParams<DateTime> pag = new(20)
+                { PageSize = cursorPaginationParams.PageSize, After = cursorPaginationParams.After, Before = cursorPaginationParams.Before };
+            
+            var profiles = await _profileService.GetProfilesByFilter(ProfileIdInClaims, pag, searchQuery);
+            return profiles.Match(
+                (source) =>
+                {
+                    var metadata = new
+                    {
+                        source.TotalCount,
+                        NextCursor =  source.Next?.LastActivity,
+                    };
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                         
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(source.Items));
+                },
+                Problem);
         }
 
         [HttpGet("{profileId:int}/mutualFriends")]
-        public async Task<IActionResult> GetMutualFriendsWithProfile(int profileId, [FromQuery]CursorPaginationRequest<DateTime> cursorPaginationParams)
+        public async Task<IActionResult> GetMutualFriendsWithProfile(int profileId, [FromQuery]CursorPagination<DateTime> cursorPaginationParams)
         {
-            CursorPaginationParams<DateTime> pag = new()
+            CursorPaginationParams<DateTime> pag = new(20)
                 { PageSize = cursorPaginationParams.PageSize, After = cursorPaginationParams.After, Before = cursorPaginationParams.Before };
             
             var mutualFriends = await _relationshipService.GetMutualFriends(ProfileIdInClaims, profileId, pag);
@@ -129,7 +153,7 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                          
-                    return Ok(_mapper.Map<IEnumerable<ShortProfileResponse>>(source.Items));
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(source.Items));
                 },
                 Problem);
             

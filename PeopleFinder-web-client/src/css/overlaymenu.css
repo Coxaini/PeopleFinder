@@ -1,0 +1,19 @@
+.mesage-overlay-menu {
+    bottom: 80%;
+    transform: translateX(10%);
+    max-height: 300px;
+    min-width: 100px;
+} 
+
+@media screen and (max-width: 1000px){
+    .mine.mesage-overlay-menu{
+        transform: translateX(-85%);
+    }
+}
+
+.chatheader-overlay-menu{
+    bottom: -30%;
+    left: -130px;
+    max-height: 400px;
+    min-width: 150px;
+}

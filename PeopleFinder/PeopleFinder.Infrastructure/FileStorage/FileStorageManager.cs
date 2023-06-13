@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PeopleFinder.Application.Common.Interfaces.FileStorage;
 using PeopleFinder.Application.Models.File;
+using PeopleFinder.Application.Services.FileStorage;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 using PeopleFinder.Infrastructure.Common.Helpers;
 
 namespace PeopleFinder.Infrastructure.FileStorage;
@@ -13,16 +15,18 @@ public class FileStorageManager : IFileStorageManager
     private readonly string _fileStoragePath;
     private readonly ILogger<FileStorageManager> _logger;
 
-    public FileStorageManager(IConfiguration fileConfiguration, ILogger<FileStorageManager> logger)
+    public FileStorageManager(IOptions<FileStorageSettings> fileSettings, ILogger<FileStorageManager> logger)
     {
-        _fileStoragePath = fileConfiguration["FilePath"] ?? throw new IOException("File path not found in a configuration");
+        _fileStoragePath = fileSettings.Value.FilePath ?? throw new IOException("File path not found in a configuration");
         
         _logger = logger;
     }
     
     
-    public async Task<(Guid Token, string Extension)> SaveFileAsync(FileDto fileDto, DateTime uploadTime)
+    public async Task<MediaFile> UploadFileAsync(FileDto fileDto)
     {
+        
+        var uploadTime = DateTime.UtcNow;
         
         string ext = Path.GetExtension(fileDto.FileName);
         var token = Guid.NewGuid();
@@ -34,23 +38,55 @@ public class FileStorageManager : IFileStorageManager
         await fileDto.ContentStream.CopyToAsync(stream);
 
         _logger.LogInformation("{fileName} saved to {filePath}", fileDto.FileName, filePath);
-        return (token, ext[1..]);
         
+        var mediaFile = new MediaFile()
+        {
+            Id = token,
+            OriginalName = fileDto.FileName,
+            Type = fileDto.Type,
+            Extension = ext[1..],
+            UploadTime = uploadTime
+        };
+
+        return mediaFile;
+
     }
 
     
-    /// <exception cref="FileNotFoundException"></exception>
-    public FileStream GetFileAsync(string fileName, DateTime uploadTime)
+    
+    public Task<Stream> GetFileAsync(MediaFile mediaFile)
     {
-        string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, uploadTime);
+        string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);
+
+        string fileName = mediaFile.Id.ToString() + '.' + mediaFile.Extension;
         
         string filePath = Path.Combine(folderPath, fileName);
         if (!File.Exists(filePath))
         {
+            _logger.LogError("File {fileName} not found", fileName);
+            throw new FileNotFoundException($"File {fileName} not found");
+        }
+        var stream = new FileStream(filePath, FileMode.Open);
+        
+        return Task.FromResult(stream as Stream);
+
+    }
+    /// <exception cref="IOException">Cannot delete the file because the stream is open</exception>
+    public Task DeleteFileAsync(MediaFile mediaFile)
+    {
+        string folderPath = FileFolderHelper.GetFileFolderPath(_fileStoragePath, mediaFile.UploadTime);
+
+        string fileName = mediaFile.Id.ToString() + '.' + mediaFile.Extension;
+        
+        string filePath = Path.Combine(folderPath, fileName);
+        if (!File.Exists(filePath))
+        {
+            _logger.LogError("File {fileName} not found", fileName);
             throw new FileNotFoundException($"File {fileName} not found");
         }
         
-        return File.OpenRead(filePath);
-
+        File.Delete(filePath);
+        _logger.LogInformation("File {fileName} deleted", fileName);
+        return Task.CompletedTask;
     }
 }

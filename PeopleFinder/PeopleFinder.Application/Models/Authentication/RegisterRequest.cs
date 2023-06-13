@@ -9,7 +9,7 @@ namespace PeopleFinder.Application.Models.Authentication
 {
     public record RegisterRequest(
         string Username,
-        string Email,
+       //string Email,
         string Password);
 }
  

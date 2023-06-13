@@ -12,17 +12,19 @@
  }
 
   .profile img.largeimage{
-    width: 240px;
-    height: 240px;
-  
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
     border-radius: 5%;
-    margin-right: 30px;
     margin-bottom: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   }
   .profile img.smallimage{
     width: 120px;
     height: 120px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    object-position: center;
     border-radius: 100%;
     margin-right: 30px;
     margin-bottom: 10px;
@@ -45,35 +47,38 @@
   }
 
   .info h2 {
+    margin-bottom: 5px;
     font-size: 24px;
     font-weight: 700;
     color: #333;
   }
   
   .bio {
-   
-    margin-bottom: 20px;
-    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 5px;
     color: #666;
-    flex:content;
-   
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .interests {
     display: flex;
-    
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
-    row-gap: 10px;
-    margin-top: 10px;
+    row-gap: 5px;
     margin-bottom: 10px;
   }
   
   .interests li {
-    font-size: 14px;
-    background-color: #f2f2f2;
-    color: #333;
+    font-size: 15px;
+    font-weight: 700;
+    background-color: #cacaca;
+    color: #140115;
     padding: 5px 10px;
     margin-right: 10px;
     border-radius: 5px;
@@ -94,6 +99,7 @@
   
   .approve,
   .decline {
+    min-width: 70px;
     font-size: 16px;
     padding: 10px;
     border: none;

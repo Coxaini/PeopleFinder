@@ -1,10 +1,14 @@
 using PeopleFinder.Application.Models.File;
+using PeopleFinder.Domain.Entities.MessagingEntities;
 
 namespace PeopleFinder.Application.Common.Interfaces.FileStorage;
 
 public interface IFileStorageManager
 {
-    Task<(Guid Token, string Extension)> SaveFileAsync(FileDto fileDto, DateTime uploadTime);
+    Task<MediaFile> UploadFileAsync(FileDto fileDto);
+    /// <exception cref="FileNotFoundException"></exception>
+    Task<Stream> GetFileAsync(MediaFile mediaFile);
     
-    FileStream GetFileAsync(string fileName , DateTime uploadTime);
+    
+    Task DeleteFileAsync(MediaFile mediaFile);
 }

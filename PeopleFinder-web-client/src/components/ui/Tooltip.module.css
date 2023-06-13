@@ -12,7 +12,7 @@
 
 .tooltip .tooltiptext {
     /* visibility: hidden; */
-    width: 200px;
+    width: 300px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -22,7 +22,7 @@
     z-index: 1;
     bottom: 150%;
     left: 50%;
-    margin-left: -100px;
+    margin-left: -270px;
   }
 
 .hidden{
@@ -33,7 +33,7 @@
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
+    right: 8%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;

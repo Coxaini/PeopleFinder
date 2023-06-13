@@ -12,11 +12,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using PeopleFinder.Application.Common.Interfaces.FileStorage;
+using PeopleFinder.Application.Common.Settings;
 using PeopleFinder.Application.Models.File;
+using PeopleFinder.Application.Services.ChatServices;
 using PeopleFinder.Application.Services.FileStorage;
-using PeopleFinder.Application.Services.FriendsService;
+using PeopleFinder.Application.Services.Messages;
+using PeopleFinder.Application.Services.RelationshipServices;
+using PeopleFinder.Application.Services.Tags;
 
 namespace PeopleFinder.Application
 {
@@ -27,7 +33,7 @@ namespace PeopleFinder.Application
         {
    
             
-            services.Configure<ImageSettings>(configuration.GetSection("ImageSettings"));
+            services.Configure<FileSettings>(configuration.GetSection("FileSettings"));
             
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -35,6 +41,16 @@ namespace PeopleFinder.Application
             services.AddScoped<IRecommendationService,RecommendationService>();
             services.AddScoped<IRelationshipService, RelationshipService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<ITagService, TagService>();
+            
+            services.AddSingleton<IFileUrlService, FileUrlService>();
+            services.AddSingleton<IFileTypeResolver, FileTypeResolver>();
+            
+            services.Configure<FileStorageSettings>(configuration.GetSection("FileStorageSettings"));
+            
+            
             
             services.AddScoped<IAccessVerificationService, AccessVerificationService>();
             

@@ -1,0 +1,189 @@
+{
+  "common": {
+    "serverError": "Server error",
+    "noServerResponse": "No server response.",
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "loadMore": "Load more",
+    "left": "left"
+  },
+  "registration": {
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "registration": "Registration",
+    "usernameRequirements": "Username must be at least 4 characters long and start with a letter. It can contain only letters, numbers, dashes, and underscores.",
+    "usernameTaken": "Username is already taken. Please choose another one.",
+    "emailIncorrect": "Email is not correct.",
+    "emailTaken": "Email is already taken. Please choose another one.",
+    "passwordRequirements": "Password should be 8-24 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.",
+    "passwordMatch": "Passwords must match.",
+    "showPassword": "Show password",
+    "registerButton": "Register",
+    "fillFieldsCorrectly": "Please fill in all fields correctly.",
+    "noServerResponse": "No server response.",
+    "userExists": "User with given username already exists.",
+    "userEmailExists": "User with given username and email already exists.",
+    "emailExists": "User with given email already exists.",
+    "loginFailed": "Login failed.",
+    "haveAccount": "Already have an account?",
+    "log_in": "Log in",
+    "login": "Login",
+    "register": "Register",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "wrongCredentials": "Wrong credentials.",
+    "userNotFound": "User not found.",
+    "unauthorized": "Unauthorized."
+  },
+  "file": {
+    "sizeIsTooBig100Mb": "File size is too big. Max file size is 100Mb."
+  },
+  "chat": {
+    "selectOrStartConversation": "Select a chat or start a new conversation",
+    "header": {
+      "activeNow": "Active now",
+      "deleteChat": "Delete chat",
+      "lastSeen": "Last seen",
+      "justNow": "just now"
+    },
+    "messageList": {
+      "emptyText": "No messages available."
+    },
+    "messageInputBar": {
+      "editingInfoTitle": "Editing..."
+    },
+    "message": {
+      "deleteText": "Delete",
+      "editText": "Edit",
+      "editedAt": "edited at"
+    },
+    "messageForm": {
+      "fileButtonText": "Attach File",
+      "placeholderText": "Type your message..."
+    }
+  },
+  "timeAgo": {
+    "minuteAgo_one": "1 minute ago",
+    "minuteAgo_other": "{{count}} minutes ago",
+    "hourAgo_one": "1 hour ago",
+    "hourAgo_other": "{{count}} hours ago",
+    "dayAgo_one": "1 day ago",
+    "dayAgo_other": "{{count}} days ago"
+  },
+  "profile": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "message": "Message",
+    "removeFriend": "Remove friend",
+    "cancelRequest": "Cancel request",
+    "acceptRequest": "Accept friend request",
+    "declineRequest": "Decline",
+    "unblock": "Unblock",
+    "youAreBlocked": "You are blocked by this user",
+    "block": "Block",
+    "addToFriends": "Add to friends",
+    "editProfile": "Edit profile",
+    "sendMessage": "Send message",
+    "deleteFromFriends": "Delete from friends",
+    "searchForPeople": "Search for people",
+    "mutualFriends": "Mutual friends",
+    "friendWith": "Friend with :",
+    "andMore": "and {{count}} more",
+    "bio": "Bio",
+    "typeAtLeast4chars": "Type at least 4 characters to search for people.",
+    "noUsersFound": "No users found."
+  },
+  "profileEdit": {
+    "uploadNewPhoto": "Upload new photo",
+    "imageSizeError": "File size is too big. Max file size is 5Mb.",
+    "imageUploadError": "An error occurred while uploading the image",
+    "name": "Name",
+    "city": "City",
+    "birthdate": "Birthdate",
+    "gender": "Gender",
+    "none": "None",
+    "male": "Male",
+    "woman": "Woman",
+    "interests": "Interests",
+    "nameRequirements": "Name must be at least 4 characters long and less than 20 characters long.",
+    "success" : "Profile updated successfully.",
+    "chooseTagsMax6": "Choose up to 6 tags."
+  },
+  "account": {
+    "account": "Account",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "friends": {
+    "friends": "Friends",
+    "allFriends": "All friends",
+    "friendRequests": "Friend requests",
+    "searchForUsers": "Search for users",
+    "searchForFriends": "Search for friends",
+    "friends_one": "{{count}} Friend",
+    "friends_other": "{{count}} Friends",
+    "recsByMutualFriends": "Recommendations by mutual friends",
+    "sent" : "sent"
+  },
+  "navigation": {
+    "profile": "Profile",
+    "messages": "Messages",
+    "discoverPeople": "Discover people",
+    "friends": "Friends"
+  },
+  "recs": {
+    "recsByMutual": "Recommendations by mutual friends",
+    "noRecommendations": "No recommendations available. Try to select more interests or enter your city to see recommendations.",
+    "recsByInterests": "Recommendations for common interests in your city",
+    "noMutualFriends": "No mutual friends available. Try to add some friends to see recommendations."
+  },
+  "tags" :
+  {
+    "Gaming": "Gaming",
+    "Fishing": "Fishing",
+    "Cycling": "Cycling",
+    "Hiking": "Hiking",
+    "Cooking": "Cooking",
+    "Reading": "Reading",
+    "Photography": "Photography",
+    "Painting": "Painting",
+    "Traveling": "Traveling",
+    "Writing": "Writing",
+    "Swimming": "Swimming",
+    "Running": "Running",
+    "Gardening": "Gardening",
+    "Chess": "Chess",
+    "Knitting": "Knitting",
+    "Music": "Music",
+    "Dancing": "Dancing",
+    "Singing": "Singing",
+    "Drawing": "Drawing",
+    "Yoga": "Yoga",
+    "Meditation": "Meditation",
+    "Basketball": "Basketball",
+    "Football": "Football",
+    "Tennis": "Tennis",
+    "Golf": "Golf",
+    "Soccer": "Soccer",
+    "Volleyball": "Volleyball",
+    "Badminton": "Badminton",
+    "Surfing": "Surfing",
+    "Scuba Diving": "Scuba Diving",
+    "Programming": "Programming",
+    "Software Development": "Software Development",
+    "Web Development": "Web Development",
+    "Data Science": "Data Science",
+    "Artificial Intelligence": "Artificial Intelligence",
+    "Machine Learning": "Machine Learning",
+    "Cybersecurity": "Cybersecurity",
+    "Networking": "Networking",
+    "Robotics": "Robotics",
+    "Embedded Systems": "Embedded Systems"
+  },
+  "settings":{
+    "chooseLanguage": "Choose language"
+  }
+}

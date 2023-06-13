@@ -8,5 +8,15 @@ using PeopleFinder.Domain.Entities;
 
 namespace PeopleFinder.Application.Services.ProfileServices;
 
-public record ProfileResult(int Id, string Username, RelationshipResult? Relationship, CursorList<FriendProfile>? MutualFriends
-    , string Name, int? Age, string Bio, string City, Gender? Gender, Guid? MainPictureId , List<TagResponse>  Tags);
+public record ProfileResult(
+    int Id,
+    string Username,
+    RelationshipResult? Relationship,
+    CursorList<RelationshipProfileResult>? MutualFriends,
+    string Name,
+    DateTime? BirthDate,
+    string Bio,
+    string City,
+    Gender? Gender,
+    Guid? MainPictureId,
+    List<UserTag> Tags);

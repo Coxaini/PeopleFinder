@@ -3,6 +3,8 @@
 :root{
   --main-bg-panel-color: #fbfbfb;
   --header-height : 58px;
+  --active-chat-color: #4c6dd2;
+  --mobile-mode-width: 900px;
 }
 
 * {
@@ -11,6 +13,7 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
+
   margin: 0;
   background-color: white;
 }

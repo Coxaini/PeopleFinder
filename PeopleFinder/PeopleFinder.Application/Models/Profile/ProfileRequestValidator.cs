@@ -10,7 +10,7 @@ using PeopleFinder.Domain.Repositories.Common;
 namespace PeopleFinder.Application.Models.Profile
 {
 
-    public class ProfileCreateRequestValidator : AbstractValidator<ProfileFillRequest>
+    public class ProfileCreateRequestValidator : AbstractValidator<ProfileEditRequest>
     {
         private readonly IUnitOfWork _unitOfWork;
         public ProfileCreateRequestValidator(IUnitOfWork unitOfWork)
@@ -20,24 +20,24 @@ namespace PeopleFinder.Application.Models.Profile
             
             RuleFor(x => x.Name).MustBeAValidName();
 
-            RuleFor(x => x.BirthDate).MustBeAValidBirthDate();
+            RuleFor(x => x.BirthDate.Value)
+                .MustBeAValidBirthDate()
+                .When(x => x.BirthDate.HasValue);
 
             RuleFor(x => x.Gender).Cascade(CascadeMode.Stop).MustBeAValidGender();
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.Bio).NotEmpty();
-            RuleFor(x => x.City).NotEmpty();
+            RuleFor(x => x.Username).Cascade(CascadeMode.Stop).MinimumLength(5).MaximumLength(30);
+            RuleFor(x => x.Bio).MaximumLength(400);
+            RuleFor(x => x.City).MaximumLength(40);
 
             RuleFor(x => x.Tags).Cascade(CascadeMode.Stop).
-                Must(x => x.Count > 0).
-                WithMessage("Must be least one tag").
-                Must(x => x.Count < 6).
+                Must(x => x.Count <= 6).
                 WithMessage("No more than 6 tags are allowed").
                 ForEach(tag =>
                 {
-                    tag.NotEmpty().MustAsync(IsTagNameExistsInADb).WithName(x => $"{x}").WithMessage("tag doesn`t exists");
+                    tag.NotEmpty().MustAsync(IsTagNameExistsInADb).WithName(x => $"{x}").WithMessage("tag doesn't exists");
                 });
         }
-
+        
         private async Task<bool> IsTagNameExistsInADb(string tag, CancellationToken token)
         {
             if(await _unitOfWork.TagRepository.GetFirstOrDefault(x => x.Name == tag) is null) return false;

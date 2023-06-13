@@ -19,11 +19,11 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileStorageManager _storageManager;
-        private readonly IValidator<ProfileFillRequest> _profileFillValidator;
+        private readonly IValidator<ProfileEditRequest> _profileFillValidator;
         private readonly IValidator<FileDto> _profileImageValidator;
         private readonly IMapper _mapper;
 
-        public ProfileService(IUnitOfWork unitOfWork, IFileStorageManager storageManager, IValidator<ProfileFillRequest> profileFillValidator
+        public ProfileService(IUnitOfWork unitOfWork, IFileStorageManager storageManager, IValidator<ProfileEditRequest> profileFillValidator
             ,IValidator<FileDto> profileImageValidator , IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -33,7 +33,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
             _mapper = mapper;
         }
 
-        public async Task<Result<Profile>> CreateProfile(int userId ,ProfileFillRequest request)
+        public async Task<Result<Profile>> CreateProfile(int userId ,ProfileEditRequest request)
         {
 
 
@@ -53,13 +53,13 @@ namespace PeopleFinder.Application.Services.ProfileServices
             Profile profile = new() {
                 UserId = userId,
                 Name= request.Name,
-                BirthDate = request.BirthDate.ToDateTime(new TimeOnly()),
+                BirthDate = request.BirthDate?.ToDateTime(new TimeOnly()),
                 Gender= request.Gender,
                 Bio = request.Bio,
                 City = request.City,
                 Tags = tags,
-                CreatedAt = DateTime.Now,
-                LastActivity = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                LastActivity = DateTime.UtcNow
             };
             
             await _unitOfWork.ProfileRepository.AddAsync(profile);
@@ -69,7 +69,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
 
             return profile;
         }
-        public async Task<Result<Profile>> UpdateProfile(int profileId ,ProfileFillRequest request)
+        public async Task<Result<Profile>> UpdateProfile(int profileId ,ProfileEditRequest request)
         {
             var result = await _profileFillValidator.ValidateAsync(request);
 
@@ -78,14 +78,23 @@ namespace PeopleFinder.Application.Services.ProfileServices
                 return Result.Fail(result.ToErrorList());
             }
 
-            var profileByUserId = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            var profileByUserId = await _unitOfWork.ProfileRepository.GetWithTagsByIdAsync(profileId);
             if(profileByUserId == null)
                 return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            var profileByUsername = await _unitOfWork.ProfileRepository.GetFirstOrDefault(x => x.Username == request.Username);
+            if (profileByUsername is not null && profileByUsername.Id != profileId)
+            {
+                return Result.Fail(ProfileErrors.UsernameIsTaken);
+            }
 
             var tags = await _unitOfWork.TagRepository.GetByNames(request.Tags);
 
+            profileByUserId.Tags.RemoveAll((t) => tags.Any(x=>x.Id == t.Id));    
+
             profileByUserId.Name = request.Name;
-            profileByUserId.BirthDate = request.BirthDate.ToDateTime(new TimeOnly());
+            profileByUserId.Username = request.Username;
+            profileByUserId.BirthDate = request.BirthDate?.ToDateTime(new TimeOnly());
             profileByUserId.Gender= request.Gender;
             profileByUserId.Bio = request.Bio;
             profileByUserId.City = request.City;
@@ -146,7 +155,7 @@ namespace PeopleFinder.Application.Services.ProfileServices
         {
             if (profile.Id == requesterId)
             {
-                return _mapper.Map<ProfileResult>((profile, new CursorList<FriendProfile>()));
+                return _mapper.Map<ProfileResult>((profile, new CursorList<RelationshipProfile>()));
             }
 
             var relationship =
@@ -169,28 +178,52 @@ namespace PeopleFinder.Application.Services.ProfileServices
             
             var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
             
-            var now = DateTime.Now;
-            (Guid Token, string Extension) file = await _storageManager.SaveFileAsync(fileDto, now);
-            
-            var profilePicture = new MediaFile()
-            {
-                Id = file.Token,
-                Extension = file.Extension,
-                UploadTime = now,
-                Type = MediaFileType.Image,
-                OriginalName = fileDto.FileName
-            };
-            
+            var now = DateTime.UtcNow;
+            var profilePicture = await _storageManager.UploadFileAsync(fileDto);
             
             await _unitOfWork.MediaFileRepository.AddAsync(profilePicture);
             profile!.MainPicture = profilePicture;
             
+
             await _unitOfWork.SaveAsync();
 
             return profilePicture;
         }
 
-        
-        
+        public async Task<Result<CursorList<RelationshipProfileResult>>> GetProfilesByFilter(int profileId, CursorPaginationParams<DateTime> curParams, string searchQuery)
+        {
+            
+            if(searchQuery.Length <= 3)
+                return Result.Fail<CursorList<RelationshipProfileResult>>(ProfileErrors.SearchQueryTooShort);
+            
+            
+            var profiles = await _unitOfWork
+                .ProfileRepository.GetProfilesByFilter(profileId, curParams.PageSize, curParams.After, searchQuery);
+            var profilesResult = _mapper.Map<CursorList<RelationshipProfileResult>>(profiles);
+            return profilesResult;
+        }
+
+        public async Task<Result<Profile>> SetProfileOnline(int profileId)
+        {
+            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            if (profile is null)
+                return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            profile.IsOnline = true;
+            await _unitOfWork.SaveAsync();
+            return profile;
+        }
+
+        public async Task<Result<Profile>> SetProfileOffline(int profileId)
+        {
+            var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(profileId);
+            if (profile is null)
+                return Result.Fail(ProfileErrors.ProfileNotFound);
+            
+            profile.IsOnline = false;
+            profile.LastActivity = DateTime.UtcNow;
+            await _unitOfWork.SaveAsync();
+            return profile;
+        }
     }
 }

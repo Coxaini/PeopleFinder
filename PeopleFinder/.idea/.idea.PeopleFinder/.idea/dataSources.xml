@@ -8,5 +8,13 @@
       <jdbc-url>Server=.\SQLEXPRESS;Database=PeopleFinder</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="Azure SQL Database - sql-server-peoplefinder - peoplefinder_db" uuid="0df7373f-0460-4a8a-bb2c-d9a20654cf6a">
+      <driver-ref>azure.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://sql-server-peoplefinder.database.windows.net:1433;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;database=peoplefinder_db;</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

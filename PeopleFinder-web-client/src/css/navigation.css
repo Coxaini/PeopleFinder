@@ -9,6 +9,7 @@
 .navigation-grid-centered{
     display: grid;
     grid-template-columns: 350px 1fr 350px;
+    grid-gap: 10px;
     font-size: larger;
     min-height: inherit;
 
@@ -20,14 +21,59 @@
     height: 100%;
 }
 
+@media screen and (max-width: 768px) {
+    .navigation-grid{
+        display: flex;
+        flex-direction: column;
+        font-size: larger;
+        min-height: inherit;
+    }
+    .navigation ul{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .navigation ul li span{
+        display: none;
+    }
+    .navigation ul li svg{
+        transform: scale(2);
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width : 1150px) {
+    .navigation > h2{
+        display: none;
+    }
+    .navigation-grid-centered{
+        display: flex;
+        flex-direction: column;
+        font-size: larger;
+        min-height: inherit;
+    }
+
+}
+    
+
 .navigation ul {
     position: sticky;
     top: 0;
-    z-index: 999;
     top: calc( var(--header-height) + 5px);
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-bottom: 0px;
 }
 
 .navigation a span{
@@ -48,7 +94,6 @@
 .navigation ul li {
     padding: 10px;
     margin-bottom: 5px;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 

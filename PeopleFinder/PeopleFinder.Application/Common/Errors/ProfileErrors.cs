@@ -20,7 +20,9 @@ namespace PeopleFinder.Application.Common.Errors
         
         public static readonly BaseError ProfileAlreadyRated = new("You already rated this profile", ErrorType.Conflict);
         
+        public static readonly IError SearchQueryTooShort = new BaseError("Search query too short", ErrorType.Validation);
         
+        public static readonly IError UsernameIsTaken = new BaseError("Username is taken", ErrorType.Validation);
         
         
     }

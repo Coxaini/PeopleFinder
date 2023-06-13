@@ -1,14 +1,49 @@
 .panel{
     width: 100%;
     height: 100%;
-
     padding: 10px;
+}
+
+.shadow{
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.border-right{
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .flexlist{
     display: flex;
     flex-direction: column;
+}
+
+.width100{
+    width: 100%;
+}
+
+.flexgrow{
+    flex-grow: 1;
+}
+
+.flexrow{
+    display: flex;
+    flex-direction: row;
+}
+
+.flexwrap{
+    flex-wrap: wrap;
+}
+
+.spacebetween{
+    justify-content: space-between;
+}
+
+.alignselfcenter{
+    align-self: center;
+}
+
+.aligncenter{
+    align-items: center;
 }
 
 .center{
@@ -27,16 +62,32 @@
     align-items: center;
 }
 
+.justifyselfcenter{
+    justify-content: center;
+}
+
+.justifyselfend{
+    justify-content: flex-end;
+}
+
 .leftoffset {
     margin-left: 10px;
 }
 
-.rightoffset {
-    margin-right: 10px;
+.basicmargin{
+    margin: 10px;
+}
+
+.margintop10{
+    margin-top: 10px;
 }
 
 .marginbottom10{
     margin-bottom: 10px;
+}
+
+.marginright10{
+    margin-right: 10px;
 }
 
 .nonvisible {
@@ -48,13 +99,66 @@
     font-size: 21px;
 }
 
-a.profilelinkpanel{
+a.nondecoration{
     color: initial;
     text-decoration: none;
+}
+
+button.emptybutton{
+    /* background-color: transparent; */
+    border: none;
+    cursor: pointer;
+}
+
+button.transparentbutton{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 span.errormessage{
     color: rgb(217, 0, 0);
     font-weight: 800;
     
+}
+.errormsg{
+    color: red;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    display: inline-block;
+}
+.successmsg{
+    color: green;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    display: inline-block;
+}
+
+.input-block{
+    position: relative;
+    width: 100%;
+}
+
+.cursorpointer:hover{
+    cursor: pointer;
+}
+
+a{
+    z-index: 1;
+}
+
+.circle-badge{
+    position: absolute;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background-color: #b7b7df;
+    font-size: smaller;
+    left: 20px;
+    bottom: -8px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }

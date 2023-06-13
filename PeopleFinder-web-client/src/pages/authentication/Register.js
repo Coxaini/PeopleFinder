@@ -4,11 +4,12 @@ import { faCheck, faTimes, faInfoCircle, faCircleQuestion, faRedo } from "@forta
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./Register.module.css";
 import Tooltip from "../../components/ui/Tooltip";
-import logo from "../../images/PeopleFinder.png"
 import { Link } from "react-router-dom";
 import api from "../../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import useUserData from "../../hooks/useUserData";
+import { useTranslation } from 'react-i18next';
+import useValidationCheck from "../../hooks/useValidationCheck";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -16,14 +17,15 @@ const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))
 
 const Register = () => {
 
+  const {t} = useTranslation();
+
   const [user, setUser] = useState('');
   const [validName, setValidName] = useState(false);
-  const [nameAvailable, setNameAvailable] = useState(true);
   const [userFocus, setUserFocus] = useState(false);
 
   const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
-  const [emailAvailable, setEmailAvailable] = useState(false);
+
   const [emailFocus, setEmailFocus] = useState(false);
 
   const [pwd, setPwd] = useState('');
@@ -68,57 +70,20 @@ const Register = () => {
     setErrMsg('');
   }, [user, email, pwd, matchPwd])
 
-  useEffect(() => {
-    if(validName){
-      setNameAvailable(true);
-      const checkUser = setTimeout( async ()=>{
-        try{
-        const response = await api.get(`/auth/check_username/${user}`);
-        console.log("Username available");
-        setNameAvailable(true);
-        }catch(err){
-          if(err.response.status === 409){
-            console.log("Username is not available");
-            setNameAvailable(false);
-          }
-        }
-      }, 300)
-
-      return () => clearTimeout(checkUser);
-    }
-  }, [user, validName])
-
-  useEffect(() => {
-    setEmailAvailable(true);
-    if(validEmail){
-      const checkEmail = setTimeout( async ()=>{
-        try{
-        const response = await api.get(`/auth/check_email/${email}`);
-        console.log("Email available");
-        setEmailAvailable(true);
-        }catch(err){
-          if(err.response.status === 409){
-            console.log("Email is not available");
-            setEmailAvailable(false);
-          }
-        }
-      }, 300)
-
-      return () => clearTimeout(checkEmail);
-    }
-  }, [email, validEmail])
+  const nameAvailable = useValidationCheck(user, validName,"/auth/check_username");
+  const emailAvailable = useValidationCheck(email, validEmail,"/auth/check_email");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!(validName && validEmail && validPwd && validMatch)) {
+    if (!(validName  && validPwd && validMatch)) {
 
-      setErrMsg('Please fill in all fields correctly');
+      setErrMsg(t("registration.fillFieldsCorrectly"));
       return;
     }
 
     try {
 
-      const payload = JSON.stringify({ username: user, email: email, password: pwd });
+      const payload = JSON.stringify({ username: user, password: pwd });
 
       const response = await api.post('/auth/register', payload,
         {
@@ -127,37 +92,33 @@ const Register = () => {
         });
 
       setUserData(response?.data);
-      navigate(from, { replace: true });
+      navigate("/edit", { replace: true });
 
     } catch (err) {
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setErrMsg(t('common.noServerResponse'));
       } else if (err.response?.status === 409) {
         let errMsg = err.response?.data?.title;
-        if(errMsg.includes('username') && errMsg.includes('email'))
-          setErrMsg('User with given username and email already exists');
-        else if(errMsg.includes('login'))
-        setErrMsg('User with given username already exists');
+        if (errMsg.includes('username') && errMsg.includes('email'))
+          setErrMsg(t('registration.userEmailExists'));
+        else if (errMsg.includes('login'))
+          setErrMsg(t('registration.userExists'));
         else
-        setErrMsg('User with given email already exists');
+          setErrMsg(t('registration.emailExists'));
       } else {
-        setErrMsg('Login Failed');
+        setErrMsg(t('common.serverError'));
       }
-
     }
-
   }
 
   return (
     <>
       <div className={classes.section}>
-        <img src={logo} className={classes.logoImage} />
-
         <div className={classes.authform}>
           <form onSubmit={handleSubmit}>
-            <h1>Registration</h1>
+            <h1>{t('registration.registration')}</h1>
 
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">{t('registration.username')}</label>
             <div className={classes.inputblock}>
               <input type="text" name="username" id="username"
                 onFocus={() => setUserFocus(true)}
@@ -165,17 +126,17 @@ const Register = () => {
                 onChange={(e) => setUser(e.target.value)}
               />
               <Tooltip icontype={faInfoCircle}
-                tiptext="Username must be at least 4 symbols and start with a letter and can contain only letters, numbers, dashes and underscores"
-                className={user && !validName ? '' : classes.offscreen}
-                hiddentip={userFocus === true ? false : true} />
-                <Tooltip icontype={faCircleQuestion}
-                tiptext="Username is already taken. Try another one"
+                tiptext={t('registration.usernameRequirements')}
+                isVisible={user && !validName}
+                hiddentip={!userFocus} />
+              <Tooltip icontype={faCircleQuestion}
+                tiptext={t('registration.usernameTaken')}
                 color="#1900f7"
-                className={user && validName && !nameAvailable ? '' : classes.offscreen}
-                hiddentip={userFocus === true ? false : true} />
+                isVisible={user && validName && !nameAvailable}
+                hiddentip={!userFocus} />
             </div>
-
-            <label htmlFor="email">Email</label>
+{/* 
+            <label htmlFor="email">{t('registration.email')}</label>
             <div className={classes.inputblock}>
               <input type="email" name="email" id="email"
                 onFocus={() => setEmailFocus(true)}
@@ -183,17 +144,17 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Tooltip icontype={faInfoCircle}
-                tiptext="Email is not correct"
-                className={email && !validEmail ? '' : classes.offscreen}
-                hiddentip={emailFocus === true ? false : true} />
-            <Tooltip icontype={faCircleQuestion}
-                tiptext="Email is already taken. Try another one"
+                tiptext={t("registration.emailIncorrect")}
+                isVisible={email && !validEmail}
+                hiddentip={!emailFocus} />
+              <Tooltip icontype={faCircleQuestion}
+                tiptext={t('registration.emailTaken')}
                 color="#1900f7"
-                className={email && validEmail && !emailAvailable ? '' : classes.offscreen}
-                hiddentip={emailFocus === true ? false : true} />
-            </div>
+                isVisible={email && validEmail && !emailAvailable}
+                hiddentip={!emailFocus} />
+            </div> */}
 
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('registration.password')}</label>
             <div className={classes.inputblock}>
               <input type="password" name="password" id="password"
                 ref={pwdRef}
@@ -202,14 +163,12 @@ const Register = () => {
                 onChange={(e) => setPwd(e.target.value)}
               />
               <Tooltip icontype={faInfoCircle}
-                tiptext="Password should be 8-24 characters long and contain at least one uppercase letter, one lowercase letter, one digit"
-                className={pwd && !validPwd ? '' : classes.offscreen}
-                hiddentip={pwdFocus === true ? false : true} />
+                tiptext={t('registration.passwordRequirements')}
+                isVisible={pwd && !validPwd}
+                hiddentip={!pwdFocus} />
             </div>
 
-
-
-            <label htmlFor="password2">Confirm Password</label>
+            <label htmlFor="password2">{t('registration.confirmPassword')}</label>
             <div className={classes.inputblock}>
               <input type="password" name="password2" id="password2"
                 ref={matchRef}
@@ -218,30 +177,30 @@ const Register = () => {
                 onChange={(e) => setMatchPwd(e.target.value)}
               />
               <Tooltip icontype={faInfoCircle}
-                tiptext="Must match the first password input field."
-                className={matchPwd && !validMatch ? '' : classes.offscreen}
-                hiddentip={matchFocus === true ? false : true}
+                tiptext={t('registration.passwordMatch')}
+                isVisible={matchPwd && !validMatch}
+                hiddentip={!matchFocus}
               />
             </div>
 
             <div className={classes.pwdsection}>
-              <label htmlFor="showpwd">Show password</label>
+              <label htmlFor="showpwd">{t("registration.showPassword")}</label>
               <input id="showpwd" type="checkbox" name="showpwd" onChange={(e) => setShowPwd(e.target.checked)} className={classes.showpwdcheckbox} />
             </div>
 
-            <input type="submit" value="Register" />
+            <input type="submit" value={t("registration.register")} />
 
           </form>
 
-          <div className={`${classes.errormsg} ${errmsg ? '' : classes.offscreen}`}>
+          <div className={`errormsg ${errmsg ? '' : classes.offscreen}`}>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />
             <span>{errmsg}</span>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />
           </div>
           <p>
-            Already have an account ?<br />
+            {t("registration.haveAccount")}<br />
             <span className={classes.line}>
-              <Link to="/login">Log in</Link>
+              <Link to="/login">{t("registration.log_in")}</Link>
             </span>
           </p>
         </div>

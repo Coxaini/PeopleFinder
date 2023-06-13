@@ -6,8 +6,8 @@ using PeopleFinder.Api.Common.Extensions;
 using PeopleFinder.Api.Controllers.Common;
 using PeopleFinder.Application.Models.Friend;
 using PeopleFinder.Application.Models.Rating;
-using PeopleFinder.Application.Services.FriendsService;
-using PeopleFinder.Contracts.Friends;
+using PeopleFinder.Application.Services.RelationshipServices;
+using PeopleFinder.Contracts.Pagination;
 using PeopleFinder.Contracts.Profile;
 using PeopleFinder.Contracts.Rating;
 using PeopleFinder.Contracts.Recommendation;
@@ -39,6 +39,8 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
+        
+        
         [HttpDelete("{friendId:int}")]
         public async Task<IActionResult> RemoveFriend(int friendId)
         {
@@ -49,7 +51,7 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
-        [HttpPut("approve/{friendRequesterId:int}")]
+        [HttpPost("requests/{friendRequesterId:int}")]
         public async Task<IActionResult> ApproveFriendRequest(int friendRequesterId)
         {
             var requestResult = await _relationshipService.ApproveFriendRequest(ProfileIdInClaims, friendRequesterId);
@@ -59,38 +61,35 @@ namespace PeopleFinder.Api.Controllers
                 Problem);
         }
         
-       
-        /*public async Task<IActionResult> GetFriends([FromQuery]PaginationRequestParams paginationParams)
+        [HttpPut("requests/{friendRequesterId:int}")]
+        public async Task<IActionResult> RejectFriendRequest(int friendRequesterId)
         {
-            PagedPaginationParams pag = new()
-                { PageNumber = paginationParams.PageNumber, PageSize = paginationParams.PageSize };
-
-            var friendsResult = await _friendsService.GetFriends(ProfileIdInClaims, pag);
-
-            return friendsResult.Match(
-                friends =>
-                {
-                    var metadata = new
-                    {
-                        friends.TotalCount,
-                        friends.PageSize,
-                        friends.CurrentPage,
-                        friends.TotalPages,
-                        friends.HasNext,
-                        friends.HasPrevious
-                    };
-                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-                    return Ok(_mapper.Map<IEnumerable<ProfileResponse>>(friends));
-                },
+            var requestResult = await _relationshipService.RejectFriendRequest(ProfileIdInClaims, friendRequesterId);
+            
+            return requestResult.Match(
+                () => Ok("Friend request rejected successfully"),
                 Problem);
-        }*/
-        [HttpGet("")]
-        public async Task<IActionResult> GetFriends([FromQuery]CursorPaginationRequest<DateTime> paginationParams)
+        }
+        
+        [HttpDelete("requests/{receiverProfileId:int}")]
+        public async Task<IActionResult> CancelFriendRequest(int receiverProfileId)
         {
-            CursorPaginationParams<DateTime> pag = new()
+            var requestResult = await _relationshipService.CancelFriendRequest(ProfileIdInClaims, receiverProfileId);
+            
+            return requestResult.Match(
+                () => Ok("Friend request cancelled successfully"),
+                Problem);
+        }
+        
+        
+        [HttpGet("")]
+        public async Task<IActionResult> GetFriends([FromQuery]CursorPagination<DateTime> paginationParams, 
+            [FromQuery]string? searchQuery)
+        {
+            CursorPaginationParams<DateTime> pag = new(20)
                 { PageSize = paginationParams.PageSize, After = paginationParams.After, Before = paginationParams.Before };
 
-            var friendsResult = await _relationshipService.GetFriends(ProfileIdInClaims, pag);
+            var friendsResult = await _relationshipService.GetFriends(ProfileIdInClaims, pag, searchQuery);
             return friendsResult.Match(
                 friends =>
                 {
@@ -101,16 +100,16 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                     
-                    return Ok(_mapper.Map<IEnumerable<ShortProfileResponse>>(friends.Items));
+                    return Ok(_mapper.Map<IList<ShortProfileResponse>>(friends.Items));
                 },
                 Problem);
            
         }
         
         [HttpGet("updates")]
-        public async Task<IActionResult> GetFriendRequestUpdates([FromQuery]CursorPaginationRequest<DateTime> paginationParams)
+        public async Task<IActionResult> GetFriendRequestUpdates([FromQuery]CursorPagination<DateTime> paginationParams)
         {
-            CursorPaginationParams<DateTime> pag = new()
+            CursorPaginationParams<DateTime> pag = new(20)
                 { PageSize = paginationParams.PageSize, After = paginationParams.After, Before = paginationParams.Before };
 
             var updatesResult = await _relationshipService.GetFriendshipRequestUpdates(ProfileIdInClaims, pag);
@@ -125,7 +124,7 @@ namespace PeopleFinder.Api.Controllers
                     };
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                     
-                    return Ok(_mapper.Map<IEnumerable<FriendRequestResponse>>(updates.Items));
+                    return Ok(_mapper.Map<IList<FriendRequestResponse>>(updates.Items));
                 },
                 Problem);
             

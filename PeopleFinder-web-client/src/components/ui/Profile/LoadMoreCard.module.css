@@ -1,0 +1,24 @@
+button.loadmore{
+    margin: 20px auto;
+    display: block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    color: #000000;
+    font-size: 32px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+div.loadmorecontainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    width: 350px;
+    min-height: 580px;
+    border: 1px dashed #000000;
+    border-radius: 5px;
+}

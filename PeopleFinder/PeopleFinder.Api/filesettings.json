@@ -1,26 +1,29 @@
 {
-  "ImageSettings": {
-    "MaxSize": 5000000,
-    "AllowedExtensions": [
-      ".jpg",
-      ".png",
-      ".jpeg"
-    ]
-  },
-    "VideoSettings": {
-        "MaxSize": 100000000,
-        "AllowedExtensions": [
+   "FileSettings" : {
+    "Image": {
+      "MaxSize": 5000000,
+      "AllowedExtensions": [
+        ".jpg",
+        ".png",
+        ".jpeg"
+      ]
+    },
+    "Video": {
+      "MaxSize": 100000000,
+      "AllowedExtensions": [
         ".mp4",
         ".avi",
         ".mov"
-        ]
+      ]
     },
-    "AudioSettings": {
-        "MaxSize": 50000000,
-        "AllowedExtensions": [
+    "Audio": {
+      "MaxSize": 50000000,
+      "AllowedExtensions": [
         ".mp3",
         ".wav",
         ".ogg"
-        ]
-    }
+      ]
+    },
+    "FileMaxSize": 100000000
+  }
 }

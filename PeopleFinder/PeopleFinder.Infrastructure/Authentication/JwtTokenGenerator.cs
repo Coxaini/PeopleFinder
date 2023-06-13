@@ -33,7 +33,6 @@ namespace PeopleFinder.Infrastructure.Authentication
             var claims = new[]
             {
                 new Claim(ProjectJwtRegisteredClaimNames.UserId, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.NameId, profile.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, profile.Username),
             };
@@ -42,7 +41,7 @@ namespace PeopleFinder.Infrastructure.Authentication
                 claims: claims,
                 issuer: _jwtsettings.Issuer,
                 audience: _jwtsettings.Audience,
-                expires: DateTime.Now.AddMinutes(_jwtsettings.ExpiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(_jwtsettings.ExpiryMinutes),
                 signingCredentials: signingCredentials
                 );
 

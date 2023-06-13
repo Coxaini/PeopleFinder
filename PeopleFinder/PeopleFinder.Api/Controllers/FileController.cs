@@ -26,14 +26,14 @@ public class FileController : ApiController
                {
                    string contentType = file.FileType switch
                    {
-                       MediaFileType.Image => "image/",
-                       MediaFileType.Video => "video/",
-                       MediaFileType.Audio => "audio/",
+                       MediaFileType.Image => "image/" + file.Extension,
+                       MediaFileType.Video => "video/" + file.Extension,
+                       MediaFileType.Audio => "audio/" + file.Extension,
                        _ => "application/octet-stream"
                    };
+                   
 
-                  
-                   return File(file.ContentStream, contentType+file.Extension, file.OriginalFileName);
+                   return File(file.ContentStream, contentType, file.OriginalFileName, true);
                },
               Problem
          );

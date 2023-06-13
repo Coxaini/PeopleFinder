@@ -9,13 +9,14 @@ import classes from './ProfileCard.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import OverlayCentredPanel from '../components/ui/OverlayCentredPanel';
+import OverlayCentredPanel from '../components/ui/Overlay/OverlayCentredPanel';
 import MutualFriendsList from '../components/ui/Profile/MutualFriendsList';
 import ProfileActions from '../components/ui/Profile/ProfileActions';
-
+import { useTranslation } from 'react-i18next';
 
 function ProfilePage() {
 
+    const {t} = useTranslation();
     const params = useParams();
     const [userData] = useUserData();
 
@@ -49,7 +50,7 @@ function ProfilePage() {
 
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>{t("common.loading")}</div>;
     }
 
     let mutualFriends = null;
@@ -57,7 +58,7 @@ function ProfilePage() {
     if (profile.mutualFriends.length > 0) {
         mutualFriends = (
             <Link onClick={toggleMutualFriendsOverlay} className={`${classes.horizontallayout} ${classes.textlink}`}>
-                <span className={classes.rightoffset}>friend with : </span>
+                <span className={classes.rightoffset}>{t("profile.friendWith")}</span>
                 {profile.mutualFriends.map((friend, i) => (
                     <div key={i}>
                         {i > 0 ? <span>, </span> : null}
@@ -66,7 +67,7 @@ function ProfilePage() {
                 ))}
                 {mutualFriendsCount > profile.mutualFriends.length ?
                     <span className={classes.leftoffset}>
-                        and {mutualFriendsCount - profile.mutualFriends.length} more
+                        {t("profile.andMore", mutualFriendsCount - profile.mutualFriends.length)}
                     </span> : null}
 
             </Link>
@@ -77,52 +78,10 @@ function ProfilePage() {
         setMutualFriendsOverlay((prev) => !prev);
     }
 
-    let actions = null;
-    if (profile.id !== Number(userData.id)) {
-        switch (profile.status) {
-            case "friend":
-                actions = <>
-                    <button className={classes.approve}>Message</button>
-                    <button className={classes.decline}>Remove Friend</button>
-                </>
-                break;
-            case "requestsent":
-                actions = <>
-                    <button className={classes.decline}>Cancel request</button>
-                </>
-                break;
-            case "requestreceived":
-                actions = <>
-                    <button className={classes.approve}>Accept Friend Request</button>
-                    <button className={classes.decline}>Decline</button>
-                </>
-                break;
-            case "blockedbyyou" || "blockedbyboth":
-                actions = <>
-                    <button className={classes.decline}>Unblock</button>
-                </>
-                break;
-            case "blockedbyperson":
-                actions = <>
-                    <h1>You are blocked by this profile</h1>
-                </>
-                break;
-            default:
-                actions = <>
-                    <button className={classes.approve}>Add To Friends</button>
-                </>;
-        }
-    }else{
-        actions = <>
-        <button className={classes.approve}>Edit Profile</button>
-    </>;
-    }
-
-
     return (
         <>
             {mutualFriendsOverlay ?
-                <OverlayCentredPanel onClick={toggleMutualFriendsOverlay} title={"Mutual Friends"}>
+                <OverlayCentredPanel onClick={toggleMutualFriendsOverlay} title={t("profile.mutualFriends")}>
                     <MutualFriendsList profileId={profile.id} />
                 </OverlayCentredPanel> : null}
 
@@ -132,7 +91,12 @@ function ProfilePage() {
                         <div className='flexlist'>
                             <img src={profile.mainPictureUrl} alt='profile' />
                             <div className={classes.actionslayout}>
-                            <ProfileActions id={profile.id} status={profile.status}/>
+                            <ProfileActions id={profile.id} status={profile.status} 
+                            setStatus={(status)=>{
+                                return setProfile((prev)=>{
+                                    return {...prev, status}
+                                 });
+                            } } />
                         </div>
                         </div>
                         <div className={classes.profilepanel}>
@@ -147,13 +111,13 @@ function ProfilePage() {
                                     <div>
                                         <ul className={classes.interests}>
                                             {profile.tags?.map((interest) => (
-                                                <li key={interest.id}>{interest.title}</li>
+                                                <li key={interest.id}>{t(`tags.${interest.title}`)}</li>
                                             ))}
                                         </ul>
                                     </div>
                                     : null
                                 }
-                                <h2>Bio</h2>
+                                <h2>{t("profile.bio")}</h2>
                                 <span className={classes.bio}>{profile.bio}</span>
 
                             </div>
