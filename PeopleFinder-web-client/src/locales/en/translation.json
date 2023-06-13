@@ -4,7 +4,9 @@
     "noServerResponse": "No server response.",
     "loading": "Loading...",
     "error": "Error",
-    "save": "Save"
+    "save": "Save",
+    "loadMore": "Load more",
+    "left": "left"
   },
   "registration": {
     "username": "Username",

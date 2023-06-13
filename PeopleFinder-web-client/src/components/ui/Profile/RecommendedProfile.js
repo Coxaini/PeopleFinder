@@ -30,9 +30,9 @@ function RecommendedProfile({ profile }) {
 
   return (
     <div className={classes.recprofile}>
-      <div className={classes.name}>{profile.name + ", " + profile.age} </div>
+      <div className={classes.name}>{profile.name}{profile.age !== null ? ", " + profile.age : ''}</div>
       <img className={classes.image} src={profile.mainPictureUrl} alt="profile" />
-      <Link to={`/profile/${profile.username}`} className='username nondecoration'>@{profile.username}</Link>
+      <Link to={`/profile/${profile.username}`} className={`${classes.username} nondecoration`}>@{profile.username}</Link>
       <div className='flexgrow'>
         <span className={classes.bio}>{profile.bio}</span>
       </div>

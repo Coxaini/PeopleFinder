@@ -103,7 +103,7 @@ const Login = () => {
             </p>
           </form>
 
-          <div className={`${classes.errormsg} ${errmsg ? '' : classes.offscreen}`}>
+          <div className={`errormsg ${errmsg ? '' : classes.offscreen}`}>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />
             <span>{errmsg}</span>
             <FontAwesomeIcon icon={faRedo} color="red" spin={true} />

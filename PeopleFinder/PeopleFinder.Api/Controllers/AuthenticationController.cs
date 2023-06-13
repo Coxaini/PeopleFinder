@@ -42,6 +42,7 @@ namespace PeopleFinder.Api.Controllers
 
           
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {

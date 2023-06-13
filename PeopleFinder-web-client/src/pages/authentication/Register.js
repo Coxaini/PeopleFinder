@@ -75,7 +75,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!(validName && validEmail && validPwd && validMatch)) {
+    if (!(validName  && validPwd && validMatch)) {
 
       setErrMsg(t("registration.fillFieldsCorrectly"));
       return;
@@ -83,7 +83,7 @@ const Register = () => {
 
     try {
 
-      const payload = JSON.stringify({ username: user, email: email, password: pwd });
+      const payload = JSON.stringify({ username: user, password: pwd });
 
       const response = await api.post('/auth/register', payload,
         {
@@ -135,7 +135,7 @@ const Register = () => {
                 isVisible={user && validName && !nameAvailable}
                 hiddentip={!userFocus} />
             </div>
-
+{/* 
             <label htmlFor="email">{t('registration.email')}</label>
             <div className={classes.inputblock}>
               <input type="email" name="email" id="email"
@@ -152,7 +152,7 @@ const Register = () => {
                 color="#1900f7"
                 isVisible={email && validEmail && !emailAvailable}
                 hiddentip={!emailFocus} />
-            </div>
+            </div> */}
 
             <label htmlFor="password">{t('registration.password')}</label>
             <div className={classes.inputblock}>

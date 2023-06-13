@@ -67,18 +67,17 @@
   
   .interests {
     display: flex;
-    
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
-    row-gap: 10px;
+    row-gap: 5px;
     margin-bottom: 10px;
   }
   
   .interests li {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    background-color: #bdbdbd;
+    background-color: #cacaca;
     color: #140115;
     padding: 5px 10px;
     margin-right: 10px;

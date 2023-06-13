@@ -33,7 +33,6 @@ namespace PeopleFinder.Infrastructure.Authentication
             var claims = new[]
             {
                 new Claim(ProjectJwtRegisteredClaimNames.UserId, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.NameId, profile.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, profile.Username),
             };
