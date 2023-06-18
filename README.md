@@ -11,19 +11,19 @@ PeopleFinder Messenger is a chat web application that allows users to communicat
 
 ### Chats
 
-![./img/chatsPage.png](./img/chatsPage.PNG)
+![./img/chatsPage.png](./img/chatsPage.png)
 
 ### Profile
 
-![./img/profilePage.png](./img/profilePage.PNG)
+![./img/profilePage.png](./img/profilePage.png)
 
 ### Profile Edit
 
-![./img/profileEditPage.png](./img/profileEditPage.PNG)
+![./img/profileEditPage.png](./img/profileEditPage.png)
 
 ### Friends
 
-![./img/friendsPage.png](./img/friendsPage.PNG)
+![./img/friendsPage.png](./img/friendsPage.png)
 
 ## Technology stack
 
