@@ -101,7 +101,7 @@ const Register = () => {
         let errMsg = err.response?.data?.title;
         if (errMsg.includes('username') && errMsg.includes('email'))
           setErrMsg(t('registration.userEmailExists'));
-        else if (errMsg.includes('login'))
+        else if (errMsg.includes('username'))
           setErrMsg(t('registration.userExists'));
         else
           setErrMsg(t('registration.emailExists'));

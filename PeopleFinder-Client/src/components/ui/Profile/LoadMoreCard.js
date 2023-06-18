@@ -12,9 +12,9 @@ function LoadMoreCard({ isLoading, handleLoadMore, TotalCount, page }) {
             {
                 !isLoading ?
                     <button className={`${classes.loadmore}`} onClick={() => { handleLoadMore() }}>
-                        {t("basic.loadmore")}
-                        ({TotalCount - page * 4})
-                        {t("basic.left")}
+                        {t("common.loadMore")} {" "}
+                        ({TotalCount - page * 4}) {" "}
+                        {t("common.left")}
                     </button>
                     :
                     <LoaderSpinner scale={1.5} />

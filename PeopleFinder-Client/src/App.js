@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import FindPeoplePage from "./pages/recommendations/FindPeople";
 import ProfilePage from "./pages/Profile";
@@ -22,6 +23,12 @@ import SearchProfiles from "./pages/profiles/SearchProfiles";
 import MutualFriendsProfiles from "./pages/profiles/MutualFriendsProfiles";
 
 function App() {
+
+  useEffect(() => {
+    // This will run when the page first loads and whenever the title changes
+    document.title = "PeopleFinder";
+  }, []);
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />

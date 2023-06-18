@@ -103,10 +103,13 @@ function ProfilePage() {
                             <div className={classes.info}>
                                 <h1>{profile.name}{profile.age ? `, ${profile.age}` : ''}</h1>
                                 {mutualFriends}
+                                {
+                                profile.city &&
                                 <div className={classes.location}>
                                     <FontAwesomeIcon icon={faLocationDot} style={{ color: "#000000", }} />
                                     <span>{profile.city}</span>
                                 </div>
+                                }
                                 {profile.tags.length > 0 ?
                                     <div>
                                         <ul className={classes.interests}>
@@ -117,8 +120,13 @@ function ProfilePage() {
                                     </div>
                                     : null
                                 }
+                                {
+                                profile.bio &&
+                                <>
                                 <h2>{t("profile.bio")}</h2>
                                 <span className={classes.bio}>{profile.bio}</span>
+                                </>
+                                }   
 
                             </div>
 

@@ -21,7 +21,8 @@ namespace PeopleFinder.Infrastructure.Persistence.Configuration
             builder
                 .HasOne(c => c.LastMessageAuthorProfile)
                 .WithMany(p => p.LastAuthorSenderChats)
-                .HasForeignKey(c => c.LastMessageAuthorProfileId);
+                .HasForeignKey(c => c.LastMessageAuthorProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(c => c.Messages)

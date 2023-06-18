@@ -142,12 +142,6 @@ export const ChatHubProvider = ({ children }) => {
             else
                 return prevChats;
         });
-        // setActiveChat((prevChat) => { 
-        //     if (prevChat?.uniqueTitle === username)
-        //     return { ...prevChat, isOnline: true } 
-        //     else
-        //     return prevChat;
-        // });
     }
 
     function userOfflineHandler(username, lastSeenAt) {
@@ -158,14 +152,6 @@ export const ChatHubProvider = ({ children }) => {
             else
                 return prevChats;
         });
-        // setActiveChat((prevChat) => { 
-        //     if (prevChat?.uniqueTitle === username)
-        //     return { ...prevChat, isOnline: false, lastSeenAt:lastSeenAt} 
-        //     else
-        //     return prevChat;
-        // });
-
-        //setActiveChat((prevChat) => { return { ...prevChat, isOnline: false, lastSeenAt: lastSeenAt } });
     }
 
     useEffect(() => {
